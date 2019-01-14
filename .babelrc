@@ -1,0 +1,29 @@
+{
+  "env": {
+    "development": {
+      "presets": ["react-app"],
+      "plugins": [
+        ["styled-components"],
+        [
+          "import",
+          {
+            "libraryName": "antd",
+            "style": false
+          }
+        ]
+      ]
+    },
+    "production": {
+      "presets": ["react-app"],
+      "plugins": [
+        [
+          "import",
+          {
+            "libraryName": "antd",
+            "style": false
+          }
+        ]
+      ]
+    }
+  }
+}
