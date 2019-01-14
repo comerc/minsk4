@@ -1,6 +1,7 @@
 import Layout from 'src/components/Layout'
 import HomePage from 'src/components/HomePage'
 import AboutPage from 'src/components/AboutPage'
+import PostPage from 'src/components/PostPage'
 
 const routes = [
   // {
@@ -19,6 +20,11 @@ const routes = [
         path: '/about',
         exact: true,
         component: AboutPage,
+      },
+      {
+        path: '/post/:id',
+        exact: true,
+        component: PostPage,
       },
     ],
   },
