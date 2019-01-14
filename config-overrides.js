@@ -29,25 +29,11 @@ const createRewireLess = (options = {}) => {
     const testSource = /\.css$/.source
     const cssRules = oneOf.find((element) => element.test.source === testSource)
 
-    let lessRules
-    if (env === 'production') {
-      lessRules = {
-        test: lessExtension,
-        loader: [
-          // TODO: originally this part is wrapper in extract-text-webpack-plugin
-          //       which we cannot do, so some things like relative publicPath
-          //       will not work.
-          //       https://github.com/timarney/react-app-rewired/issues/33
-          ...cssRules.loader,
-          { loader: 'less-loader', options },
-        ],
-      }
-    } else {
-      lessRules = {
-        test: lessExtension,
-        use: [...cssRules.use, { loader: 'less-loader', options }],
-      }
+    const lessRules = {
+      test: lessExtension,
+      use: [...cssRules.use, { loader: 'less-loader', options }],
     }
+
     oneOf.unshift(lessRules)
   }
 }
@@ -55,6 +41,6 @@ const createRewireLess = (options = {}) => {
 module.exports = function override(config, env) {
   rewireAbsolutePath(config, env)
   createRewireBabel({ babelrc: true })(config, env)
-  createRewireLess({ javascriptEnabled: true })(config, env)
+  createRewireLess({ javascriptEnabled: true, sourceMap: env === 'production' })(config, env)
   return config
 }

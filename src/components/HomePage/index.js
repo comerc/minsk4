@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Posts from 'src/components/Posts'
+import { Button } from 'antd'
 
 class HomePage extends Component {
   render() {
@@ -9,6 +10,7 @@ class HomePage extends Component {
       <div className={className}>
         <h1>HomePage</h1>
         <Posts />
+        <Button>Test</Button>
       </div>
     )
   }
