@@ -1,17 +1,21 @@
-const rewireAbsolutePath = (config, env) => {
-  const path = require('path')
-  config.resolve.modules = [path.resolve('.')].concat(config.resolve.modules)
+const { getLessVars } = require('antd-theme-generator')
+const path = require('path')
+const util = require('util')
+
+const inspect = (data) => {
+  throw new Error(util.inspect(data, { depth: Infinity }))
 }
 
-const createRewireBabel = (options = {}) => {
+const rewireAbsolutePath = (config, env) => {
+  config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
+}
+
+const createRewireBabel = (modifyOptions) => {
   return (config, env) => {
     const oneOf = config.module.rules.find((element) => element.oneOf).oneOf
     const testSource = /\.(js|mjs|jsx|ts|tsx)$/.source
     const babelLoader = oneOf.find((element) => element.test.source === testSource)
-    if (babelLoader) {
-      const babelLoaderOptions = babelLoader.options || {}
-      babelLoader.options = { ...babelLoaderOptions, ...options }
-    }
+    babelLoader.options = modifyOptions(babelLoader.options)
   }
 }
 
@@ -40,7 +44,27 @@ const createRewireLess = (options = {}) => {
 
 module.exports = function override(config, env) {
   rewireAbsolutePath(config, env)
-  createRewireBabel({ babelrc: true })(config, env)
-  createRewireLess({ javascriptEnabled: true, sourceMap: env === 'production' })(config, env)
+  createRewireBabel((options) => {
+    const plugins = [...options.plugins]
+    plugins.push([
+      require.resolve('babel-plugin-import'),
+      {
+        libraryName: 'antd',
+        style: true,
+      },
+    ])
+    if (env === 'development') {
+      plugins.push([require.resolve('babel-plugin-styled-components')])
+    }
+    return {
+      ...options,
+      plugins,
+    }
+  })(config, env)
+  createRewireLess({
+    // modifyVars: getLessVars(require.resolve('./src/styles/vars.less'))),
+    javascriptEnabled: true,
+    sourceMap: env === 'production',
+  })(config, env)
   return config
 }
