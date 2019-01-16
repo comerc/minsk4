@@ -62,7 +62,7 @@ module.exports = function override(config, env) {
     }
   })(config, env)
   createRewireLess({
-    // modifyVars: getLessVars(require.resolve('./src/styles/vars.less'))),
+    modifyVars: getLessVars(require.resolve('./src/styles/vars.less')),
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)
