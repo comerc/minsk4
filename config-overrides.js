@@ -1,4 +1,3 @@
-const { getLessVars } = require('antd-theme-generator')
 const path = require('path')
 const util = require('util')
 
@@ -62,7 +61,7 @@ module.exports = function override(config, env) {
     }
   })(config, env)
   createRewireLess({
-    // modifyVars: getLessVars(require.resolve('./src/styles/vars.less'))),
+    modifyVars: { '@primary-color': '#a51d7c' },
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)

@@ -7,7 +7,6 @@ import { ConnectedRouter } from 'connected-react-router'
 import { renderRoutes } from 'react-router-config'
 import routes from './routes'
 import * as serviceWorker from './serviceWorker'
-import './index.less'
 
 const history = createBrowserHistory()
 
