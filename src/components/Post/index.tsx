@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { dispatch } from 'src/store'
-import { readPost } from 'src/ducks/post'
+import { dispatch } from '../../store'
+import { readPost } from '../../ducks/post'
 import styled from 'styled-components'
 
 const render = ({ className }) => <div className={className}>Post</div>
 
 const Post = ({ className, id }) => {
   useEffect(() => {
-    // dispatch(readPost(id))
+    dispatch(readPost(id))
   }, [])
   return render({ className })
 }

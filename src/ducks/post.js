@@ -1,6 +1,6 @@
 import { createReducer, createAction } from 'redux-act'
 import axios from 'axios'
-import { API } from 'src/constants'
+import { API } from '../constants'
 
 const NS = `POST__`
 

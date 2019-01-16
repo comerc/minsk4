@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Post from 'src/components/Post'
+import Post from '../Post'
 
 const PostPage = ({
   className,

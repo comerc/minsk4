@@ -1,7 +1,7 @@
-import Layout from 'src/components/Layout'
-import HomePage from 'src/components/HomePage'
-import AboutPage from 'src/components/AboutPage'
-import PostPage from 'src/components/PostPage'
+import Layout from './components/Layout'
+import HomePage from './components/HomePage'
+import AboutPage from './components/AboutPage'
+import PostPage from './components/PostPage'
 
 const routes = [
   // {

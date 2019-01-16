@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Copyright from 'src/components/Copyright'
+import Copyright from '../Copyright'
 
 const Footer = ({ className }) => (
   <div className={className}>
