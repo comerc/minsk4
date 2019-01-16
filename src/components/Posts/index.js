@@ -1,18 +1,16 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
 import { readPosts } from 'src/ducks/posts'
 import styled from 'styled-components'
 
-class Posts extends Component {
-  componentDidMount() {
-    dispatch(readPosts())
-  }
+const render = ({ className }) => <div className={className}>Posts</div>
 
-  render() {
-    const { className } = this.props
-    return <div className={className}>Posts</div>
-  }
+const Posts = ({ className }) => {
+  useEffect(() => {
+    // dispatch(readPosts())
+  }, [])
+  return render({ className })
 }
 
 const mapStateToProps = (state) => ({

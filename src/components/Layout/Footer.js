@@ -1,17 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Copyright from 'src/components/Copyright'
 
-class Footer extends Component {
-  render() {
-    const { className } = this.props
-    return (
-      <div className={className}>
-        <Copyright className="aaa" />
-      </div>
-    )
-  }
-}
+const Footer = ({ className }) => (
+  <div className={className}>
+    <Copyright className="aaa" />
+  </div>
+)
 
 export default styled(Footer)`
   ${Copyright} {
