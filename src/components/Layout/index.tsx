@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { Component } from 'react'
+import _ from 'lodash'
 import styled from 'styled-components'
 import { renderRoutes } from 'react-router-config'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({ className, route: { routes } }) => (
-  <div className={className}>
-    <Header />
-    {renderRoutes(routes)}
-    <Footer />
-  </div>
-)
+const style = () => (Self) => styled(Self)``
 
-export default styled(Layout)``
+@style()
+class Layout extends Component {
+  render() {
+    const {
+      className,
+      route: { routes },
+    } = _.get(this, 'props')
+    return (
+      <div className={className}>
+        <Header />
+        {renderRoutes(routes)}
+        <Footer />
+      </div>
+    )
+  }
+}
+
+export default Layout

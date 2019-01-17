@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { dispatch } from '../../store'
 import { readPosts } from '../../ducks/posts'
@@ -6,44 +7,24 @@ import styled from 'styled-components'
 
 const mapStateToProps = (state) => ({
   items: state.posts.items,
+  testField: 123,
 })
 
-interface Props {
-  className: string
-}
-
-const style = () => (WrappedComponent) => styled(WrappedComponent)`
-  &&.myclass {
-    border: 2px solid red;
-  }
+const style = () => (Component) => styled(Component)`
+  border: 2px solid blue;
 `
 
 @connect(mapStateToProps)
 @style()
-class Posts extends Component<Props> {
+class Posts extends Component {
   componentDidMount() {
     dispatch(readPosts())
   }
 
   render() {
-    return render(this.props)
+    const { className, testField } = _.get(this, 'props')
+    return <div className={className}>Posts {testField}</div>
   }
 }
 
-const render = ({ className }: Props) => <div className={className}>Posts</div>
-
-// const Posts = ({ className }) => {
-//   useEffect(() => {
-//     dispatch(readPosts())
-//   }, [])
-//   return render({ className })
-// }
-
-// const ConnectedPosts = connect(mapStateToProps)(Posts)
-
 export default Posts
-
-//   &&.myclass {
-//     border: 2px solid red;
-//   }
-// `

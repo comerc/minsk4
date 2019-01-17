@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { Component } from 'react'
+import _ from 'lodash'
 import styled from 'styled-components'
 import Copyright from '../Copyright'
 
-const Footer = ({ className }) => (
-  <div className={className}>
-    <Copyright className="aaa" />
-  </div>
-)
-
-export default styled(Footer)`
+const style = () => (Self) => styled(Self)`
   ${Copyright} {
   }
 `
+
+@style()
+class Footer extends Component {
+  render() {
+    const { className } = _.get(this, 'props')
+    return (
+      <div className={className}>
+        <Copyright />
+      </div>
+    )
+  }
+}
+
+export default Footer

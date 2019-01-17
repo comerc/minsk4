@@ -1,22 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { Component } from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { dispatch } from '../../store'
 import { readPost } from '../../ducks/post'
 import styled from 'styled-components'
 
-const render = ({ className }) => <div className={className}>Post</div>
-
-const Post = ({ className, id }) => {
-  useEffect(() => {
-    dispatch(readPost(id))
-  }, [])
-  return render({ className })
-}
-
 const mapStateToProps = (state) => ({
   items: state.post.items,
 })
 
-const ConnectedPost = connect(mapStateToProps)(Post)
+const style = () => (Component) => styled(Component)`
+  border: 2px solid blue;
+`
 
-export default styled(ConnectedPost)``
+@connect(mapStateToProps)
+@style()
+class Post extends Component<{ id: number }> {
+  componentDidMount() {
+    const { id } = _.get(this, 'props')
+    dispatch(readPost(id))
+  }
+
+  render() {
+    const { className, id } = _.get(this, 'props')
+    return <div className={className}>Post {id}</div>
+  }
+}
+
+export default Post

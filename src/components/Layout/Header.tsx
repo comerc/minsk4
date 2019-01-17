@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { Component } from 'react'
+import _ from 'lodash'
 import styled from 'styled-components'
 
-const Header = ({ className }) => <div className={className}>Header</div>
+const style = () => (Self) => styled(Self)``
 
-export default styled(Header)``
+@style()
+class Header extends Component {
+  render() {
+    const { className } = _.get(this, 'props')
+    return <div className={className}>Header</div>
+  }
+}
+
+export default Header

@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { Component } from 'react'
+import _ from 'lodash'
 import styled from 'styled-components'
 import Posts from '../Posts'
 import { Button } from 'antd'
 
-const HomePage = ({ className }) => (
-  <div className={className}>
-    <h1>HomePage</h1>
-    <Posts className="myclass" />
-    <Button type="primary">Test</Button>
-  </div>
-)
+const style = () => (Self) => styled(Self)``
 
-export default styled(HomePage)``
+@style()
+class HomePage extends Component {
+  render() {
+    const { className } = _.get(this, 'props')
+    return (
+      <div className={className}>
+        <h1>HomePage</h1>
+        <Posts />
+        <Button type="primary">Test</Button>
+      </div>
+    )
+  }
+}
+
+export default HomePage
