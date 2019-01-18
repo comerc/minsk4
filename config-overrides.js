@@ -41,7 +41,7 @@ const createRewireLess = (options = {}) => {
   }
 }
 
-module.exports = function override(config, env) {
+module.exports = (config, env) => {
   rewireAbsolutePath(config, env)
   createRewireBabel((options) => {
     const plugins = [...options.plugins]
