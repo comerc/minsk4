@@ -3,11 +3,11 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
 import { readPosts } from 'src/ducks/posts'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const mapStateToProps = (state) => ({
   items: state.posts.items,
-  testField: 123,
 })
 
 const style = () => (Component) => styled(Component)`
@@ -22,8 +22,19 @@ class Posts extends Component {
   }
 
   render() {
-    const { className, testField } = _.get(this, 'props')
-    return <div className={className}>Posts {testField}</div>
+    const { className, items } = _.get(this, 'props')
+    return (
+      <div className={className}>
+        {items.map(({ id, title, teaser }) => (
+          <div key={id}>
+            <h3>
+              <Link to={`/post/${id}`}>{title}</Link>
+            </h3>
+            <p>{teaser}</p>
+          </div>
+        ))}
+      </div>
+    )
   }
 }
 

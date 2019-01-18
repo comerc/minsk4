@@ -10,9 +10,12 @@
     "@types/react-dom": "^16.0.11",
     "babel-plugin-import": "^1.11.0",
     "babel-plugin-styled-components": "^1.10.0",
+    "faker": "^4.1.0",
     "husky": "^1.3.1",
+    "json-server": "^0.14.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.15.3",
     "pretty-quick": "^1.8.0",
     "prop-types": "^15.6.2",
@@ -39,11 +42,13 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "start": "BROWSER=none react-app-rewired start",
+    "client": "BROWSER=none react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build"
+    "serve": "serve -s build",
+    "server": "json-server db-data.js --port 4000 -m db-middlewares.js",
+    "start": "npm-run-all --parallel server client"
   },
   "husky": {
     "hooks": {

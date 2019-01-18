@@ -16,7 +16,6 @@ class PostPage extends Component {
     } = _.get(this, 'props')
     return (
       <div className={className}>
-        <h1>PostPage</h1>
         <Post id={id} />
       </div>
     )
