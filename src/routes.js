@@ -4,10 +4,6 @@ import AboutPage from 'src/components/AboutPage'
 import PostPage from 'src/components/PostPage'
 
 const routes = [
-  // {
-  //   path: '/404',
-  //   component: NotFound,
-  // },
   {
     component: Layout,
     routes: [
