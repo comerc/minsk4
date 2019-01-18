@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import logo from 'src/_logo.svg'
+import 'src/_App.css'
 import { Button } from 'antd'
 import styled from 'styled-components'
 

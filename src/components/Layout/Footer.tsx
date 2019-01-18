@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import styled from 'styled-components'
-import Copyright from '../Copyright'
+import Copyright from 'src/components/Copyright'
 
 const style = () => (Self) => styled(Self)`
   ${Copyright} {

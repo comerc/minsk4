@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import styled from 'styled-components'
-import Posts from '../Posts'
+import Posts from 'src/components/Posts'
 import { Button } from 'antd'
 
 const style = () => (Self) => styled(Self)``

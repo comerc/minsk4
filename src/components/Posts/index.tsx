@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { dispatch } from '../../store'
-import { readPosts } from '../../ducks/posts'
+import { dispatch } from 'src/store'
+import { readPosts } from 'src/ducks/posts'
 import styled from 'styled-components'
 
 const mapStateToProps = (state) => ({
