@@ -1,5 +1,7 @@
 const path = require('path')
 const { generateTheme } = require('antd-theme-generator')
+const lessJs = require('less')
+const fs = require('fs')
 
 const options = {
   stylesDir: path.join(__dirname, './src/styles'),
@@ -21,8 +23,23 @@ const options = {
 }
 
 generateTheme(options)
+  .then((generatedLess) => {
+    // console.log('Theme generated successfully')
+    return lessJs.render(generatedLess, { javascriptEnabled: true })
+  })
+  .then(({ css }) => {
+    console.log('Less rendered successfully')
+    return new Promise((resolve, reject) =>
+      fs.writeFile('./public/custom-theme.css', css, (error) => {
+        if (error) {
+          reject(error)
+        }
+        resolve()
+      }),
+    )
+  })
   .then(() => {
-    console.log('Theme generated successfully')
+    console.log('File writed successfully')
   })
   .catch((error) => {
     console.log('Error', error)
