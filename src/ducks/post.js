@@ -2,7 +2,7 @@ import { createReducer, createAction } from 'redux-act'
 import axios from 'axios'
 import { API } from 'src/constants'
 
-const NS = `POST__`
+const NS = 'POST__'
 
 const initialState = {
   item: {},
