@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import styled from 'styled-components'
 import Post from 'src/components/Post'
 
@@ -13,7 +12,7 @@ class PostPage extends Component {
       match: {
         params: { id },
       },
-    } = _.get(this, 'props')
+    } = this.props as any
     return (
       <div className={className}>
         <Post id={id} />

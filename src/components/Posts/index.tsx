@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
 import { readPosts } from 'src/ducks/posts'
@@ -22,7 +21,7 @@ class Posts extends Component {
   }
 
   render() {
-    const { className, items } = _.get(this, 'props')
+    const { className, items } = this.props as any
     return (
       <div className={className}>
         {items.map(({ id, title, teaser }) => (

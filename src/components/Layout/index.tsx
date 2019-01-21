@@ -27,7 +27,7 @@ class Layout extends Component {
     const {
       className,
       route: { routes },
-    } = _.get(this, 'props')
+    } = this.props as any
     const { isNotFound } = this.state
     return (
       <div className={className}>

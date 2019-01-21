@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import styled from 'styled-components'
 import Copyright from 'src/components/Copyright'
 
@@ -11,7 +10,7 @@ const style = () => (Self) => styled(Self)`
 @style()
 class Footer extends Component {
   render() {
-    const { className } = _.get(this, 'props')
+    const { className } = this.props as any
     return (
       <div className={className}>
         <Copyright />
