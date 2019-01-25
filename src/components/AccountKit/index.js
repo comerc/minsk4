@@ -1,81 +1,77 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { bestFacebookLocaleFor } from 'facebook-locales'
 
 let isAccountKitInitialized = false
 
 class AccountKit extends React.Component {
-  constructor(props) {
-    super(props)
-    this.signIn = this.signIn.bind(this)
-    this.state = {
-      disabled: !isAccountKitInitialized,
-    }
+  state = {
+    disabled: !isAccountKitInitialized,
   }
 
-  componentDidMount() {
-    this.mounted = true
-    if (!window.AccountKit) {
-      ;((callback) => {
-        const tag = document.createElement('script')
-        tag.setAttribute('src', `https://sdk.accountkit.com/${this.props.language}/sdk.js`)
-        tag.setAttribute('id', 'account-kit')
-        tag.setAttribute('type', 'text/javascript')
-        tag.onload = callback
-        document.head.appendChild(tag)
-      })(() => {
-        window.AccountKit_OnInteractive = this.onLoad.bind(this)
+  login = () => {
+    const { disabled } = this.state
+    if (disabled) {
+      return
+    }
+    const { loginType, onLogin, countryCode, phoneNumber, emailAddress } = this.props
+    const options = {}
+    if (loginType === 'PHONE') {
+      if (countryCode) {
+        options.countryCode = countryCode
+      }
+      if (phoneNumber) {
+        options.phoneNumber = phoneNumber
+      }
+    } else if (loginType === 'EMAIL' && emailAddress) {
+      options.emailAddress = emailAddress
+    }
+    window.AccountKit.login(loginType, options, (response) => onLogin(response))
+  }
+
+  onLoad = () => {
+    window.AccountKit_OnInteractive = () => {
+      const { appId, csrf, version, debug, display, redirect } = this.props
+      window.AccountKit.init({
+        appId,
+        state: csrf,
+        version,
+        debug,
+        display,
+        redirect,
+        fbAppEventsEnabled: false,
       })
-    }
-  }
-
-  componentWillMount() {
-    this.mounted = false
-  }
-
-  onLoad() {
-    const { appId, csrf, version, debug, display, redirect } = this.props
-    window.AccountKit.init({
-      appId,
-      state: csrf,
-      version,
-      debug,
-      display,
-      redirect,
-      fbAppEventsEnabled: false,
-    })
-    isAccountKitInitialized = true
-    if (this.mounted) {
+      isAccountKitInitialized = true
       this.setState({
         disabled: false,
       })
     }
   }
 
-  signIn() {
-    if (this.state.disabled) {
+  componentDidMount() {
+    if (window.AccountKit) {
       return
     }
-    const { loginType, onResponse, countryCode, phoneNumber, emailAddress } = this.props
+    const { language } = this.props
+    const locale = bestFacebookLocaleFor(language)
+    const tag = document.createElement('script')
+    tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js`)
+    tag.setAttribute('id', 'account-kit')
+    tag.setAttribute('type', 'text/javascript')
+    tag.onload = this.onLoad
+    document.head.appendChild(tag)
+  }
 
-    const options = {}
-    if (countryCode) {
-      options.countryCode = countryCode
-    }
-
-    if (loginType === 'PHONE' && phoneNumber) {
-      options.phoneNumber = phoneNumber
-    } else if (loginType === 'EMAIL' && emailAddress) {
-      options.emailAddress = emailAddress
-    }
-
-    window.AccountKit.login(loginType, options, (resp) => onResponse(resp))
+  componentWillUnmount() {
+    const tag = document.getElementById('account-kit')
+    tag.onload = null
   }
 
   render() {
     const disabled = this.state.disabled || this.props.disabled
     return this.props.children({
       onClick: () => {
-        this.signIn()
+        this.login()
       },
       disabled,
     })
@@ -87,7 +83,7 @@ AccountKit.propTypes = {
   appId: PropTypes.string.isRequired,
   version: PropTypes.string.isRequired,
   children: PropTypes.func.isRequired,
-  onResponse: PropTypes.func.isRequired,
+  onLogin: PropTypes.func.isRequired,
   loginType: PropTypes.oneOf(['PHONE', 'EMAIL']),
   debug: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -103,7 +99,7 @@ AccountKit.defaultProps = {
   debug: false,
   disabled: false,
   display: 'popup',
-  language: 'en_US',
+  language: 'en',
   loginType: 'PHONE',
 }
 
