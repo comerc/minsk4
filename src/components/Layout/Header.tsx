@@ -6,7 +6,6 @@ import AccountKit from 'src/components/AccountKit'
 import { ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
 import styled from 'styled-components'
 
-// acceptLanguage.languages(['zh-CN', 'en-US'])
 const style = () => (Self) => styled(Self)``
 
 @style()
@@ -18,11 +17,18 @@ class Header extends Component {
     window.navigator.language ||
     AccountKit.defaultProps.language
 
-  handleLogin = (response) => {
-    if (response.state !== this.csrf) {
-      console.error('Invalid csrf')
-      return
+  handleAccountKitMount = () => {
+    const data = {
+      // csrf: this.csrf,
     }
+    return new Promise((resolve) => setTimeout(() => resolve(data), 5000))
+  }
+
+  handleAccountKitLogin = (response) => {
+    // if (response.state !== this.csrf) {
+    //   console.error('Invalid csrf')
+    //   return
+    // }
     console.log(response)
   }
 
@@ -35,8 +41,8 @@ class Header extends Component {
           {...{
             appId: ACCOUNT_KIT_APP_ID,
             version: ACCOUNT_KIT_VERSION,
-            onLogin: this.handleLogin,
-            csrf: this.csrf,
+            onMount: this.handleAccountKitMount,
+            onLogin: this.handleAccountKitLogin,
             language: this.language,
             debug: process.env.NODE_ENV === 'development',
             loginType: 'EMAIL',

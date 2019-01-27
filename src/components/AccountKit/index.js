@@ -2,11 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bestFacebookLocaleFor } from 'facebook-locales'
 
-let isAccountKitInitialized = false
-
 class AccountKit extends React.Component {
   state = {
-    disabled: !isAccountKitInitialized,
+    disabled: !window.AccountKit_OnInteractive,
   }
 
   login = () => {
@@ -29,42 +27,41 @@ class AccountKit extends React.Component {
     window.AccountKit.login(loginType, options, (response) => onLogin(response))
   }
 
-  onLoad = () => {
-    window.AccountKit_OnInteractive = () => {
-      const { appId, csrf, version, debug, display, redirect } = this.props
-      window.AccountKit.init({
-        appId,
-        state: csrf,
-        version,
-        debug,
-        display,
-        redirect,
-        fbAppEventsEnabled: false,
-      })
-      isAccountKitInitialized = true
-      this.setState({
-        disabled: false,
-      })
-    }
-  }
-
   componentDidMount() {
-    if (window.AccountKit) {
-      return
-    }
-    const { language } = this.props
-    const locale = bestFacebookLocaleFor(language)
-    const tag = document.createElement('script')
-    tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js`)
-    tag.setAttribute('id', 'account-kit')
-    tag.setAttribute('type', 'text/javascript')
-    tag.onload = this.onLoad
-    document.head.appendChild(tag)
+    this.props.onMount().then(({ csrf }) => {
+      if (this.isUnmounted || window.AccountKit_OnInteractive) {
+        return
+      }
+      const { appId, version, debug, display, redirect, language } = this.props
+      window.AccountKit_OnInteractive = () => {
+        window.AccountKit.init({
+          state: csrf || '',
+          appId,
+          version,
+          debug,
+          display,
+          redirect,
+          fbAppEventsEnabled: false,
+        })
+        this.setState({
+          disabled: false,
+        })
+      }
+      const locale = bestFacebookLocaleFor(language)
+      const tag = document.createElement('script')
+      tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js`)
+      tag.setAttribute('id', 'account-kit')
+      tag.setAttribute('type', 'text/javascript')
+      document.head.appendChild(tag)
+      this.isAccountKitInitialized = true
+    })
   }
 
   componentWillUnmount() {
-    const tag = document.getElementById('account-kit')
-    tag.onload = null
+    this.isUnmounted = true
+    if (this.isAccountKitInitialized) {
+      window.AccountKit_OnInteractive = null
+    }
   }
 
   render() {
@@ -79,10 +76,10 @@ class AccountKit extends React.Component {
 }
 
 AccountKit.propTypes = {
-  csrf: PropTypes.string.isRequired,
   appId: PropTypes.string.isRequired,
   version: PropTypes.string.isRequired,
   children: PropTypes.func.isRequired,
+  onMount: PropTypes.func.isRequired,
   onLogin: PropTypes.func.isRequired,
   loginType: PropTypes.oneOf(['PHONE', 'EMAIL']),
   debug: PropTypes.bool,
