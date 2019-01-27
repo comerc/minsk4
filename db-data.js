@@ -1,6 +1,6 @@
 module.exports = () => {
   const faker = require('faker')
-  const data = { posts: [] }
+  const data = { csrf: [], posts: [] }
   for (let i = 0; i < 1000; i++) {
     data.posts.push({
       id: faker.lorem.slug(),
