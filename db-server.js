@@ -25,15 +25,34 @@ const corsOptions = {
 server.use(cors(corsOptions))
 
 // Add custom routes before JSON Server router
-server.use('/csrf', (req, _, next) => {
-  if (req.method === 'POST' && !req.query.id) {
-    const nanoid = require('nanoid')
-    req.body = { value: nanoid(), createdAt: Date.now() }
+const nanoid = require('nanoid')
+const secret = process.env.SECRET || nanoid()
+const util = require('util')
+const jwt = require('jsonwebtoken')
+
+server.post('/csrf', async (_, res) => {
+  try {
+    const token = await util.promisify(jwt.sign)(
+      {
+        salt: nanoid(),
+      },
+      secret,
+      { expiresIn: '1m' },
+    )
+    res.status(201).jsonp({ token })
+  } catch {
+    res.status(500).end()
   }
-  if (req.method === 'DELETE') {
-    req.method = 'PUT'
+})
+
+server.get('/csrf', async (req, res) => {
+  const token = req.query.token
+  try {
+    await util.promisify(jwt.verify)(token, secret)
+    res.status(205).end()
+  } catch {
+    res.status(403).end()
   }
-  next()
 })
 
 // Add custom middleware
@@ -55,9 +74,9 @@ server.use('/posts', (req, _, next) => {
 
 // Use default router
 const path = require('path')
-// const createData = require(path.join(__dirname, 'db-data'))
-// const router = jsonServer.router(createData())
-const router = jsonServer.router(path.join(__dirname, 'db-data.json'))
+const createData = require(path.join(__dirname, 'db-data'))
+const router = jsonServer.router(createData())
+// const router = jsonServer.router(path.join(__dirname, 'db-data.json'))
 server.use(router)
 
 server.listen(4000, () => {

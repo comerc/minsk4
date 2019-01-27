@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import * as serviceWorker from 'src/serviceWorker'
@@ -11,21 +10,16 @@ ReactDOM.render(<App />, document.getElementById('root'))
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister()
 
+const axios = require('axios')
+
 axios
   .post('http://localhost:4000/csrf')
-  .then(({ data }) => {
-    console.log('post', data)
-    return axios.get(`http://localhost:4000/csrf?value=${data.value}`)
+  .then((response) => {
+    console.log('post', response)
+    const { token } = response.data
+    return axios.get(`http://localhost:4000/csrf?token=${token}`)
   })
-  .then(({ data }) => {
-    console.log('get', data)
-    const { id, value, createdAt } = data[0]
-    // if (!value || value != csrf) {
-    //   return Promise.reject('Invalid csrf')
-    // }
-    if (!createdAt || Date.now() - createdAt > 1000 * 60 * 10) {
-      return Promise.reject('Expired csrf')
-    }
-    return axios.delete(`http://localhost:4000/csrf/${id}`)
+  .then((response) => {
+    console.log('get', response)
   })
-  .catch((error) => console.log(error))
+  .catch((error) => console.error(error))
