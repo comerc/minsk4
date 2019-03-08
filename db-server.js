@@ -26,7 +26,7 @@ server.use(cors(corsOptions))
 
 // Add custom routes before JSON Server router
 const nanoid = require('nanoid')
-const secret = process.env.SECRET || nanoid()
+const secret = process.env.SECRET || nanoid(32)
 const util = require('util')
 const jwt = require('jsonwebtoken')
 
@@ -34,7 +34,7 @@ server.post('/csrf', async (_, res) => {
   try {
     const token = await util.promisify(jwt.sign)(
       {
-        salt: nanoid(),
+        salt: nanoid(32),
       },
       secret,
       { expiresIn: '1m' },
@@ -79,6 +79,6 @@ const router = jsonServer.router(createData())
 // const router = jsonServer.router(path.join(__dirname, 'db-data.json'))
 server.use(router)
 
-server.listen(4000, () => {
+server.listen(5000, () => {
   console.log('JSON Server is running')
 })

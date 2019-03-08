@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import nanoid from 'nanoid'
+// import nanoid from 'nanoid'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
@@ -10,7 +10,7 @@ const style = () => (Self) => styled(Self)``
 
 @style()
 class Header extends Component {
-  csrf = nanoid()
+  // csrf = nanoid()
 
   language =
     (window.navigator.languages && window.navigator.languages[0]) ||

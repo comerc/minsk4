@@ -13,11 +13,11 @@ serviceWorker.unregister()
 const axios = require('axios')
 
 axios
-  .post('http://localhost:4000/csrf')
+  .post('http://localhost:5000/csrf')
   .then((response) => {
     console.log('post', response)
     const { token } = response.data
-    return axios.get(`http://localhost:4000/csrf?token=${token}`)
+    return axios.get(`http://localhost:5000/csrf?token=${token}`)
   })
   .then((response) => {
     console.log('get', response)
