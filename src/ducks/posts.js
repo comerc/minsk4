@@ -1,6 +1,6 @@
 import { createReducer, createAction } from 'redux-act'
 import axios from 'axios'
-import { API_URL, PAGE_LIMIT } from 'src/constants'
+import { API, PAGE_LIMIT } from 'src/constants'
 
 const NS = 'POSTS__'
 
@@ -33,7 +33,7 @@ reducer.on(readListFailure, (state) => ({
 export const readPosts = () => (dispatch) => {
   dispatch(readListRequest())
   return axios
-    .get(`${API_URL}/posts/?_limit=${PAGE_LIMIT}`)
+    .get(`${API}/posts/?_limit=${PAGE_LIMIT}`)
     .then(({ data: items }) => {
       dispatch(readListSuccess(items))
     })

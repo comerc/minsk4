@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
-import { API_URL, ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
+import { API, ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
 import styled from 'styled-components'
 
 const style = () => (Self) => styled(Self)``
@@ -16,14 +16,14 @@ class Header extends Component {
     AccountKit.defaultProps.language
 
   handleAccountKitMount = () => {
-    return axios.post(`${API_URL}/csrf`).then(({ data: { token: state } }) => {
+    return axios.post(`${API}/csrf`).then(({ data: { token: state } }) => {
       return { state }
     })
   }
 
   handleAccountKitLogin = (response) => {
     axios
-      .get(`${API_URL}/csrf?token=${response.state}`)
+      .get(`${API}/csrf?token=${response.state}`)
       .then((response) => {
         console.log('get', response)
       })

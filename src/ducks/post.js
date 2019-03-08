@@ -1,6 +1,6 @@
 import { createReducer, createAction } from 'redux-act'
 import axios from 'axios'
-import { API_URL } from 'src/constants'
+import { API } from 'src/constants'
 
 const NS = 'POST__'
 
@@ -33,7 +33,7 @@ reducer.on(readItemFailure, (state) => ({
 export const readPost = (id) => (dispatch) => {
   dispatch(readItemRequest())
   return axios
-    .get(`${API_URL}/posts/${id}/`)
+    .get(`${API}/posts/${id}/`)
     .then(({ data: item }) => {
       dispatch(readItemSuccess(item))
     })
