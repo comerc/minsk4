@@ -1,3 +1,5 @@
+const config = require('./config')
+
 const jsonServer = require('json-server')
 const server = jsonServer.create()
 
@@ -11,7 +13,7 @@ server.use(defaultMiddlewares)
 
 // Add custom cors
 const cors = require('cors')
-const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost:3000'
+const REACT_APP_HOST = config.get('REACT_APP_HOST')
 const whitelist = [REACT_APP_HOST]
 const corsOptions = {
   origin: (origin, callback) => {
@@ -27,7 +29,7 @@ server.use(cors(corsOptions))
 
 // Add custom routes before JSON Server router
 const nanoid = require('nanoid')
-const SECRET = process.env.SECRET || nanoid(32)
+const SECRET = config.get('SECRET')
 const util = require('util')
 const jwt = require('jsonwebtoken')
 
@@ -75,9 +77,9 @@ server.use('/posts', (req, _, next) => {
 
 // Use default router
 const path = require('path')
-const createData = require(path.join(__dirname, 'db-data'))
+const createData = require('./data')
 const router = jsonServer.router(createData())
-// const router = jsonServer.router(path.join(__dirname, 'db-data.json'))
+// const router = jsonServer.router(path.join(__dirname, 'data.json'))
 server.use(router)
 
 server.listen(5000, () => {
