@@ -1,35 +1,33 @@
 import React, { Component } from 'react'
-// import nanoid from 'nanoid'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
-import { ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
+import { API_URL, ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
 import styled from 'styled-components'
 
 const style = () => (Self) => styled(Self)``
 
 @style()
 class Header extends Component {
-  // csrf = nanoid()
-
   language =
     (window.navigator.languages && window.navigator.languages[0]) ||
     window.navigator.language ||
     AccountKit.defaultProps.language
 
   handleAccountKitMount = () => {
-    const data = {
-      // csrf: this.csrf,
-    }
-    return new Promise((resolve) => setTimeout(() => resolve(data), 5000))
+    return axios.post(`${API_URL}/csrf`).then(({ data: { token: state } }) => {
+      return { state }
+    })
   }
 
   handleAccountKitLogin = (response) => {
-    // if (response.state !== this.csrf) {
-    //   console.error('Invalid csrf')
-    //   return
-    // }
-    console.log(response)
+    axios
+      .get(`${API_URL}/csrf?token=${response.state}`)
+      .then((response) => {
+        console.log('get', response)
+      })
+      .catch((error) => console.error(error))
   }
 
   render() {

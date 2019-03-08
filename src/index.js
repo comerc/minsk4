@@ -9,17 +9,3 @@ ReactDOM.render(<App />, document.getElementById('root'))
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister()
-
-const axios = require('axios')
-
-axios
-  .post('http://localhost:5000/csrf')
-  .then((response) => {
-    console.log('post', response)
-    const { token } = response.data
-    return axios.get(`http://localhost:5000/csrf?token=${token}`)
-  })
-  .then((response) => {
-    console.log('get', response)
-  })
-  .catch((error) => console.error(error))
