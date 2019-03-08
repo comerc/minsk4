@@ -28,17 +28,17 @@ class AccountKit extends React.Component {
   }
 
   componentDidMount() {
-    this.props.onMount().then(({ csrf }) => {
+    this.props.onMount().then(({ state }) => {
       if (this.isUnmounted || window.AccountKit_OnInteractive) {
         return
       }
-      if (!csrf) {
-        throw new Error('csrf must have value')
+      if (!state) {
+        throw new Error('state-param must have value')
       }
       const { appId, version, debug, display, redirect, language } = this.props
       window.AccountKit_OnInteractive = () => {
         window.AccountKit.init({
-          state: csrf,
+          state,
           appId,
           version,
           debug,
