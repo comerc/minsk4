@@ -11,7 +11,8 @@ server.use(defaultMiddlewares)
 
 // Add custom cors
 const cors = require('cors')
-const whitelist = ['http://localhost:3000']
+const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost:3000'
+const whitelist = [REACT_APP_HOST]
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
@@ -26,7 +27,7 @@ server.use(cors(corsOptions))
 
 // Add custom routes before JSON Server router
 const nanoid = require('nanoid')
-const secret = process.env.SECRET || nanoid(32)
+const SECRET = process.env.SECRET || nanoid(32)
 const util = require('util')
 const jwt = require('jsonwebtoken')
 
@@ -36,7 +37,7 @@ server.post('/csrf', async (_, res) => {
       {
         salt: nanoid(32),
       },
-      secret,
+      SECRET,
       { expiresIn: '1m' },
     )
     res.status(201).jsonp({ token })
@@ -48,7 +49,7 @@ server.post('/csrf', async (_, res) => {
 server.get('/csrf', async (req, res) => {
   const token = req.query.token
   try {
-    await util.promisify(jwt.verify)(token, secret)
+    await util.promisify(jwt.verify)(token, SECRET)
     res.status(205).end()
   } catch {
     res.status(403).end()
