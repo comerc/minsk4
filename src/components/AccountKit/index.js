@@ -35,6 +35,9 @@ class AccountKit extends React.Component {
       if (!state) {
         throw new Error('state-param must have value')
       }
+      // if (state.length > 36) {
+      //   throw new Error('state-param must have length <= 36')
+      // }
       const { appId, version, debug, display, redirect, language } = this.props
       window.AccountKit_OnInteractive = () => {
         window.AccountKit.init({
