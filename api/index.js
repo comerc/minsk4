@@ -40,7 +40,7 @@ server.post('/csrf', async (_, res) => {
         salt: nanoid(32),
       },
       SECRET,
-      { expiresIn: '1m' },
+      // { expiresIn: '1m' },
     )
     res.status(201).jsonp({ token })
   } catch {
@@ -48,13 +48,30 @@ server.post('/csrf', async (_, res) => {
   }
 })
 
-server.get('/csrf', async (req, res) => {
-  const token = req.query.token
+// server.get('/csrf', async (req, res) => {
+//   const token = req.query.token
+//   try {
+//     await util.promisify(jwt.verify)(token, SECRET)
+//     res.status(205).end()
+//   } catch {
+//     res.status(403).end()
+//   }
+// })
+
+const accountKitGraph = require('./accountKitGraph')
+
+server.post('/login', async (req, res) => {
+  const { code, token } = req.body
   try {
     await util.promisify(jwt.verify)(token, SECRET)
-    res.status(205).end()
   } catch {
     res.status(403).end()
+  }
+  try {
+    const { id, access_token, token_refresh_interval_sec } = await accountKitGraph.accessToken(code)
+    res.status(201).jsonp({ id, access_token, token_refresh_interval_sec })
+  } catch {
+    res.status(500).end()
   }
 })
 

@@ -22,12 +22,16 @@ class Header extends Component {
   }
 
   handleAccountKitLogin = (response) => {
-    axios
-      .get(`${API}/csrf?token=${response.state}`)
-      .then((response) => {
-        console.log('get', response)
-      })
-      .catch((error) => console.error(error))
+    const { code, state } = response
+    axios.post(`${API}/login`, { code, token: state }).then((response) => {
+      console.log('login', response)
+    })
+
+    // axios
+    //   .get(`${API}/csrf?token=${response.state}`)
+    //   .then((response) => {
+    //   })
+    //   .catch((error) => console.error(error))
   }
 
   render() {
