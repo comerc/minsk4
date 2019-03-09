@@ -9,6 +9,7 @@ nconf
     'SECRET',
     'REACT_APP_ACCOUNT_KIT_APP_ID',
     'REACT_APP_ACCOUNT_KIT_VERSION',
+    'REACT_APP_ACCOUNT_KIT_SECRET',
     'REACT_APP_HOST',
   ])
   .defaults({
