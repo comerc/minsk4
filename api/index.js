@@ -35,14 +35,14 @@ const jwt = require('jsonwebtoken')
 
 server.post('/csrf', async (_, res) => {
   try {
-    const token = await util.promisify(jwt.sign)(
+    const csrf = await util.promisify(jwt.sign)(
       {
         salt: nanoid(32),
       },
       SECRET,
       // { expiresIn: '1m' },
     )
-    res.status(201).jsonp({ token })
+    res.status(201).jsonp({ csrf })
   } catch {
     res.status(500).end()
   }
@@ -62,14 +62,18 @@ const accountKit = require('./accountKit')
 
 server.post('/login', async (req, res) => {
   try {
-    const { token } = req.body
-    await util.promisify(jwt.verify)(token, SECRET)
+    const { csrf } = req.body
+    await util.promisify(jwt.verify)(csrf, SECRET)
   } catch {
     res.status(403).end()
   }
   try {
     const { code } = req.body
     const { id, access_token, token_refresh_interval_sec } = await accountKit.accessToken(code)
+    // .catch((error) => {
+    //   console.log(error)
+    //   return Promise.reject(error)
+    // })
     const token = await util.promisify(jwt.sign)(
       {
         accountId: id,
@@ -78,7 +82,6 @@ server.post('/login', async (req, res) => {
         refreshInterval: token_refresh_interval_sec,
       },
       SECRET,
-      { expiresIn: `${token_refresh_interval_sec}s` },
     )
     res.status(201).jsonp({ token })
   } catch {
