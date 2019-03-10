@@ -4,7 +4,8 @@ const crypto = require('crypto-js')
 
 const APP_ID = config.get('REACT_APP_ACCOUNT_KIT_APP_ID')
 const SECRET = config.get('REACT_APP_ACCOUNT_KIT_SECRET')
-const baseUrl = `https://graph.accountkit.com/${config.get('REACT_APP_ACCOUNT_KIT_VERSION')}`
+const VERSION = config.get('REACT_APP_ACCOUNT_KIT_VERSION')
+const baseUrl = `https://graph.accountkit.com/${VERSION}`
 
 const result = {
   accessToken: (code) =>
