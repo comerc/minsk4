@@ -58,7 +58,7 @@ server.post('/csrf', async (_, res) => {
 //   }
 // })
 
-const accountKitGraph = require('./accountKitGraph')
+const accountKit = require('./accountKit')
 
 server.post('/login', async (req, res) => {
   const { code, token } = req.body
@@ -68,7 +68,7 @@ server.post('/login', async (req, res) => {
     res.status(403).end()
   }
   try {
-    const { id, access_token, token_refresh_interval_sec } = await accountKitGraph.accessToken(code)
+    const { id, access_token, token_refresh_interval_sec } = await accountKit.accessToken(code)
     res.status(201).jsonp({ id, access_token, token_refresh_interval_sec })
   } catch {
     res.status(500).end()
