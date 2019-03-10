@@ -3,9 +3,8 @@ const path = require('path')
 
 nconf
   .file({ format: nconf.formats.ini, file: path.join(__dirname, '../.env.local') })
-  .argv() // read command line args
+  .argv()
   .env([
-    // read environment vars
     'SECRET',
     'REACT_APP_ACCOUNT_KIT_APP_ID',
     'REACT_APP_ACCOUNT_KIT_VERSION',
