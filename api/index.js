@@ -61,15 +61,26 @@ server.post('/csrf', async (_, res) => {
 const accountKit = require('./accountKit')
 
 server.post('/login', async (req, res) => {
-  const { code, token } = req.body
   try {
+    const { token } = req.body
     await util.promisify(jwt.verify)(token, SECRET)
   } catch {
     res.status(403).end()
   }
   try {
+    const { code } = req.body
     const { id, access_token, token_refresh_interval_sec } = await accountKit.accessToken(code)
-    res.status(201).jsonp({ id, access_token, token_refresh_interval_sec })
+    const token = await util.promisify(jwt.sign)(
+      {
+        accountId: id,
+        code,
+        accessToken: access_token,
+        refreshInterval: token_refresh_interval_sec,
+      },
+      SECRET,
+      { expiresIn: `${token_refresh_interval_sec}s` },
+    )
+    res.status(201).jsonp({ token })
   } catch {
     res.status(500).end()
   }
