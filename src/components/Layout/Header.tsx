@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+// import jwt from 'jsonwebtoken'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
@@ -16,23 +17,35 @@ class Header extends Component {
     AccountKit.defaultProps.language
 
   handleAccountKitMount = () => {
-    return axios.post(`${API}/csrf`).then(({ data: { token: state } }) => {
+    return axios.post(`${API}/csrf`).then(({ data: { csrf: state } }) => {
       return { state }
     })
   }
 
   handleAccountKitLogin = (response) => {
-    const { code, state } = response
-    axios.post(`${API}/login`, { code, token: state }).then((response) => {
-      console.log('login', response)
+    const { state: csrf, code } = response
+    axios.post(`${API}/login`, { csrf, code }).then((response) => {
+      const { token } = response.data
+      localStorage.setItem('token', token)
     })
-
-    // axios
-    //   .get(`${API}/csrf?token=${response.state}`)
-    //   .then((response) => {
-    //   })
-    //   .catch((error) => console.error(error))
   }
+
+  // refreshToken() {
+  //   const token = localStorage.getItem('token')
+  //   if (!token) {
+  //     return
+  //   }
+  //   const { iat, refreshInterval, code } = jwt.decode(token)
+  //   const expired = iat + refreshInterval
+  //   const now = new Date().valueOf() / 1000
+  //   if (expired < now) {
+  //     axios.post(`${API}/login`, { code }).then((response) => {
+  //       const { token } = response.data
+  //       console.log({ token })
+  //       localStorage.setItem('token', token)
+  //     })
+  //   }
+  // }
 
   render() {
     const { className } = this.props as any
