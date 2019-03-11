@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import axios from 'axios'
 // import jwt from 'jsonwebtoken'
 import { Link } from 'react-router-dom'
@@ -47,6 +47,7 @@ class Header extends Component {
     axios.post(`${API}/login`, { csrf, state, code }).then((response) => {
       const { token } = response.data
       localStorage.setItem('token', token)
+      this.setState({ isLogged: true })
     })
   }
 
@@ -74,21 +75,25 @@ class Header extends Component {
       content: '',
       okText: 'Да',
       cancelText: 'Нет, только здесь',
-      onOk() {
-        console.log('handleConfirm')
+      onOk: () => {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        axios.post(`${API}/invalidateAllTokens`, { token })
+        localStorage.removeItem('token')
+        this.setState({ isLogged: false })
       },
-      onCancel() {
-        console.log('handleCancel')
+      onCancel: () => {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        axios.post(`${API}/logout`, { token })
+        localStorage.removeItem('token')
+        this.setState({ isLogged: false })
       },
     })
-    // const token = localStorage.getItem('token')
-    // if (!token) {
-    //   return
-    // }
-    // axios.post(`${API}/logout`, { token }).then((response) => {
-    //   console.log(response)
-    //   localStorage.removeItem('token')
-    // })
   }
 
   render() {
@@ -99,45 +104,47 @@ class Header extends Component {
         <div>Header</div>
         <Link to="/404">404</Link>
         <br />
-        {isLogged && (
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key="0">
-                  <a href="#" onClick={this.logout}>
-                    Logout
+        <AccountKit
+          {...{
+            appId: ACCOUNT_KIT_APP_ID,
+            version: ACCOUNT_KIT_VERSION,
+            onMount: this.handleAccountKitMount,
+            onLogin: this.handleAccountKitLogin,
+            language: this.language,
+            debug: process.env.NODE_ENV === 'development',
+            loginType: 'EMAIL',
+          }}
+        >
+          {({ onClick, disabled }) => (
+            <Fragment>
+              {isLogged && (
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      <Menu.Item>
+                        <a href="#" onClick={this.logout}>
+                          Logout
+                        </a>
+                      </Menu.Item>
+                      <Menu.Divider />
+                      <Menu.Item>3rd menu item</Menu.Item>
+                    </Menu>
+                  }
+                  trigger={['click']}
+                >
+                  <a className="ant-dropdown-link" href="#">
+                    Account <Icon type="down" />
                   </a>
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key="3">3rd menu item</Menu.Item>
-              </Menu>
-            }
-            trigger={['click']}
-          >
-            <a className="ant-dropdown-link" href="#">
-              Profile <Icon type="down" />
-            </a>
-          </Dropdown>
-        )}
-        {isLogged || (
-          <AccountKit
-            {...{
-              appId: ACCOUNT_KIT_APP_ID,
-              version: ACCOUNT_KIT_VERSION,
-              onMount: this.handleAccountKitMount,
-              onLogin: this.handleAccountKitLogin,
-              language: this.language,
-              debug: process.env.NODE_ENV === 'development',
-              loginType: 'EMAIL',
-            }}
-          >
-            {({ onClick, disabled }) => (
-              <Button {...{ onClick, disabled }} type="primary">
-                Login
-              </Button>
-            )}
-          </AccountKit>
-        )}
+                </Dropdown>
+              )}
+              {isLogged || (
+                <Button {...{ onClick, disabled }} type="primary">
+                  Login
+                </Button>
+              )}
+            </Fragment>
+          )}
+        </AccountKit>
       </div>
     )
   }

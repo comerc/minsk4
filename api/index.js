@@ -68,10 +68,10 @@ server.post('/login', async (req, res) => {
     if (decoded.state !== state) {
       throw new Error('Invalid state')
     }
-  } catch {
-    res.status(403).end()
-  }
-  try {
+    // } catch {
+    //   res.status(403).end()
+    // }
+    // try {
     const { code } = req.body
     const { id, access_token, token_refresh_interval_sec } = await accountKit.accessToken(code)
     // .catch((error) => {
@@ -81,13 +81,41 @@ server.post('/login', async (req, res) => {
     const token = await util.promisify(jwt.sign)(
       {
         accountId: id,
-        code,
         accessToken: access_token,
-        refreshInterval: token_refresh_interval_sec,
+        // refreshInterval: token_refresh_interval_sec,
       },
       SECRET,
+      { expiresIn: `${token_refresh_interval_sec}s` },
     )
     res.status(201).jsonp({ token })
+  } catch {
+    res.status(500).end()
+  }
+})
+
+server.post('/logout', async (req, res) => {
+  try {
+    const { token } = req.body
+    const { accessToken } = await util.promisify(jwt.verify)(token, SECRET)
+    const { success } = await accountKit.logout(accessToken)
+    if (!success) {
+      throw new Error('Without success')
+    }
+    res.status(200).end()
+  } catch {
+    res.status(500).end()
+  }
+})
+
+server.post('/invalidateAllTokens', async (req, res) => {
+  try {
+    const { token } = req.body
+    const { accountId } = await util.promisify(jwt.verify)(token, SECRET)
+    const { success } = await accountKit.invalidateAllTokens(accountId)
+    if (!success) {
+      throw new Error('Without success')
+    }
+    res.status(200).end()
   } catch {
     res.status(500).end()
   }
