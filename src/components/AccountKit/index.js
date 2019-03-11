@@ -35,10 +35,10 @@ class AccountKit extends React.Component {
       if (!state) {
         throw new Error('state-param must have value')
       }
-      // if (state.length > 36) {
-      //   throw new Error('state-param must have length <= 36')
-      // }
-      const { appId, version, debug, display, redirect, language, hash } = this.props
+      if (state.length > 36) {
+        throw new Error('state-param must have length <= 36')
+      }
+      const { appId, version, debug, display, redirect, language } = this.props
       window.AccountKit_OnInteractive = () => {
         window.AccountKit.init({
           state,
@@ -55,12 +55,11 @@ class AccountKit extends React.Component {
       }
       const locale = bestFacebookLocaleFor(language)
       const tag = document.createElement('script')
-      tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js?hash=${hash}`)
+      tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js`)
       tag.setAttribute('id', 'account-kit')
       tag.setAttribute('type', 'text/javascript')
-      tag.setAttribute('async', true)
-      tag.setAttribute('crossorigin', 'anonymous')
       document.head.appendChild(tag)
+      this.tag = tag
       this.isAccountKitInitialized = true
     })
   }
@@ -98,7 +97,6 @@ AccountKit.propTypes = {
   countryCode: PropTypes.string,
   phoneNumber: PropTypes.string,
   emailAddress: PropTypes.string,
-  hash: PropTypes.string,
 }
 
 AccountKit.defaultProps = {

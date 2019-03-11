@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import nanoid from 'nanoid'
 // import jwt from 'jsonwebtoken'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
@@ -12,23 +11,36 @@ const style = () => (Self) => styled(Self)``
 
 @style()
 class Header extends Component {
+  csrf = null
+
   language =
     (window.navigator.languages && window.navigator.languages[0]) ||
     window.navigator.language ||
     AccountKit.defaultProps.language
 
   handleAccountKitMount = () => {
-    return axios.post(`${API}/csrf`).then(({ data: { csrf: state } }) => {
+    return axios.post(`${API}/csrf`).then(({ data: { csrf, state } }) => {
+      this.csrf = csrf
       return { state }
     })
   }
 
   handleAccountKitLogin = (response) => {
     if (response.status === 'NOT_AUTHENTICATED') {
+      console.error('status is NOT_AUTHENTICATED')
       return
     }
-    const { state: csrf, code } = response
-    axios.post(`${API}/login`, { csrf, code }).then((response) => {
+    if (response.status === 'BAD_PARAMS') {
+      console.error('status is BAD_PARAMS')
+      return
+    }
+    if (response.status !== 'PARTIALLY_AUTHENTICATED') {
+      console.error('status is not PARTIALLY_AUTHENTICATED')
+      return
+    }
+    const { state, code } = response
+    const csrf = this.csrf
+    axios.post(`${API}/login`, { csrf, state, code }).then((response) => {
       const { token } = response.data
       localStorage.setItem('token', token)
     })
@@ -65,7 +77,6 @@ class Header extends Component {
             language: this.language,
             debug: process.env.NODE_ENV === 'development',
             loginType: 'EMAIL',
-            hash: nanoid(32),
           }}
         >
           {({ onClick, disabled }) => (

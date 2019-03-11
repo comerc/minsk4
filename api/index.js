@@ -35,14 +35,15 @@ const jwt = require('jsonwebtoken')
 
 server.post('/csrf', async (_, res) => {
   try {
+    const state = nanoid(36)
     const csrf = await util.promisify(jwt.sign)(
       {
-        salt: nanoid(32),
+        state,
       },
       SECRET,
-      // { expiresIn: '1m' },
+      { expiresIn: '1d' },
     )
-    res.status(201).jsonp({ csrf })
+    res.status(201).jsonp({ csrf, state })
   } catch {
     res.status(500).end()
   }
@@ -62,8 +63,11 @@ const accountKit = require('./accountKit')
 
 server.post('/login', async (req, res) => {
   try {
-    const { csrf } = req.body
-    await util.promisify(jwt.verify)(csrf, SECRET)
+    const { csrf, state } = req.body
+    decoded = await util.promisify(jwt.verify)(csrf, SECRET)
+    if (decoded.state !== state) {
+      throw new Error('Invalid state')
+    }
   } catch {
     res.status(403).end()
   }
