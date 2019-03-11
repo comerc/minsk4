@@ -29,6 +29,7 @@ const result = {
     }),
   logout: (accessToken) =>
     rp({
+      method: 'POST',
       uri: `${baseUrl}/logout`,
       qs: {
         access_token: accessToken,
@@ -38,6 +39,7 @@ const result = {
     }),
   invalidateAllTokens: (accountId) =>
     rp({
+      method: 'POST',
       uri: `${baseUrl}/${accountId}/invalidate_all_tokens`,
       qs: {
         access_token: ['AA', APP_ID, SECRET].join('|'),
