@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import nanoid from 'nanoid'
 // import jwt from 'jsonwebtoken'
 import { Link } from 'react-router-dom'
 import { Button } from 'antd'
@@ -64,6 +65,7 @@ class Header extends Component {
             language: this.language,
             debug: process.env.NODE_ENV === 'development',
             loginType: 'EMAIL',
+            hash: nanoid(32),
           }}
         >
           {({ onClick, disabled }) => (
