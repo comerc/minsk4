@@ -23,6 +23,9 @@ class Header extends Component {
   }
 
   handleAccountKitLogin = (response) => {
+    if (response.status === 'NOT_AUTHENTICATED') {
+      return
+    }
     const { state: csrf, code } = response
     axios.post(`${API}/login`, { csrf, code }).then((response) => {
       const { token } = response.data
