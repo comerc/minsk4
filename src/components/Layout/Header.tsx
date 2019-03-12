@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
+import _ from 'lodash'
 import axios from 'axios'
-// import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { Link } from 'react-router-dom'
 import { Menu, Dropdown, Icon, Modal, Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
@@ -32,45 +33,43 @@ class Header extends Component {
   handleAccountKitLogin = (response) => {
     if (response.status === 'NOT_AUTHENTICATED') {
       console.error('status is NOT_AUTHENTICATED')
-      return
+      return Promise.reject()
     }
     if (response.status === 'BAD_PARAMS') {
       console.error('status is BAD_PARAMS')
-      return
+      return Promise.reject()
     }
     if (response.status !== 'PARTIALLY_AUTHENTICATED') {
       console.error('status is not PARTIALLY_AUTHENTICATED')
-      return
+      return Promise.reject()
     }
     const { state, code } = response
     const csrf = this.csrf
-    axios.post(`${API}/login`, { csrf, state, code }).then((response) => {
-      const { token } = response.data
-      // const { accountId } = jwt.decode(token)
-      // console.log({ accountId }) // 561142874296458
-      localStorage.setItem('token', token)
-      this.setState({ isLogged: true })
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${API}/login`, { csrf, state, code })
+        .then(({ data: { token } }) => {
+          resolve({ token })
+        })
+        .catch(reject)
     })
   }
 
-  // refreshToken() {
-  //   const token = localStorage.getItem('token')
-  //   if (!token) {
-  //     return
-  //   }
-  //   const { iat, refreshInterval, code } = jwt.decode(token)
-  //   const expired = iat + refreshInterval
-  //   const now = new Date().valueOf() / 1000
-  //   if (expired < now) {
-  //     axios.post(`${API}/login`, { code }).then((response) => {
-  //       const { token } = response.data
-  //       console.log({ token })
-  //       localStorage.setItem('token', token)
-  //     })
-  //   }
-  // }
+  handleLoginClick = _.memoize((login) => (event) => {
+    event.preventDefault()
+    login().then(({ token }) => {
+      localStorage.setItem('token', token)
+      this.setState({ isLogged: true })
+    })
+  })
 
-  logout = (event) => {
+  invalidateAllTokens = ({ token }) => {
+    axios.post(`${API}/invalidateAllTokens`, { token })
+    localStorage.removeItem('token')
+    this.setState({ isLogged: false })
+  }
+
+  handleLogoutClick = _.memoize((login) => (event) => {
     event.preventDefault()
     Modal.confirm({
       title: 'Выйти на всех устройствах?',
@@ -80,15 +79,28 @@ class Header extends Component {
       onOk: () => {
         const token = localStorage.getItem('token')
         if (!token) {
+          this.setState({ isLogged: false })
           return
         }
-        axios.post(`${API}/invalidateAllTokens`, { token })
-        localStorage.removeItem('token')
-        this.setState({ isLogged: false })
+        const decoded = jwt.decode(token)
+        const { exp } = decoded
+        const now = new Date().valueOf()
+        if (exp * 1000 < now + 1000 * 60 * 60 * 24) {
+          Modal.info({
+            title: 'Выполните вход',
+            content: 'Для этой операции требуется повторно выполнить вход',
+            onOk: () => {
+              login().then(this.invalidateAllTokens)
+            },
+          })
+          return
+        }
+        this.invalidateAllTokens({ token })
       },
       onCancel: () => {
         const token = localStorage.getItem('token')
         if (!token) {
+          this.setState({ isLogged: false })
           return
         }
         axios.post(`${API}/logout`, { token })
@@ -96,9 +108,15 @@ class Header extends Component {
         this.setState({ isLogged: false })
       },
     })
+  })
+
+  delete = ({ token }) => {
+    axios.delete(`${API}/delete`, { data: { token } })
+    localStorage.removeItem('token')
+    this.setState({ isLogged: false })
   }
 
-  delete = (event) => {
+  handleDeleteClick = _.memoize((login) => (event) => {
     event.preventDefault()
     Modal.confirm({
       title: 'Удалить аккаунт?',
@@ -108,14 +126,26 @@ class Header extends Component {
       onOk: () => {
         const token = localStorage.getItem('token')
         if (!token) {
+          this.setState({ isLogged: false })
           return
         }
-        axios.delete(`${API}/delete`, { data: { token } })
-        localStorage.removeItem('token')
-        this.setState({ isLogged: false })
+        const decoded = jwt.decode(token)
+        const { exp } = decoded
+        const now = new Date().valueOf()
+        if (exp * 1000 < now + 1000 * 60 * 60 * 24) {
+          Modal.info({
+            title: 'Выполните вход',
+            content: 'Для этой операции требуется повторно выполнить вход',
+            onOk: () => {
+              login().then(this.delete)
+            },
+          })
+          return
+        }
+        this.delete({ token })
       },
     })
-  }
+  })
 
   render() {
     const { className } = this.props as any
@@ -136,19 +166,19 @@ class Header extends Component {
             loginType: 'EMAIL',
           }}
         >
-          {({ onClick, disabled }) => (
+          {({ login, disabled }) => (
             <Fragment>
               {isLogged && (
                 <Dropdown
                   overlay={
                     <Menu>
                       <Menu.Item>
-                        <a href="#" onClick={this.logout}>
+                        <a href="#" onClick={this.handleLogoutClick(login)}>
                           Logout
                         </a>
                       </Menu.Item>
                       <Menu.Item>
-                        <a href="#" onClick={this.delete}>
+                        <a href="#" onClick={this.handleDeleteClick(login)}>
                           Delete
                         </a>
                       </Menu.Item>
@@ -164,7 +194,7 @@ class Header extends Component {
                 </Dropdown>
               )}
               {isLogged || (
-                <Button {...{ onClick, disabled }} type="primary">
+                <Button {...{ onClick: this.handleLoginClick(login), disabled }} type="primary">
                   Login
                 </Button>
               )}

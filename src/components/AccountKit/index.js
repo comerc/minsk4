@@ -8,23 +8,30 @@ class AccountKit extends React.Component {
   }
 
   login = () => {
-    const { disabled } = this.state
-    if (disabled) {
-      return
-    }
-    const { loginType, onLogin, countryCode, phoneNumber, emailAddress } = this.props
-    const options = {}
-    if (loginType === 'PHONE') {
-      if (countryCode) {
-        options.countryCode = countryCode
+    return new Promise((resolve, reject) => {
+      const { disabled } = this.state
+      if (disabled) {
+        reject()
+        return
       }
-      if (phoneNumber) {
-        options.phoneNumber = phoneNumber
+      const { loginType, onLogin, countryCode, phoneNumber, emailAddress } = this.props
+      const options = {}
+      if (loginType === 'PHONE') {
+        if (countryCode) {
+          options.countryCode = countryCode
+        }
+        if (phoneNumber) {
+          options.phoneNumber = phoneNumber
+        }
+      } else if (loginType === 'EMAIL' && emailAddress) {
+        options.emailAddress = emailAddress
       }
-    } else if (loginType === 'EMAIL' && emailAddress) {
-      options.emailAddress = emailAddress
-    }
-    window.AccountKit.login(loginType, options, (response) => onLogin(response))
+      window.AccountKit.login(loginType, options, (response) =>
+        onLogin(response)
+          .then(resolve)
+          .catch(reject),
+      )
+    })
   }
 
   componentDidMount() {
@@ -74,9 +81,7 @@ class AccountKit extends React.Component {
   render() {
     const disabled = this.state.disabled || this.props.disabled
     return this.props.children({
-      onClick: () => {
-        this.login()
-      },
+      login: this.login,
       disabled,
     })
   }
