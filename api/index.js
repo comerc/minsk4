@@ -121,6 +121,20 @@ server.post('/invalidateAllTokens', async (req, res) => {
   }
 })
 
+server.delete('/delete', async (req, res) => {
+  try {
+    const { token } = req.body
+    const { accountId } = await util.promisify(jwt.verify)(token, SECRET)
+    const { success } = await accountKit.delete(accountId)
+    if (!success) {
+      throw new Error('Without success')
+    }
+    res.status(200).end()
+  } catch {
+    res.status(500).end()
+  }
+})
+
 // Add custom middleware
 server.use('/posts', (req, _, next) => {
   if (req.method === 'GET') {

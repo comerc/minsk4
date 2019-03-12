@@ -46,6 +46,15 @@ const result = {
       },
       json: true,
     }),
+  delete: (accountId) =>
+    rp({
+      method: 'DELETE',
+      uri: `${baseUrl}/${accountId}`,
+      qs: {
+        access_token: ['AA', APP_ID, SECRET].join('|'),
+      },
+      json: true,
+    }),
 }
 
 module.exports = result

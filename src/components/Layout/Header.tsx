@@ -46,6 +46,8 @@ class Header extends Component {
     const csrf = this.csrf
     axios.post(`${API}/login`, { csrf, state, code }).then((response) => {
       const { token } = response.data
+      // const { accountId } = jwt.decode(token)
+      // console.log({ accountId }) // 561142874296458
       localStorage.setItem('token', token)
       this.setState({ isLogged: true })
     })
@@ -96,6 +98,25 @@ class Header extends Component {
     })
   }
 
+  delete = (event) => {
+    event.preventDefault()
+    Modal.confirm({
+      title: 'Удалить аккаунт?',
+      content: '',
+      okText: 'Удалить',
+      cancelText: 'Отмена',
+      onOk: () => {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        axios.delete(`${API}/delete`, { data: { token } })
+        localStorage.removeItem('token')
+        this.setState({ isLogged: false })
+      },
+    })
+  }
+
   render() {
     const { className } = this.props as any
     const { isLogged } = this.state
@@ -124,6 +145,11 @@ class Header extends Component {
                       <Menu.Item>
                         <a href="#" onClick={this.logout}>
                           Logout
+                        </a>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <a href="#" onClick={this.delete}>
+                          Delete
                         </a>
                       </Menu.Item>
                       <Menu.Divider />
