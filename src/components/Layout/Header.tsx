@@ -118,27 +118,30 @@ class Header extends Component {
             <Fragment>
               {isLogged && (
                 <Dropdown
-                  overlay={
-                    <Menu>
-                      <Menu.Item>
-                        <a href="#" onClick={this.handleLogoutClick(login)}>
-                          Logout
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a href="#" onClick={this.handleDeleteClick(login)}>
-                          Delete
-                        </a>
-                      </Menu.Item>
-                      <Menu.Divider />
-                      <Menu.Item>3rd menu item</Menu.Item>
-                    </Menu>
-                  }
-                  trigger={['click']}
+                  {...{
+                    overlay: (
+                      <Menu>
+                        <Menu.Item>
+                          <a href="#" onClick={this.handleLogoutClick(login)}>
+                            Logout
+                          </a>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <a href="#" onClick={this.handleDeleteClick(login)}>
+                            Delete
+                          </a>
+                        </Menu.Item>
+                        <Menu.Divider />
+                        <Menu.Item>3rd menu item</Menu.Item>
+                      </Menu>
+                    ),
+                    trigger: ['click'],
+                    disabled,
+                  }}
                 >
-                  <a className="ant-dropdown-link" href="#">
+                  <Button type="primary">
                     Account <Icon type="down" />
-                  </a>
+                  </Button>
                 </Dropdown>
               )}
               {isLogged || (
