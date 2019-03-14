@@ -61,7 +61,7 @@ server.post('/csrf', async (_, res) => {
 
 const accountKit = require('./accountKit')
 
-server.post('/login', async (req, res) => {
+server.post('/token', async (req, res) => {
   try {
     const { csrf, state } = req.body
     decoded = await util.promisify(jwt.verify)(csrf, SECRET)

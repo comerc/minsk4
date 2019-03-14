@@ -2,20 +2,31 @@ import React, { Component, Fragment } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import { connect } from 'react-redux'
+import { dispatch } from 'src/store'
+import {
+  loadCSRF,
+  loadToken,
+  setToken,
+  invalidateAllTokens,
+  logout,
+  erase,
+} from 'src/ducks/account'
 import { Link } from 'react-router-dom'
 import { Menu, Dropdown, Icon, Modal, Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
 import { API, ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
 import styled from 'styled-components'
 
+const mapStateToProps = (state) => ({
+  isLogged: !!state.account.token,
+})
+
 const style = () => (Self) => styled(Self)``
 
+@connect(mapStateToProps)
 @style()
 class Header extends Component {
-  state = {
-    isLogged: !!localStorage.getItem('token'),
-  }
-
   csrf = null
 
   language =
@@ -24,49 +35,36 @@ class Header extends Component {
     AccountKit.defaultProps.language
 
   handleAccountKitMount = () => {
-    return axios.post(`${API}/csrf`).then(({ data: { csrf, state } }) => {
+    return dispatch(loadCSRF()).then(({ csrf, state }) => {
       this.csrf = csrf
       return { state }
     })
   }
 
-  handleAccountKitLogin = (response) => {
-    if (response.status === 'NOT_AUTHENTICATED') {
-      console.error('status is NOT_AUTHENTICATED')
-      return Promise.reject()
-    }
-    if (response.status === 'BAD_PARAMS') {
-      console.error('status is BAD_PARAMS')
-      return Promise.reject()
-    }
-    if (response.status !== 'PARTIALLY_AUTHENTICATED') {
-      console.error('status is not PARTIALLY_AUTHENTICATED')
-      return Promise.reject()
-    }
-    const { state, code } = response
-    const csrf = this.csrf
-    return new Promise((resolve, reject) => {
-      axios
-        .post(`${API}/login`, { csrf, state, code })
-        .then(({ data: { token } }) => {
-          resolve({ token })
-        })
-        .catch(reject)
-    })
+  handleAccountKitLogin = ({ status, state, code }) => {
+    return dispatch(loadToken({ status, state, code }, this.csrf))
   }
 
   handleLoginClick = _.memoize((login) => (event) => {
     event.preventDefault()
     login().then(({ token }) => {
-      localStorage.setItem('token', token)
-      this.setState({ isLogged: true })
+      dispatch(setToken(token))
     })
   })
 
-  invalidateAllTokens = ({ token }) => {
-    axios.post(`${API}/invalidateAllTokens`, { token })
-    localStorage.removeItem('token')
-    this.setState({ isLogged: false })
+  relogin = (login) => (onLogin) => {
+    return new Promise((resolve, reject) => {
+      Modal.info({
+        title: 'Выполните вход',
+        content: 'Для этой операции требуется повторно выполнить вход',
+        onOk: () => {
+          login()
+            .then(onLogin)
+            .then(resolve)
+            .catch(reject)
+        },
+      })
+    })
   }
 
   handleLogoutClick = _.memoize((login) => (event) => {
@@ -77,44 +75,13 @@ class Header extends Component {
       okText: 'Да',
       cancelText: 'Нет, только здесь',
       onOk: () => {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          this.setState({ isLogged: false })
-          return
-        }
-        const decoded = jwt.decode(token)
-        const { exp } = decoded
-        const now = new Date().valueOf()
-        if (exp * 1000 < now + 1000 * 60 * 60 * 24) {
-          Modal.info({
-            title: 'Выполните вход',
-            content: 'Для этой операции требуется повторно выполнить вход',
-            onOk: () => {
-              login().then(this.invalidateAllTokens)
-            },
-          })
-          return
-        }
-        this.invalidateAllTokens({ token })
+        dispatch(invalidateAllTokens(this.relogin(login)))
       },
       onCancel: () => {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          this.setState({ isLogged: false })
-          return
-        }
-        axios.post(`${API}/logout`, { token })
-        localStorage.removeItem('token')
-        this.setState({ isLogged: false })
+        dispatch(logout())
       },
     })
   })
-
-  delete = ({ token }) => {
-    axios.delete(`${API}/delete`, { data: { token } })
-    localStorage.removeItem('token')
-    this.setState({ isLogged: false })
-  }
 
   handleDeleteClick = _.memoize((login) => (event) => {
     event.preventDefault()
@@ -124,32 +91,13 @@ class Header extends Component {
       okText: 'Удалить',
       cancelText: 'Отмена',
       onOk: () => {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          this.setState({ isLogged: false })
-          return
-        }
-        const decoded = jwt.decode(token)
-        const { exp } = decoded
-        const now = new Date().valueOf()
-        if (exp * 1000 < now + 1000 * 60 * 60 * 24) {
-          Modal.info({
-            title: 'Выполните вход',
-            content: 'Для этой операции требуется повторно выполнить вход',
-            onOk: () => {
-              login().then(this.delete)
-            },
-          })
-          return
-        }
-        this.delete({ token })
+        dispatch(erase(this.relogin(login)))
       },
     })
   })
 
   render() {
-    const { className } = this.props as any
-    const { isLogged } = this.state
+    const { className, isLogged } = this.props as any
     return (
       <div className={className}>
         <div>Header</div>

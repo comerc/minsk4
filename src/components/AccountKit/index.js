@@ -60,6 +60,7 @@ class AccountKit extends React.Component {
           disabled: false,
         })
       }
+      this.isAccountKitInitialized = true
       const locale = bestFacebookLocaleFor(language)
       const tag = document.createElement('script')
       tag.setAttribute('src', `https://sdk.accountkit.com/${locale}/sdk.js`)
@@ -67,7 +68,6 @@ class AccountKit extends React.Component {
       tag.setAttribute('type', 'text/javascript')
       document.head.appendChild(tag)
       this.tag = tag
-      this.isAccountKitInitialized = true
     })
   }
 
