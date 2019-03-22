@@ -8,7 +8,7 @@ import {
   setToken,
   invalidateAllTokens,
   logout,
-  erase,
+  doDelete,
 } from 'src/ducks/account'
 import { Link } from 'react-router-dom'
 import { Menu, Dropdown, Icon, Modal, Button } from 'antd'
@@ -89,7 +89,7 @@ class Header extends Component {
       okText: 'Удалить',
       cancelText: 'Отмена',
       onOk: () => {
-        dispatch(erase(this.relogin(login)))
+        dispatch(doDelete(this.relogin(login)))
       },
     })
   })

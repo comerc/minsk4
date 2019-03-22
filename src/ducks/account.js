@@ -81,7 +81,7 @@ export const logout = () => (dispatch, getState) => {
   return axios.post(`${API}/logout`, { token })
 }
 
-export const erase = (relogin) => (dispatch, getState) => {
+export const doDelete = (relogin) => (dispatch, getState) => {
   const {
     account: { token },
   } = getState()
