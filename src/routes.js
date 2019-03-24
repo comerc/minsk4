@@ -19,8 +19,24 @@ const routes = [
       },
       {
         path: '/post/:id',
-        exact: true,
-        component: PostPage,
+        component: PostLayout,
+        // routes: [
+        //   {
+        //     path: '/post/new',
+        //     exact: true,
+        //     component: NewPostPage,
+        //   },
+        //   {
+        //     path: '/post/:id',
+        //     exact: true,
+        //     component: PostPage,
+        //   },
+        //   {
+        //     path: '/post/:id/edit',
+        //     exact: true,
+        //     component: EditPostPage,
+        //   },
+        // ],
       },
     ],
   },
