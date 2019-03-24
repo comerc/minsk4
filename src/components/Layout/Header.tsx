@@ -98,9 +98,12 @@ class Header extends Component {
     const { className, isLogged } = this.props as any
     return (
       <div className={className}>
-        <div>Header</div>
-        <Link to="/404">404</Link>
-        <br />
+        <div>
+          <Link to="/">Logo</Link>
+        </div>
+        <div>
+          <Link to="/404">404</Link>
+        </div>
         <AccountKit
           {...{
             appId: ACCOUNT_KIT_APP_ID,
