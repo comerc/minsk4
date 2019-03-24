@@ -8,8 +8,7 @@ const mapStateToProps = (state) => ({
   item: state.post.item,
 })
 
-const style = () => (Component) => styled(Component)`
-  border: 2px solid blue;
+const style = () => (Self) => styled(Self)`
   .text {
     white-space: pre-wrap;
     border: 2px solid red;

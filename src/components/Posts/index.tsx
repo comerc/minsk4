@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
   items: state.posts.items,
 })
 
-const style = () => (Component) => styled(Component)`
+const style = () => (Self) => styled(Self)`
   border: 2px solid blue;
 `
 
