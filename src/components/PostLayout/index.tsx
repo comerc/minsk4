@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
 import { readPost } from 'src/ducks/post'
 import styled from 'styled-components'
+import { renderRoutes } from 'react-router-config'
 
 const mapStateToProps = (state) => ({
   item: state.post.item,
@@ -29,18 +30,14 @@ class PostLayout extends Component<{ id: number }> {
   render() {
     const {
       className,
-      item: { title, text },
+      route: { routes },
+      item,
     } = this.props as any
     const { isFirstLoaded } = this.state
     return (
       <div className={className}>
         {isFirstLoaded || <div>Loading...</div>}
-        {isFirstLoaded && (
-          <Fragment>
-            <h1>{title}</h1>
-            <div className="text">{text.replace(/(\n \r)/g, '\n\n')}</div>
-          </Fragment>
-        )}
+        {isFirstLoaded && renderRoutes(routes, { item })}
       </div>
     )
   }

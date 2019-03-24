@@ -1,6 +1,7 @@
 import Layout from 'src/components/Layout'
 import HomePage from 'src/components/HomePage'
 import AboutPage from 'src/components/AboutPage'
+import PostLayout from 'src/components/PostLayout'
 import PostPage from 'src/components/PostPage'
 
 const routes = [
@@ -20,23 +21,23 @@ const routes = [
       {
         path: '/post/:id',
         component: PostLayout,
-        // routes: [
-        //   {
-        //     path: '/post/new',
-        //     exact: true,
-        //     component: NewPostPage,
-        //   },
-        //   {
-        //     path: '/post/:id',
-        //     exact: true,
-        //     component: PostPage,
-        //   },
-        //   {
-        //     path: '/post/:id/edit',
-        //     exact: true,
-        //     component: EditPostPage,
-        //   },
-        // ],
+        routes: [
+          // {
+          //   path: '/post/new',
+          //   exact: true,
+          //   component: EditPostPage,
+          // },
+          {
+            path: '/post/:id',
+            exact: true,
+            component: PostPage,
+          },
+          //   {
+          //     path: '/post/:id/edit',
+          //     exact: true,
+          //     component: EditPostPage,
+          //   },
+        ],
       },
     ],
   },
