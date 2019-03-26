@@ -3,6 +3,7 @@ import HomePage from 'src/components/HomePage'
 import AboutPage from 'src/components/AboutPage'
 import PostLayout from 'src/components/PostLayout'
 import PostPage from 'src/components/PostPage'
+import EditPostPage from 'src/components/EditPostPage'
 
 const routes = [
   {
@@ -32,11 +33,11 @@ const routes = [
             exact: true,
             component: PostPage,
           },
-          //   {
-          //     path: '/post/:id/edit',
-          //     exact: true,
-          //     component: EditPostPage,
-          //   },
+          {
+            path: '/post/:id/edit',
+            exact: true,
+            component: EditPostPage,
+          },
         ],
       },
     ],
