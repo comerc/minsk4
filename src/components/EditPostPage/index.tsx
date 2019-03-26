@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Form, Input, Button } from 'antd'
 import { formCreate } from 'src/utilities'
+import { Form, Input, Button } from 'antd'
+import UnicornEditor from 'src/components/UnicornEditor'
 
 const style = () => (Self) => styled(Self)`
   .text {
@@ -11,7 +12,7 @@ const style = () => (Self) => styled(Self)`
 `
 
 @formCreate()
-@style()
+@styled()
 class EditPostPage extends Component {
   handleSubmit = (event) => {
     event.preventDefault()
@@ -53,6 +54,14 @@ class EditPostPage extends Component {
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
+        </Form.Item>
+        <Form.Item>
+          {/* {getFieldDecorator('dummy', {
+            rules: [{ required: true, message: 'Please enter text' }],
+            initialValue: text,
+          })(
+          )} */}
+          <UnicornEditor />
         </Form.Item>
       </Form>
     )

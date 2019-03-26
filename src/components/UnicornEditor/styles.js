@@ -1,0 +1,65 @@
+import styled from 'styled-components'
+
+// .root {
+// }
+
+// .editor {
+// }
+
+// .editor :global(.public-DraftEditor-content) {
+//   min-height: 240px;
+// }
+
+// .stateButton {
+//   border: 1px solid #bbb;
+//   height: 40px;
+//   padding: 0 1.2em;
+//   color: #888;
+//   margin: 0;
+//   border-radius: 20px;
+//   line-height: 1.2em;
+//   cursor: pointer;
+//   margin-right: 10px;
+//   position: relative;
+//   top: -4px;
+//   background-color: #fff;
+// }
+
+// .stateButton:focus {
+//   outline: 0; /* reset for :focus */
+// }
+
+// .stateButton:hover {
+//   background: #f3f3f3;
+// }
+
+// .stateButton:active {
+//   background: #e6e6e6;
+// }
+
+// .pressedStateButton {
+//   composes: stateButton;
+//   background-color: #ededed;
+// }
+
+// .editorButton {
+// }
+
+export const Root = styled.div`
+  background: #fff;
+`
+
+export const EditorContainer = styled.div`
+  border: 1px solid #ddd;
+  cursor: text;
+  padding: 16px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  box-shadow: inset 0px 1px 8px -3px #ababab;
+  background: #fefefe;
+`
+
+export const EditorButtonContainer = styled.div`
+  margin-right: 10px;
+  display: inline-block;
+`
