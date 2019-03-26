@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import styled from 'styled-components'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
@@ -14,7 +15,6 @@ import { Link } from 'react-router-dom'
 import { Menu, Dropdown, Icon, Modal, Button } from 'antd'
 import AccountKit from 'src/components/AccountKit'
 import { ACCOUNT_KIT_APP_ID, ACCOUNT_KIT_VERSION } from 'src/constants'
-import styled from 'styled-components'
 
 const mapStateToProps = (state) => ({
   isLogged: !!state.account.token,

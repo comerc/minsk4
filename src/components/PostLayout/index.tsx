@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
 import { readPost } from 'src/ducks/post'
-import styled from 'styled-components'
 import { renderRoutes } from 'react-router-config'
 
 const mapStateToProps = (state) => ({
