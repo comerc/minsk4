@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { formCreate } from 'src/utilities'
 import { Form, Input, Button } from 'antd'
-import UnicornEditor from 'src/components/UnicornEditor'
+// import Editor from 'src/components/Editor'
 
 const style = () => (Self) => styled(Self)`
   .text {
@@ -61,7 +61,7 @@ class EditPostPage extends Component {
             initialValue: text,
           })(
           )} */}
-          <UnicornEditor />
+          {/* <Editor /> */}
         </Form.Item>
       </Form>
     )
