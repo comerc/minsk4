@@ -12,7 +12,7 @@ const style = () => (Self) => styled(Self)`
 `
 
 @formCreate()
-@styled()
+@style()
 class EditPostPage extends Component {
   handleSubmit = (event) => {
     event.preventDefault()
