@@ -4,6 +4,7 @@ import Copyright from 'src/components/Copyright'
 
 const style = () => (Self) => styled(Self)`
   ${Copyright} {
+    margin: 10px;
   }
 `
 
