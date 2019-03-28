@@ -32,7 +32,6 @@
     "antd": "^3.12.3",
     "axios": "^0.18.0",
     "connected-react-router": "^6.2.1",
-    "draft-js": "^0.10.5",
     "facebook-locales": "^1.0.591",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",
@@ -47,6 +46,9 @@
     "redux-act": "^1.7.4",
     "redux-devtools-extension": "^2.13.7",
     "redux-thunk": "^2.3.0",
+    "slate": "^0.44.12",
+    "slate-react": "^0.21.18",
+    "slate-react-placeholder": "^0.1.15",
     "styled-components": "^4.1.3",
     "typescript": "^3.2.2"
   },

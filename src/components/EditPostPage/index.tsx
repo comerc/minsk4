@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { formCreate } from 'src/utilities'
 import { Form, Input, Button } from 'antd'
-// import Editor from 'src/components/Editor'
+import Editor from 'src/components/Editor'
 
 const style = () => (Self) => styled(Self)`
   .text {
@@ -38,6 +38,14 @@ class EditPostPage extends Component {
           hideRequiredMark: true,
         }}
       >
+        <Form.Item>
+          {/* {getFieldDecorator('dummy', {
+            rules: [{ required: true, message: 'Please enter text' }],
+            initialValue: text,
+          })(
+          )} */}
+          <Editor />
+        </Form.Item>
         <Form.Item label="Title">
           {getFieldDecorator('title', {
             rules: [{ message: 'Please enter title' }],
@@ -54,14 +62,6 @@ class EditPostPage extends Component {
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
-        </Form.Item>
-        <Form.Item>
-          {/* {getFieldDecorator('dummy', {
-            rules: [{ required: true, message: 'Please enter text' }],
-            initialValue: text,
-          })(
-          )} */}
-          {/* <Editor /> */}
         </Form.Item>
       </Form>
     )
