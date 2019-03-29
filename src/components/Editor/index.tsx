@@ -1,6 +1,7 @@
 import React from 'react'
 import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
+import placeholder from './placeholder'
 import initialValueAsJson from './value.json'
 
 const initialValue = Value.fromJSON(initialValueAsJson)
@@ -23,14 +24,17 @@ const schema = {
   },
 }
 
-class ForcedLayout extends React.Component {
+class MainEditor extends React.Component {
   render() {
     return (
       <Editor
-        placeholder="Enter a title..."
         defaultValue={initialValue}
         schema={schema}
         renderNode={this.renderNode}
+        plugins={[
+          placeholder({ type: 'title', placeholder: 'Enter a title...' }),
+          placeholder({ type: 'paragraph', placeholder: 'Enter a text...' }),
+        ]}
       />
     )
   }
@@ -49,4 +53,4 @@ class ForcedLayout extends React.Component {
   }
 }
 
-export default ForcedLayout
+export default MainEditor
