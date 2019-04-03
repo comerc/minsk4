@@ -1,9 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
 
-const GlobalStyle = createGlobalStyle`
-  [data-slate-editor='true'] span[contenteditable='false'] {
-    float: left;
-  }
-`
+const GlobalStyle = createGlobalStyle``
 
 export default GlobalStyle

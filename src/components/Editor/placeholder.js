@@ -12,6 +12,8 @@ const whens = {
     isOnlyTitle(editor.state.value.document),
 }
 
+const fixCursorStyle = { float: 'left' }
+
 export default ({ type, placeholder }) => {
   if (type !== 'title' && type !== 'paragraph') {
     throw new Error("type needs to be 'title' or 'paragraph'")
@@ -19,5 +21,6 @@ export default ({ type, placeholder }) => {
   return PlaceholderPlugin({
     placeholder,
     when: whens[type],
+    style: fixCursorStyle,
   })
 }
