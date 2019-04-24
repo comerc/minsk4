@@ -1,8 +1,11 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
 import placeholder from './placeholder'
 import initialValueAsJson from './value.json'
+
+const style = () => (Self) => styled(Self)``
 
 const initialValue = Value.fromJSON(initialValueAsJson)
 
@@ -24,16 +27,19 @@ const schema = {
   },
 }
 
+@style()
 class MainEditor extends React.Component {
   render() {
+    const { className } = this.props as any
     return (
       <Editor
+        className={className}
         defaultValue={initialValue}
         schema={schema}
         renderNode={this.renderNode}
         plugins={[
-          placeholder({ type: 'title', placeholder: 'Enter a title...' }),
-          placeholder({ type: 'paragraph', placeholder: 'Enter a text...' }),
+          placeholder({ type: 'title', placeholder: 'Title' }),
+          placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
         ]}
       />
     )
