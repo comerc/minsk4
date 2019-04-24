@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { dispatch } from 'src/store'
@@ -15,7 +15,7 @@ const style = () => (Self) => styled(Self)`
 
 @connect(mapStateToProps)
 @style()
-class PostLayout extends Component<{ id: number }> {
+class PostLayout extends React.Component<{ id: number }> {
   state = { isFirstLoaded: false }
 
   componentDidMount() {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const style = () => (Self) => styled(Self)`
@@ -9,7 +9,7 @@ const style = () => (Self) => styled(Self)`
 `
 
 @style()
-class PostPage extends Component {
+class PostPage extends React.Component {
   render() {
     const {
       className,

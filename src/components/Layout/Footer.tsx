@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Copyright from 'src/components/Copyright'
 
 const style = () => (Self) => styled(Self)`
   ${Copyright} {
     margin: 10px;
+    border: 1px solid red;
   }
 `
 
 @style()
-class Footer extends Component {
+class Footer extends React.Component {
   render() {
     const { className } = this.props as any
     return (

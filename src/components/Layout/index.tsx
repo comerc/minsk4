@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { matchRoutes, renderRoutes } from 'react-router-config'
@@ -10,7 +10,7 @@ import GlobalStyle from './GlobalStyle'
 const style = () => (Self) => styled(Self)``
 
 @style()
-class Layout extends Component {
+class Layout extends React.Component {
   state = { pathname: null, isNotFound: false }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -34,12 +34,12 @@ class Layout extends Component {
       <div className={className}>
         {isNotFound && <NotFound />}
         {isNotFound || (
-          <Fragment>
+          <React.Fragment>
             <Header />
             {renderRoutes(routes)}
             <Footer />
             <GlobalStyle />
-          </Fragment>
+          </React.Fragment>
         )}
       </div>
     )

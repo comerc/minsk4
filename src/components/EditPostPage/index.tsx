@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { formCreate } from 'src/utilities'
 import { Form, Input, Button } from 'antd'
-import Editor from 'src/components/Editor'
 
 const style = () => (Self) => styled(Self)`
   .text {
@@ -13,7 +12,7 @@ const style = () => (Self) => styled(Self)`
 
 @formCreate()
 @style()
-class EditPostPage extends Component {
+class EditPostPage extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault()
     const { form } = this.props as any
@@ -44,7 +43,6 @@ class EditPostPage extends Component {
             initialValue: text,
           })(
           )} */}
-          <Editor />
         </Form.Item>
         <Form.Item label="Title">
           {getFieldDecorator('title', {

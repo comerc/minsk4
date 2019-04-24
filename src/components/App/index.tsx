@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { createBrowserHistory } from 'history'
 import configureStore from 'src/store'
 import { Provider } from 'react-redux'
@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { renderRoutes } from 'react-router-config'
 import routes from 'src/routes'
 
-class App extends Component {
+class App extends React.Component {
   history = createBrowserHistory()
   store = configureStore(this.history)
 

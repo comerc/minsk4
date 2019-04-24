@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Posts from 'src/components/Posts'
 import { Button } from 'antd'
@@ -6,7 +6,7 @@ import { Button } from 'antd'
 const style = () => (Self) => styled(Self)``
 
 @style()
-class HomePage extends Component {
+class HomePage extends React.Component {
   render() {
     const { className } = this.props as any
     return (

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { connect } from 'react-redux'
@@ -24,7 +24,7 @@ const style = () => (Self) => styled(Self)``
 
 @connect(mapStateToProps)
 @style()
-class Header extends Component {
+class Header extends React.Component {
   csrf = null
 
   language =
@@ -116,7 +116,7 @@ class Header extends Component {
           }}
         >
           {({ login, disabled }) => (
-            <Fragment>
+            <React.Fragment>
               {isLogged && (
                 <Dropdown
                   {...{
@@ -150,7 +150,7 @@ class Header extends Component {
                   Login
                 </Button>
               )}
-            </Fragment>
+            </React.Fragment>
           )}
         </AccountKit>
       </div>
