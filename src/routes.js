@@ -4,6 +4,7 @@ import AboutPage from 'src/components/AboutPage'
 import PostLayout from 'src/components/PostLayout'
 import PostPage from 'src/components/PostPage'
 import EditPostPage from 'src/components/EditPostPage'
+import EditorPage from 'src/components/EditorPage'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
         path: '/about',
         exact: true,
         component: AboutPage,
+      },
+      {
+        path: '/editor',
+        exact: true,
+        component: EditorPage,
       },
       {
         path: '/post/:id',
