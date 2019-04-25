@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
-import sidebar from 'src/components/Sidebar'
+import sidebar from 'src/components/EditorSidebar'
 import placeholder from './placeholder'
 import initialValueAsJson from './value.json'
 
@@ -38,23 +38,20 @@ const renderNode = (props, _editor, next) => {
   }
 }
 
+const plugins = [
+  placeholder({ type: 'title', placeholder: 'Title' }),
+  placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
+]
+
 @sidebar()
 class EditorContainer extends React.Component {
-  // editor
-
-  // ref = (editor) => (this.editor = editor)
-
   render() {
     return (
       <Editor
         {...{
           schema,
           renderNode,
-          plugins: [
-            placeholder({ type: 'title', placeholder: 'Title' }),
-            placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
-          ],
-          // ref: this.ref,
+          plugins,
           ...this.props,
         }}
       />
@@ -64,22 +61,27 @@ class EditorContainer extends React.Component {
 
 @style()
 class ControlledEditor extends React.Component {
-  // state = {
-  //   value: Value.fromJSON(initialValueAsJson),
-  // }
+  state = {
+    value: Value.fromJSON(initialValueAsJson),
+  }
 
-  // handleChange = ({ value }) => this.setState({ value })
+  // editor
+
+  // ref = (editor) => (this.editor = editor)
+
+  handleChange = ({ value }) => this.setState({ value })
 
   render() {
     const { className } = this.props as any
-    // const { value } = this.state
+    const { value } = this.state
     return (
       <EditorContainer
         {...{
           className,
-          defaultValue: Value.fromJSON(initialValueAsJson),
-          // value,
-          // onChange: this.handleChange,
+          // defaultValue: Value.fromJSON(initialValueAsJson),
+          value,
+          onChange: this.handleChange,
+          // ref: this.ref,
         }}
       />
     )

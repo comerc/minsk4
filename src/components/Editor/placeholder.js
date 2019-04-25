@@ -6,10 +6,7 @@ const isOnlyTitle = (node) =>
 const whens = {
   title: (_editor, node) => node.object === 'block' && node.type === 'title' && node.text === '',
   paragraph: (editor, node) =>
-    node.object === 'block' &&
-    node.type === 'paragraph' &&
-    node.text === '' &&
-    isOnlyTitle(editor.state.value.document),
+    node.object === 'block' && node.type === 'paragraph' && node.text === '', // && isOnlyTitle(editor.state.value.document),
 }
 
 const fixCursorStyle = { float: 'left' }

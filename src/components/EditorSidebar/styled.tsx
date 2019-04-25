@@ -3,7 +3,6 @@ import styled from 'styled-components'
 export const SidebarContainer = styled.div`
   position: absolute;
   z-index: 5;
-
   i {
     color: #ccc;
     -webkit-animation: fadeIn 1s; /* Safari, Chrome and Opera > 12.1 */
@@ -12,7 +11,6 @@ export const SidebarContainer = styled.div`
     -o-animation: fadeIn 1s; /* Opera < 12.1 */
     animation: fadeIn 1s;
   }
-
   i.open {
     -webkit-animation: spin 1s; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: spin 1s; /* Firefox < 16 */
@@ -22,7 +20,6 @@ export const SidebarContainer = styled.div`
     -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
     animation-fill-mode: forwards;
   }
-
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -31,7 +28,6 @@ export const SidebarContainer = styled.div`
       opacity: 1;
     }
   }
-
   @-webkit-keyframes fadeIn {
     0% {
       opacity: 0;
@@ -48,7 +44,6 @@ export const SidebarContainer = styled.div`
       opacity: 1;
     }
   }
-
   @-moz-keyframes spin {
     from {
       -moz-transform: rotate(0deg);
@@ -94,7 +89,6 @@ export const IconContainer = styled.div`
   padding: 3px 5px;
   width: 100px;
   text-align: center;
-
   .__slate-sidebar_slateToolbarItem {
     height: 40px;
     width: 40px;
