@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Icon, Popover } from 'antd'
 // import { Header1, Header2, HeaderOnePlugin, HeaderTwoPlugin } from '@canner/slate-icon-header'
 // import { ParagraphPlugin } from '@canner/slate-icon-shared'
-// import { getVisibleSelectionRect } from 'get-selection-range'
-import { SidebarContainer, IconContainer, PopupContainer, IconWrapper } from './styled'
+import { getVisibleSelectionRect } from 'get-selection-range'
+import { Container, SidebarContainer, IconContainer, PopupContainer, IconWrapper } from './styled'
 
 // type Props = {
 //   icons: Array<React.Element<*> | string>,
@@ -13,7 +13,7 @@ import { SidebarContainer, IconContainer, PopupContainer, IconWrapper } from './
 // };
 
 // type State = {
-//   openPopover: boolean
+//   isOpenPopover: boolean
 // };
 
 // const defaultPlugins = [] // [ParagraphPlugin(), HeaderOnePlugin(), HeaderTwoPlugin()]
@@ -30,17 +30,26 @@ export default (options: any = {}) => {
       //   title: 'Header Two',
       // },
     ],
-    leftOffset = -20,
+    leftOffset = 0,
   } = options
   let i = 0
   return (Editor) => {
-    class EditorSidebar extends React.Component {
+    return class EditorSidebar extends React.Component {
       state = {
-        openPopover: false,
+        isOpenPopover: false,
       }
 
-      sidebarContainerNode
+      editorNode
+
       containerNode
+
+      sidebarContainerNode
+
+      editorRef = (node) => (this.editorNode = node)
+
+      containerRef = (node) => (this.containerNode = node)
+
+      sidebarContainerRef = (node) => (this.sidebarContainerNode = node)
 
       componentDidMount() {
         window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
@@ -51,39 +60,48 @@ export default (options: any = {}) => {
       }
 
       componentDidUpdate(prevProps) {
-        // const { value } = this.props as any
-        // const { texts, focusBlock } = value
-        // const currentTextNode = texts.get(0)
-        // const currentLineText = currentTextNode.text
-        // if (
-        //   (currentLineText.length !== 0 ||
-        //     focusBlock.type !== 'paragraph' ||
-        //     value !== prevProps.value) &&
-        //   this.state.openPopover
-        // ) {
-        //   this.hidePopover()
-        // }
-        // const rect = getVisibleSelectionRect()
-        // if (!rect || !this.sidebarContainerNode || !this.containerNode) {
-        //   return
-        // }
-        // const containerBound = this.containerNode.getBoundingClientRect()
-        // const { top: containerBoundTop } = containerBound
-        // this.sidebarContainerNode.style.left = `${leftOffset}px`
-        // const top = rect.top - containerBoundTop - 3
-        // this.sidebarContainerNode.style.top = `${top}px`
+        const { value } = this.props as any
+        const { texts, focusBlock } = value
+        const currentTextNode = texts.get(0)
+        if (!currentTextNode) {
+          return
+        }
+        const currentLineText = currentTextNode.text
+        if (
+          (currentLineText.length !== 0 ||
+            focusBlock.type !== 'paragraph' ||
+            value !== prevProps.value) &&
+          this.state.isOpenPopover
+        ) {
+          this.setState({
+            isOpenPopover: false,
+          })
+          return
+        }
+        if (this.state.isOpenPopover) {
+          return
+        }
+        const rect = getVisibleSelectionRect()
+        if (!rect || !this.sidebarContainerNode || !this.containerNode) {
+          return
+        }
+        const containerBound = this.containerNode.getBoundingClientRect()
+        const { top: containerBoundTop } = containerBound
+        this.sidebarContainerNode.style.left = `${leftOffset}px`
+        const top = rect.top - containerBoundTop - 3
+        this.sidebarContainerNode.style.top = `${top}px`
         // this.sidebarContainerNode.style.opacity = '1'
       }
 
-      hidePopover = () => {
-        this.setState({
-          openPopover: false,
-        })
-      }
-
-      handleVisibleChange = (visible) => {
-        this.setState({
-          openPopover: visible,
+      handlePlusIconClick = () => {
+        this.setState((prevState) => {
+          const { isOpenPopover } = prevState as any
+          if (isOpenPopover) {
+            setTimeout(() => this.editorNode.focus())
+          }
+          return {
+            isOpenPopover: !isOpenPopover,
+          }
         })
       }
 
@@ -117,7 +135,7 @@ export default (options: any = {}) => {
 
       renderSidebar = () => {
         const { value } = this.props as any
-        const { openPopover } = this.state
+        const { isOpenPopover } = this.state
         const { texts, focusBlock } = value
         const currentTextNode = texts.get(0)
         if (!currentTextNode) {
@@ -128,43 +146,44 @@ export default (options: any = {}) => {
         return (
           currentLineText.length === 0 &&
           focusBlock.type === 'paragraph' && (
-            <SidebarContainer innerRef={(node) => (this.sidebarContainerNode = node)}>
-              <Icon
-                type="plus-circle"
-                theme="outlined"
-                onClick={() => this.handleVisibleChange(!openPopover)}
-                className={openPopover ? 'open' : ''}
-              />
-              <PopupContainer isOpen={openPopover}>{content}</PopupContainer>
+            <SidebarContainer ref={this.sidebarContainerRef}>
+              <div>
+                <Icon
+                  type="plus-circle"
+                  theme="outlined"
+                  onClick={this.handlePlusIconClick}
+                  className={isOpenPopover ? 'open' : ''}
+                />
+              </div>
+              <PopupContainer isOpen={isOpenPopover}>{content}</PopupContainer>
             </SidebarContainer>
           )
         )
-        return null
       }
 
       render() {
         return (
-          <div style={{ position: 'relative' }} ref={(node) => (this.containerNode = node)}>
+          <Container ref={this.containerRef}>
             {this.renderSidebar()}
-            <Editor {...this.props} />
-          </div>
+            <Editor editorRef={this.editorRef} {...this.props} />
+          </Container>
         )
       }
     }
 
-    return class EditorSidebarDecorator extends React.Component {
-      // shouldComponentUpdate(nextProps) {
-      //   const { value } = this.props as any
-      //   if (value === nextProps.value) {
-      //     console.log(false)
-      //     return false
-      //   }
-      //   return true
-      // }
+    // return class EditorSidebarDecorator extends React.Component {
+    //   // shouldComponentUpdate(nextProps) {
+    //   //   const { value } = this.props as any
+    //   //   if (value === nextProps.value) {
+    //   //     console.log(false)
+    //   //     return false
+    //   //   }
+    //   //   return true
+    //   // }
 
-      render() {
-        return <EditorSidebar {...this.props} />
-      }
-    }
+    //   render() {
+    //     return <EditorSidebar {...this.props} />
+    //   }
+    // }
   }
 }

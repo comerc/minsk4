@@ -43,16 +43,23 @@ const plugins = [
   placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
 ]
 
-@sidebar()
-class EditorContainer extends React.Component {
+const sidebarOptions = {
+  leftOffset: 80,
+}
+
+@sidebar(sidebarOptions)
+class EditorContainer2 extends React.Component {
   render() {
+    const { editorRef, ...rest } = this.props as any
     return (
       <Editor
         {...{
+          autoFocus: true,
           schema,
           renderNode,
           plugins,
-          ...this.props,
+          ref: editorRef,
+          ...rest,
         }}
       />
     )
@@ -65,23 +72,19 @@ class ControlledEditor extends React.Component {
     value: Value.fromJSON(initialValueAsJson),
   }
 
-  // editor
-
-  // ref = (editor) => (this.editor = editor)
-
-  handleChange = ({ value }) => this.setState({ value })
+  handleChange = ({ value }) => {
+    this.setState({ value })
+  }
 
   render() {
     const { className } = this.props as any
     const { value } = this.state
     return (
-      <EditorContainer
+      <EditorContainer2
         {...{
           className,
-          // defaultValue: Value.fromJSON(initialValueAsJson),
           value,
           onChange: this.handleChange,
-          // ref: this.ref,
         }}
       />
     )

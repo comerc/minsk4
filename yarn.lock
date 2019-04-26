@@ -4607,6 +4607,11 @@ get-own-enumerable-property-symbols@^3.0.0:
   resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-3.0.0.tgz#b877b49a5c16aefac3655f2ed2ea5b684df8d203"
   integrity sha512-CIJYJC4GGF06TakLg8z4GQKvDsx9EMspVxOYih7LerEL/WosUnFIww45CGfxfeKHqlg3twgUrYRT1O3WQqjGCg==
 
+get-selection-range@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/get-selection-range/-/get-selection-range-0.1.0.tgz#d76db74e922247361f37e713c563bd911c63873b"
+  integrity sha512-3iiUKQ2PlAhP6Zryt4DDjYX7Ankw7ScY4h7Iy0xVCN82l0BUzd9BDuukfOyAdkOziEG1mrGW6ifZm0mUkT3wSQ==
+
 get-stdin@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-6.0.0.tgz#9e09bf712b360ab9225e812048f71fde9c89657b"

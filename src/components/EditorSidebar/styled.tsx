@@ -1,7 +1,13 @@
 import styled from 'styled-components'
 
+export const Container = styled.div`
+  position: relative;
+`
+
 export const SidebarContainer = styled.div`
   position: absolute;
+  display: flex;
+  flex-wrap: nowrap;
   z-index: 5;
   i {
     color: #ccc;
@@ -78,10 +84,8 @@ export const PopupContainer = styled.div`
   background-clip: padding-box;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  position: relative;
   padding: 10px;
-  left: 20px;
-  top: -140px;
+  margin-left: 6px;
 `
 
 export const IconContainer = styled.div`

@@ -33,6 +33,7 @@
     "axios": "^0.18.0",
     "connected-react-router": "^6.2.1",
     "facebook-locales": "^1.0.591",
+    "get-selection-range": "^0.1.0",
     "immutable": "^3.8.2",
     "invariant": "^2.2.4",
     "lodash": "^4.17.11",

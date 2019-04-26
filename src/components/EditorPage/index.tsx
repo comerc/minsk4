@@ -4,8 +4,8 @@ import Editor from 'src/components/Editor'
 
 const style = () => (Self) => styled(Self)`
   ${Editor} {
-    margin: 10px;
-    border: 1px solid red;
+    margin: 100px;
+    border: 1px solid blue;
   }
 `
 
