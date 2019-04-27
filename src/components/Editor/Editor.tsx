@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Button } from 'antd'
 import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
 import sidebar from 'src/components/EditorSidebar'
@@ -76,6 +77,13 @@ const plugins = [
 
 const sidebarOptions = {
   leftOffset: 10,
+  content: (
+    <div>
+      <Button>
+        <i className="fas fa-tasks" style={{ color: 'Tomato' }} />
+      </Button>
+    </div>
+  ),
 }
 
 @sidebar(sidebarOptions)
