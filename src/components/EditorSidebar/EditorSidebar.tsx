@@ -3,7 +3,13 @@ import { Icon, Popover } from 'antd'
 // import { Header1, Header2, HeaderOnePlugin, HeaderTwoPlugin } from '@canner/slate-icon-header'
 // import { ParagraphPlugin } from '@canner/slate-icon-shared'
 import { getVisibleSelectionRect } from 'get-selection-range'
-import { Container, SidebarContainer, IconContainer, PopupContainer, IconWrapper } from './styled'
+import {
+  Container,
+  SidebarContainer,
+  IconContainer,
+  PopupContainer,
+  IconWrapper,
+} from './EditorSidebar.styled'
 
 // type Props = {
 //   icons: Array<React.Element<*> | string>,
@@ -18,7 +24,7 @@ import { Container, SidebarContainer, IconContainer, PopupContainer, IconWrapper
 
 // const defaultPlugins = [] // [ParagraphPlugin(), HeaderOnePlugin(), HeaderTwoPlugin()]
 
-export default (options: any = {}) => {
+const sidebar = (options: any = {}) => {
   let {
     icons = [
       // {
@@ -187,3 +193,5 @@ export default (options: any = {}) => {
     // }
   }
 }
+
+export default sidebar
