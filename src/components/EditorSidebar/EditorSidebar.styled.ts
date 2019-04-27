@@ -45,6 +45,9 @@ export const PopupContainer = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   padding: 10px;
   margin-left: 6px;
+  svg {
+    color: Tomato;
+  }
 `
 
 export const IconContainer = styled.div`
