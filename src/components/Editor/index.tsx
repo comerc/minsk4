@@ -46,6 +46,11 @@ const renderNode = (props, _editor, next) => {
 
 const onKeyDown = (event, editor, next) => {
   const { value } = editor
+  if (event.key === 'Enter' && value.startBlock.type === 'title') {
+    event.preventDefault()
+    editor.moveToStartOfNextBlock()
+    return
+  }
   if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
     event.preventDefault()
     editor.splitBlock().setBlocks({ data: { checked: false } })
