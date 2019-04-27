@@ -28,6 +28,108 @@
             ]
           }
         ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": true
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Slide to the left."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": true
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Slide to the right."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": false
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Criss-cross."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": true
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Criss-cross!"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": false
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Cha cha real smooth…"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": "block",
+        "type": "check-list-item",
+        "data": {
+          "checked": false
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "text": "Let's go to work!"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

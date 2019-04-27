@@ -4,13 +4,17 @@ import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
 import sidebar from 'src/components/EditorSidebar'
 import placeholder from './placeholder'
+import CheckListItem from './CheckListItem'
 import initialValueAsJson from './value.json'
 
 const style = () => (Self) => styled(Self)``
 
 const schema = {
   document: {
-    nodes: [{ match: { type: 'title' }, min: 1, max: 1 }, { match: { type: 'paragraph' }, min: 1 }],
+    nodes: [
+      { match: { type: 'title' }, min: 1, max: 1 },
+      { match: [{ type: 'paragraph' }, { type: 'check-list-item' }], min: 1 },
+    ],
     normalize: (editor, { code, node, child, index }) => {
       switch (code) {
         case 'child_type_invalid': {
@@ -33,9 +37,31 @@ const renderNode = (props, _editor, next) => {
       return <h2 {...attributes}>{children}</h2>
     case 'paragraph':
       return <p {...attributes}>{children}</p>
+    case 'check-list-item':
+      return <CheckListItem {...props} />
     default:
       return next()
   }
+}
+
+const onKeyDown = (event, editor, next) => {
+  const { value } = editor
+  if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
+    event.preventDefault()
+    editor.splitBlock().setBlocks({ data: { checked: false } })
+    return
+  }
+  if (
+    event.key === 'Backspace' &&
+    value.selection.isCollapsed &&
+    value.startBlock.type === 'check-list-item' &&
+    value.selection.start.offset === 0
+  ) {
+    event.preventDefault()
+    editor.setBlocks('paragraph')
+    return
+  }
+  return next()
 }
 
 const plugins = [
@@ -44,11 +70,11 @@ const plugins = [
 ]
 
 const sidebarOptions = {
-  leftOffset: 80,
+  leftOffset: 10,
 }
 
 @sidebar(sidebarOptions)
-class EditorContainer2 extends React.Component {
+class EditorContainer extends React.Component {
   render() {
     const { editorRef, ...rest } = this.props as any
     return (
@@ -57,6 +83,7 @@ class EditorContainer2 extends React.Component {
           autoFocus: true,
           schema,
           renderNode,
+          onKeyDown,
           plugins,
           ref: editorRef,
           ...rest,
@@ -80,7 +107,7 @@ class ControlledEditor extends React.Component {
     const { className } = this.props as any
     const { value } = this.state
     return (
-      <EditorContainer2
+      <EditorContainer
         {...{
           className,
           value,
