@@ -26,16 +26,17 @@ import {
 
 const sidebar = (options: any = {}) => {
   let {
-    icons = [
-      // {
-      //   icon: Header1,
-      //   title: 'Header One',
-      // },
-      // {
-      //   icon: Header2,
-      //   title: 'Header Two',
-      // },
-    ],
+    // icons = [
+    //   // {
+    //   //   icon: Header1,
+    //   //   title: 'Header One',
+    //   // },
+    //   // {
+    //   //   icon: Header2,
+    //   //   title: 'Header Two',
+    //   // },
+    // ],
+    content = '',
     leftOffset = 0,
   } = options
   let i = 0
@@ -111,33 +112,33 @@ const sidebar = (options: any = {}) => {
         })
       }
 
-      renderButton = (Type, title) => {
-        // const { value, onChange } = this.props as any
-        // change={value.change()}
-        // onChange={onChange}
-        return (
-          <IconContainer key={i++}>
-            <IconWrapper>
-              <Type
-                className="__slate-sidebar_slateToolbarItem"
-                strokeClassName="qlStroke"
-                strokeMitterClassName="qlStrokeMitter"
-                fillClassName="qlFill"
-                evenClassName="qlEven"
-                colorLabelClassName="qlColorLabel"
-                thinClassName="qlThin"
-                activeStrokeMitterClassName="qlStrokeMitterActive"
-                activeClassName="__slate-sidebar_slateToolbarItem __slate-sidebar_slateToolbarActiveItem"
-                activeStrokeClassName="qlStrokeActive"
-                activeFillClassName="qlFillActive"
-                activeThinClassName="qlThinActive"
-                activeEvenClassName="qlEvenActive"
-              />
-            </IconWrapper>
-            <div>{title}</div>
-          </IconContainer>
-        )
-      }
+      // renderButton = (Type, title) => {
+      //   // const { value, onChange } = this.props as any
+      //   // change={value.change()}
+      //   // onChange={onChange}
+      //   return (
+      //     <IconContainer key={i++}>
+      //       <IconWrapper>
+      //         <Type
+      //           className="__slate-sidebar_slateToolbarItem"
+      //           strokeClassName="qlStroke"
+      //           strokeMitterClassName="qlStrokeMitter"
+      //           fillClassName="qlFill"
+      //           evenClassName="qlEven"
+      //           colorLabelClassName="qlColorLabel"
+      //           thinClassName="qlThin"
+      //           activeStrokeMitterClassName="qlStrokeMitterActive"
+      //           activeClassName="__slate-sidebar_slateToolbarItem __slate-sidebar_slateToolbarActiveItem"
+      //           activeStrokeClassName="qlStrokeActive"
+      //           activeFillClassName="qlFillActive"
+      //           activeThinClassName="qlThinActive"
+      //           activeEvenClassName="qlEvenActive"
+      //         />
+      //       </IconWrapper>
+      //       <div>{title}</div>
+      //     </IconContainer>
+      //   )
+      // }
 
       renderSidebar = () => {
         const { value } = this.props as any
@@ -148,7 +149,7 @@ const sidebar = (options: any = {}) => {
           return null
         }
         const currentLineText = currentTextNode.text
-        const content = '123' // icons.map((item) => this.renderButton(item.icon, item.title))
+        // const content = '123' // icons.map((item) => this.renderButton(item.icon, item.title))
         return (
           currentLineText.length === 0 &&
           focusBlock.type === 'paragraph' && (
