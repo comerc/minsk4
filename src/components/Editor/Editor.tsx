@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 import { Button } from 'antd'
 import { Editor } from 'slate-react'
 import { Block, Value } from 'slate'
@@ -80,14 +81,19 @@ const plugins = [
   placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
 ]
 
+const addCheckListItemBlock = _.memoize((editor) => (event) => {
+  event.preventDefault()
+  editor.setBlocks({ type: 'check-list-item', data: { checked: false } }).focus()
+})
+
 const sidebarOptions = {
   leftOffset: 10,
-  content: (
-    <div>
-      <Button>
+  content: (editor) => (
+    <React.Fragment>
+      <Button onClick={addCheckListItemBlock(editor)}>
         <FontAwesomeIcon icon="tasks" />
       </Button>
-    </div>
+    </React.Fragment>
   ),
 }
 

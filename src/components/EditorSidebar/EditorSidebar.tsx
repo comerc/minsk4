@@ -36,7 +36,7 @@ const sidebar = (options: any = {}) => {
     //   //   title: 'Header Two',
     //   // },
     // ],
-    content = '',
+    content = () => '',
     leftOffset = 0,
   } = options
   let i = 0
@@ -162,7 +162,7 @@ const sidebar = (options: any = {}) => {
                   className={isOpenPopover ? 'open' : ''}
                 />
               </div>
-              <PopupContainer isOpen={isOpenPopover}>{content}</PopupContainer>
+              <PopupContainer isOpen={isOpenPopover}>{content(this.editorNode)}</PopupContainer>
             </SidebarContainer>
           )
         )
