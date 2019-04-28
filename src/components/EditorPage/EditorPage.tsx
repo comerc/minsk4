@@ -5,7 +5,6 @@ import Editor from 'src/components/Editor'
 const style = () => (Self) => styled(Self)`
   ${Editor} {
     margin: 30px;
-    border: 1px solid blue;
   }
 `
 
