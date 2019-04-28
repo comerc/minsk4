@@ -98,7 +98,7 @@ const sidebarOptions = {
 }
 
 @sidebar(sidebarOptions)
-class EditorContainer extends React.Component {
+class Container extends React.Component {
   render() {
     const { editorRef, ...rest } = this.props as any
     return (
@@ -131,7 +131,7 @@ class ControlledEditor extends React.Component {
     const { className } = this.props as any
     const { value } = this.state
     return (
-      <EditorContainer
+      <Container
         {...{
           className,
           value,
