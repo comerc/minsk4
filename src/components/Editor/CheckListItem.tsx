@@ -1,5 +1,6 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import classNames from 'classnames'
+import styled from 'styled-components'
 
 const style = () => (Self) => styled(Self)`
   display: flex;
@@ -13,11 +14,15 @@ const style = () => (Self) => styled(Self)`
   }
   .content-wrapper {
     flex: 1;
-    opacity: ${(props) => (props.node.data.get('checked') ? 0.62 : 1)};
-    text-decoration: ${(props) => (props.node.data.get('checked') ? 'line-through' : 'none')};
+    opacity: 1;
+    text-decoration: none;
     &:focus {
       outline: none;
     }
+  }
+  .content-wrapper.checked {
+    opacity: 0.62;
+    text-decoration: line-through;
   }
 `
 
@@ -45,7 +50,7 @@ class CheckListItem extends React.Component {
         </span>
         <span
           {...{
-            className: 'content-wrapper',
+            className: classNames('content-wrapper', { checked }),
             contentEditable: !readOnly,
             suppressContentEditableWarning: true,
           }}
