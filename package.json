@@ -34,6 +34,7 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "antd": "^3.12.3",
     "axios": "^0.18.0",
+    "classnames": "^2.2.6",
     "connected-react-router": "^6.2.1",
     "facebook-locales": "^1.0.591",
     "get-selection-range": "^0.1.0",
