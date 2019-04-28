@@ -60,7 +60,7 @@ const sidebar = (options: any = {}) => {
   let i = 0
   return (Editor) => {
     @style()
-    class EditorSidebar extends React.Component {
+    class Sidebar extends React.Component {
       state = {
         isOpen: false,
       }
@@ -172,7 +172,7 @@ const sidebar = (options: any = {}) => {
       }
     }
 
-    return class EditorSidebarDecorator extends React.Component {
+    return class SidebarDecorator extends React.Component {
       // shouldComponentUpdate(nextProps) {
       //   const { value } = this.props as any
       //   if (value === nextProps.value) {
@@ -184,7 +184,7 @@ const sidebar = (options: any = {}) => {
 
       render() {
         const { className, ...rest } = this.props as any
-        return <EditorSidebar {...rest} externalClassName={className} />
+        return <Sidebar {...rest} externalClassName={className} />
       }
     }
   }
