@@ -1,47 +1,66 @@
 import * as React from 'react'
 import { Icon, Popover } from 'antd'
-// import { Header1, Header2, HeaderOnePlugin, HeaderTwoPlugin } from '@canner/slate-icon-header'
-// import { ParagraphPlugin } from '@canner/slate-icon-shared'
 import { getVisibleSelectionRect } from 'get-selection-range'
-import {
-  Container,
-  SidebarContainer,
-  IconContainer,
-  PopupContainer,
-  IconWrapper,
-} from './EditorSidebar.styled'
+import classNames from 'classnames'
+import styled from 'styled-components'
 
-// type Props = {
-//   icons: Array<React.Element<*> | string>,
-//   plugins?: Array<any>,
-//   value: Value,
-//   onChange: (change: Change) => void
-// };
-
-// type State = {
-//   isOpenPopover: boolean
-// };
-
-// const defaultPlugins = [] // [ParagraphPlugin(), HeaderOnePlugin(), HeaderTwoPlugin()]
+const style = () => (Self) => styled(Self)`
+  position: relative;
+  .sidebar-container {
+    position: absolute;
+    display: flex;
+    flex-wrap: nowrap;
+    z-index: 5;
+    i {
+      color: #ccc;
+      animation: fadeIn 1s;
+    }
+    i.open {
+      animation: spin 1s;
+      animation-fill-mode: forwards;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(45deg);
+      }
+    }
+  }
+  .popup-container {
+    width: 320px;
+    display: none;
+    color: rgba(0, 0, 0, 0.65);
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    margin-left: 6px;
+    svg {
+      color: Tomato;
+    }
+  }
+  .popup-container.open {
+    display: block;
+  }
+`
 
 const sidebar = (options: any = {}) => {
-  let {
-    // icons = [
-    //   // {
-    //   //   icon: Header1,
-    //   //   title: 'Header One',
-    //   // },
-    //   // {
-    //   //   icon: Header2,
-    //   //   title: 'Header Two',
-    //   // },
-    // ],
-    content = () => '',
-    leftOffset = 0,
-  } = options
+  let { content = () => '', leftOffset = 0 } = options
   let i = 0
   return (Editor) => {
-    return class EditorSidebar extends React.Component {
+    @style()
+    class EditorSidebar extends React.Component {
       state = {
         isOpenPopover: false,
       }
@@ -97,7 +116,6 @@ const sidebar = (options: any = {}) => {
         this.sidebarContainerNode.style.left = `${leftOffset}px`
         const top = rect.top - containerBoundTop - 3
         this.sidebarContainerNode.style.top = `${top}px`
-        // this.sidebarContainerNode.style.opacity = '1'
       }
 
       handlePlusIconClick = () => {
@@ -112,34 +130,6 @@ const sidebar = (options: any = {}) => {
         })
       }
 
-      // renderButton = (Type, title) => {
-      //   // const { value, onChange } = this.props as any
-      //   // change={value.change()}
-      //   // onChange={onChange}
-      //   return (
-      //     <IconContainer key={i++}>
-      //       <IconWrapper>
-      //         <Type
-      //           className="__slate-sidebar_slateToolbarItem"
-      //           strokeClassName="qlStroke"
-      //           strokeMitterClassName="qlStrokeMitter"
-      //           fillClassName="qlFill"
-      //           evenClassName="qlEven"
-      //           colorLabelClassName="qlColorLabel"
-      //           thinClassName="qlThin"
-      //           activeStrokeMitterClassName="qlStrokeMitterActive"
-      //           activeClassName="__slate-sidebar_slateToolbarItem __slate-sidebar_slateToolbarActiveItem"
-      //           activeStrokeClassName="qlStrokeActive"
-      //           activeFillClassName="qlFillActive"
-      //           activeThinClassName="qlThinActive"
-      //           activeEvenClassName="qlEvenActive"
-      //         />
-      //       </IconWrapper>
-      //       <div>{title}</div>
-      //     </IconContainer>
-      //   )
-      // }
-
       renderSidebar = () => {
         const { value } = this.props as any
         const { isOpenPopover } = this.state
@@ -149,49 +139,58 @@ const sidebar = (options: any = {}) => {
           return null
         }
         const currentLineText = currentTextNode.text
-        // const content = '123' // icons.map((item) => this.renderButton(item.icon, item.title))
         return (
           currentLineText.length === 0 &&
           focusBlock.type === 'paragraph' && (
-            <SidebarContainer ref={this.sidebarContainerRef}>
+            <div className="sidebar-container" ref={this.sidebarContainerRef}>
               <div>
                 <Icon
-                  type="plus-circle"
-                  theme="outlined"
-                  onClick={this.handlePlusIconClick}
-                  className={isOpenPopover ? 'open' : ''}
+                  {...{
+                    type: 'plus-circle',
+                    theme: 'outlined',
+                    onClick: this.handlePlusIconClick,
+                    className: isOpenPopover ? 'open' : '',
+                  }}
                 />
               </div>
-              <PopupContainer isOpen={isOpenPopover}>{content(this.editorNode)}</PopupContainer>
-            </SidebarContainer>
+              <div
+                className={classNames('popup-container', {
+                  open: isOpenPopover,
+                })}
+              >
+                {content(this.editorNode)}
+              </div>
+            </div>
           )
         )
       }
 
       render() {
+        const { className, externalClassName, ...rest } = this.props as any
         return (
-          <Container ref={this.containerRef}>
+          <div className={className} ref={this.containerRef}>
             {this.renderSidebar()}
-            <Editor editorRef={this.editorRef} {...this.props} />
-          </Container>
+            <Editor className={externalClassName} {...rest} editorRef={this.editorRef} />
+          </div>
         )
       }
     }
 
-    // return class EditorSidebarDecorator extends React.Component {
-    //   // shouldComponentUpdate(nextProps) {
-    //   //   const { value } = this.props as any
-    //   //   if (value === nextProps.value) {
-    //   //     console.log(false)
-    //   //     return false
-    //   //   }
-    //   //   return true
-    //   // }
+    return class EditorSidebarDecorator extends React.Component {
+      // shouldComponentUpdate(nextProps) {
+      //   const { value } = this.props as any
+      //   if (value === nextProps.value) {
+      //     console.log(false)
+      //     return false
+      //   }
+      //   return true
+      // }
 
-    //   render() {
-    //     return <EditorSidebar {...this.props} />
-    //   }
-    // }
+      render() {
+        const { className, ...rest } = this.props as any
+        return <EditorSidebar {...rest} externalClassName={className} />
+      }
+    }
   }
 }
 
