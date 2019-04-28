@@ -16,13 +16,13 @@ const style = () => (Self) => styled(Self)`
     flex: 1;
     opacity: 1;
     text-decoration: none;
+    &.checked {
+      opacity: 0.62;
+      text-decoration: line-through;
+    }
     &:focus {
       outline: none;
     }
-  }
-  .content-wrapper.checked {
-    opacity: 0.62;
-    text-decoration: line-through;
   }
 `
 
