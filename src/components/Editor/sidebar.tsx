@@ -37,22 +37,28 @@ const style = () => (Self) => styled(Self)`
     }
   }
   .popup-container {
-    width: 320px;
     display: none;
-    color: rgba(0, 0, 0, 0.65);
-    background-color: #fff;
-    background-clip: padding-box;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    padding: 10px;
-    margin-left: 6px;
+    &.open {
+      display: block;
+    }
+    margin-left: 8px;
     svg {
       color: Tomato;
     }
   }
-  .popup-container.open {
-    display: block;
+  /* 
+  .plus-container {
+    display: flex;
+    flex-wrap: nowrap;
+    cursor: pointer;
   }
+  .fake-input {
+    margin-left: 6px;
+    width: 1px;
+    height: 23px;
+    outline: none;
+  } 
+  */
 `
 
 const sidebar = (options: any = {}) => {
@@ -71,11 +77,15 @@ const sidebar = (options: any = {}) => {
 
       sidebarContainerNode
 
+      // fakeInputNode
+
       editorRef = (node) => (this.editorNode = node)
 
       containerRef = (node) => (this.containerNode = node)
 
       sidebarContainerRef = (node) => (this.sidebarContainerNode = node)
+
+      // fakeInputRef = (node) => (this.fakeInputNode = node)
 
       componentDidMount() {
         window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
@@ -118,16 +128,44 @@ const sidebar = (options: any = {}) => {
         this.sidebarContainerNode.style.top = `${top}px`
       }
 
-      handlePlusIconClick = () => {
+      handlePlusIconClick = (event) => {
+        event.preventDefault()
         this.setState((prevState) => {
           const { isOpen } = prevState as any
           if (isOpen) {
             setTimeout(() => this.editorNode.focus())
+            // } else {
+            //   setTimeout(() => this.fakeInputNode.focus())
           }
           return {
             isOpen: !isOpen,
           }
         })
+      }
+
+      handleKeyDown = (event, editor, next) => {
+        if (event.key === 'Tab') {
+          const { value } = editor
+          const { texts, focusBlock } = value
+          const currentTextNode = texts.get(0)
+          // if (!currentTextNode) {
+          //   return next()
+          // }
+          const currentLineText = currentTextNode.text
+          if (
+            currentLineText.length === 0 &&
+            focusBlock.type === 'paragraph' &&
+            !this.state.isOpen
+          ) {
+            event.preventDefault()
+            const plusIcon = document.getElementById('sidebar-plus-icon')
+            if (plusIcon) {
+              plusIcon.click()
+            }
+            return
+          }
+        }
+        return next()
       }
 
       renderSidebar = () => {
@@ -143,9 +181,11 @@ const sidebar = (options: any = {}) => {
           currentLineText.length === 0 &&
           focusBlock.type === 'paragraph' && (
             <div className="sidebar-container" ref={this.sidebarContainerRef}>
+              {/* <div className="plus-container"> */}
               <div>
                 <Icon
                   {...{
+                    id: 'sidebar-plus-icon',
                     type: 'plus-circle',
                     theme: 'outlined',
                     onClick: this.handlePlusIconClick,
@@ -153,6 +193,16 @@ const sidebar = (options: any = {}) => {
                   }}
                 />
               </div>
+              {/* <div
+                  className="fake-input"
+                  ref={this.fakeInputRef}
+                  contentEditable={true}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onTouchStart={(event) => event.preventDefault()}
+                  onKeyDown={(event) => console.log(event.key)}
+                  tabIndex={-1}
+                /> */}
+              {/* </div> */}
               <div className={classNames('popup-container', { open })}>
                 {content(this.editorNode)}
               </div>
@@ -166,7 +216,14 @@ const sidebar = (options: any = {}) => {
         return (
           <div className={className} ref={this.containerRef}>
             {this.renderSidebar()}
-            <Editor className={externalClassName} {...rest} editorRef={this.editorRef} />
+            <Editor
+              {...{
+                className: externalClassName,
+                ...rest,
+                editorRef: this.editorRef,
+                onKeyDown: this.handleKeyDown,
+              }}
+            />
           </div>
         )
       }

@@ -48,7 +48,7 @@ const renderNode = (props, _editor, next) => {
   }
 }
 
-const onKeyDown = (event, editor, next) => {
+const handleKeyDown = _.memoize((onKeyDown) => (event, editor, next) => {
   const { value } = editor
   if (event.key === 'Enter' && value.startBlock.type === 'title') {
     event.preventDefault()
@@ -70,8 +70,8 @@ const onKeyDown = (event, editor, next) => {
     editor.setBlocks('paragraph')
     return
   }
-  return next()
-}
+  return onKeyDown(event, editor, next)
+})
 
 const plugins = [
   placeholder({ type: 'title', placeholder: 'Title' }),
@@ -97,16 +97,16 @@ const sidebarOptions = {
 @sidebar(sidebarOptions)
 class Container extends React.Component {
   render() {
-    const { editorRef, ...rest } = this.props as any
+    const { editorRef, onKeyDown, ...rest } = this.props as any
     return (
       <Editor
         {...{
           autoFocus: true,
           schema,
           renderNode,
-          onKeyDown,
           plugins,
           ref: editorRef,
+          onKeyDown: handleKeyDown(onKeyDown),
           ...rest,
         }}
       />
