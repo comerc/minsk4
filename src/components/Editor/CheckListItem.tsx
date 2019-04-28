@@ -23,9 +23,9 @@ const style = () => (Self) => styled(Self)`
 
 @style()
 class CheckListItem extends React.Component {
-  onChange = (event) => {
-    const checked = event.target.checked
+  handleChange = (event) => {
     const { editor, node } = this.props as any
+    const checked = event.target.checked
     editor.setNodeByKey(node.key, { data: { checked } })
   }
 
@@ -35,12 +35,20 @@ class CheckListItem extends React.Component {
     return (
       <div {...attributes} className={className}>
         <span className="checkbox-wrapper" contentEditable={false}>
-          <input type="checkbox" checked={checked} onChange={this.onChange} />
+          <input
+            {...{
+              type: 'checkbox',
+              checked,
+              onChange: this.handleChange,
+            }}
+          />
         </span>
         <span
-          className="content-wrapper"
-          contentEditable={!readOnly}
-          suppressContentEditableWarning
+          {...{
+            className: 'content-wrapper',
+            contentEditable: !readOnly,
+            suppressContentEditableWarning: true,
+          }}
         >
           {children}
         </span>
