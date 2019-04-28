@@ -1,6 +1,6 @@
 import React from 'react'
-import classNames from 'classnames'
 import styled from 'styled-components'
+import classNames from 'classnames'
 
 const style = () => (Self) => styled(Self)`
   display: flex;

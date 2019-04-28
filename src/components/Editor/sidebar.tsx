@@ -1,8 +1,8 @@
-import * as React from 'react'
+import React from 'react'
+import styled from 'styled-components'
+import classNames from 'classnames'
 import { Icon, Popover } from 'antd'
 import { getVisibleSelectionRect } from 'get-selection-range'
-import classNames from 'classnames'
-import styled from 'styled-components'
 
 const style = () => (Self) => styled(Self)`
   position: relative;

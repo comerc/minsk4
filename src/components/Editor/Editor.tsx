@@ -8,11 +8,8 @@ import sidebar from './sidebar'
 import placeholder from './placeholder'
 import CheckListItem from './CheckListItem'
 import initialValueAsJson from './value.json'
-import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTasks } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faTasks)
 
 const style = () => (Self) => styled(Self)``
 

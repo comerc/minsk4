@@ -6,6 +6,7 @@ import NotFound from './NotFound'
 import Header from './Header'
 import Footer from './Footer'
 import GlobalStyle from './GlobalStyle'
+import './icons'
 
 const style = () => (Self) => styled(Self)``
 
