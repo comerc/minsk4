@@ -62,7 +62,7 @@ const sidebar = (options: any = {}) => {
     @style()
     class EditorSidebar extends React.Component {
       state = {
-        isOpenPopover: false,
+        isOpen: false,
       }
 
       editorNode
@@ -97,14 +97,14 @@ const sidebar = (options: any = {}) => {
           (currentLineText.length !== 0 ||
             focusBlock.type !== 'paragraph' ||
             value !== prevProps.value) &&
-          this.state.isOpenPopover
+          this.state.isOpen
         ) {
           this.setState({
-            isOpenPopover: false,
+            isOpen: false,
           })
           return
         }
-        if (this.state.isOpenPopover) {
+        if (this.state.isOpen) {
           return
         }
         const rect = getVisibleSelectionRect()
@@ -120,19 +120,19 @@ const sidebar = (options: any = {}) => {
 
       handlePlusIconClick = () => {
         this.setState((prevState) => {
-          const { isOpenPopover } = prevState as any
-          if (isOpenPopover) {
+          const { isOpen } = prevState as any
+          if (isOpen) {
             setTimeout(() => this.editorNode.focus())
           }
           return {
-            isOpenPopover: !isOpenPopover,
+            isOpen: !isOpen,
           }
         })
       }
 
       renderSidebar = () => {
         const { value } = this.props as any
-        const { isOpenPopover } = this.state
+        const { isOpen: open } = this.state
         const { texts, focusBlock } = value
         const currentTextNode = texts.get(0)
         if (!currentTextNode) {
@@ -149,15 +149,11 @@ const sidebar = (options: any = {}) => {
                     type: 'plus-circle',
                     theme: 'outlined',
                     onClick: this.handlePlusIconClick,
-                    className: isOpenPopover ? 'open' : '',
+                    className: classNames({ open }),
                   }}
                 />
               </div>
-              <div
-                className={classNames('popup-container', {
-                  open: isOpenPopover,
-                })}
-              >
+              <div className={classNames('popup-container', { open })}>
                 {content(this.editorNode)}
               </div>
             </div>
