@@ -11,7 +11,7 @@ import initialValueAsJson from './value.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTasks } from '@fortawesome/free-solid-svg-icons'
 
-const style = () => (Self) => styled(Self)``
+const withStyle = (Self) => styled(Self)``
 
 const schema = {
   document: {
@@ -114,7 +114,7 @@ class Container extends React.Component {
   }
 }
 
-@style()
+@withStyle
 class ControlledEditor extends React.Component {
   state = {
     value: Value.fromJSON(initialValueAsJson),

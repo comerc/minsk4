@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   .text {
     white-space: pre-wrap;
     border: 2px solid red;
   }
 `
 
-@style()
+@withStyle
 class PostPage extends React.Component {
   render() {
     const {

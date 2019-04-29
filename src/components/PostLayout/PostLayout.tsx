@@ -9,12 +9,12 @@ const mapStateToProps = (state) => ({
   item: state.post.item,
 })
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   border: 2px solid blue;
 `
 
 @connect(mapStateToProps)
-@style()
+@withStyle
 class PostLayout extends React.Component<{ id: number }> {
   state = { isFirstLoaded: false }
 

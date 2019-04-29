@@ -6,9 +6,9 @@ import NotFound from './NotFound'
 import Header from './Header'
 import Footer from './Footer'
 
-const style = () => (Self) => styled(Self)``
+const withStyle = (Self) => styled(Self)``
 
-@style()
+@withStyle
 class Layout extends React.Component {
   state = { pathname: null, isNotFound: false }
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { formCreate } from 'src/utilities'
 import { Form, Input, Button } from 'antd'
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   .text {
     white-space: pre-wrap;
     border: 2px solid red;
@@ -11,7 +11,7 @@ const style = () => (Self) => styled(Self)`
 `
 
 @formCreate()
-@style()
+@withStyle
 class EditPostPage extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault()

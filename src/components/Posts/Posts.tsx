@@ -9,12 +9,12 @@ const mapStateToProps = (state) => ({
   items: state.posts.items,
 })
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   border: 2px solid blue;
 `
 
 @connect(mapStateToProps)
-@style()
+@withStyle
 class Posts extends React.Component {
   componentDidMount() {
     dispatch(readPosts())

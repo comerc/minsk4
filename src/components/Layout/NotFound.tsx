@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const style = () => (Self) => styled(Self)``
+const withStyle = (Self) => styled(Self)``
 
-@style()
+@withStyle
 class NotFound extends React.Component {
   render() {
     const { className } = this.props as any

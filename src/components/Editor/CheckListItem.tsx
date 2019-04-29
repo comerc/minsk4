@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -26,7 +26,7 @@ const style = () => (Self) => styled(Self)`
   }
 `
 
-@style()
+@withStyle
 class CheckListItem extends React.Component {
   handleChange = (event) => {
     const { editor, node } = this.props as any

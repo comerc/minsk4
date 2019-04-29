@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { Icon, Popover } from 'antd'
 import { getVisibleSelectionRect } from 'get-selection-range'
 
-const style = () => (Self) => styled(Self)`
+const withStyle = (Self) => styled(Self)`
   position: relative;
   .sidebar-container {
     position: absolute;
@@ -65,7 +65,7 @@ const sidebar = (options: any = {}) => {
   let { content = () => '', leftOffset = 0 } = options
   let i = 0
   return (Editor) => {
-    @style()
+    @withStyle
     class Sidebar extends React.Component {
       state = {
         isOpen: false,

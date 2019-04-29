@@ -20,10 +20,10 @@ const mapStateToProps = (state) => ({
   isLogged: !!state.account.token,
 })
 
-const style = () => (Self) => styled(Self)``
+const withStyle = (Self) => styled(Self)``
 
 @connect(mapStateToProps)
-@style()
+@withStyle
 class Header extends React.Component {
   csrf = null
 
