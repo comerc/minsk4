@@ -5,8 +5,6 @@ import { matchRoutes, renderRoutes } from 'react-router-config'
 import NotFound from './NotFound'
 import Header from './Header'
 import Footer from './Footer'
-import GlobalStyle from './GlobalStyle'
-import './icons'
 
 const style = () => (Self) => styled(Self)``
 
@@ -39,7 +37,6 @@ class Layout extends React.Component {
             <Header />
             {renderRoutes(routes)}
             <Footer />
-            <GlobalStyle />
           </React.Fragment>
         )}
       </div>
