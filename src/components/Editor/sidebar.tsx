@@ -5,7 +5,6 @@ import { Icon, Popover } from 'antd'
 import { getVisibleSelectionRect } from 'get-selection-range'
 
 const withStyle = (Self) => styled(Self)`
-  ${(props) => console.log(props.theme)}
   position: relative;
   .ce-toolbar {
     border: 1px solid red;
@@ -19,7 +18,7 @@ const withStyle = (Self) => styled(Self)`
     /* will-change: opacity, transform; */
     /* display: none; */
 
-    @media (max-width: 650px) {
+    @media (max-width: ${({ theme }) => theme.mobileSize}) {
       border: 1px solid green;
       position: fixed;
       bottom: 0;
