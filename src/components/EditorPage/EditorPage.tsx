@@ -2,11 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Editor from 'src/components/Editor'
 
-const withStyle = (Self) => styled(Self)`
-  ${Editor} {
-    margin: 30px;
-  }
-`
+const withStyle = (Self) => styled(Self)``
 
 @withStyle
 class EditorPage extends React.Component {

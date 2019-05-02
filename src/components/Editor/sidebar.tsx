@@ -6,8 +6,10 @@ import { getVisibleSelectionRect } from 'get-selection-range'
 
 const withStyle = (Self) => styled(Self)`
   position: relative;
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.contentWidth};
   .ce-toolbar {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     position: absolute;
     left: 0;
     right: 0;
@@ -16,7 +18,7 @@ const withStyle = (Self) => styled(Self)`
     /* visibility: hidden; */
     transition: opacity 100ms ease;
     /* will-change: opacity, transform; */
-    /* display: none; */
+    display: none;
     @media ${({ theme }) => theme.mobile} {
       border: 1px solid green;
       position: fixed;
@@ -51,7 +53,7 @@ const withStyle = (Self) => styled(Self)`
     }
     &__plus {
       position: absolute;
-      left: -${({ theme }) => theme.toolboxButtonSize};
+      left: -${({ theme }) => theme.toolboxButtonsSize};
       &--hidden {
         display: none;
       }
@@ -102,8 +104,8 @@ const withStyle = (Self) => styled(Self)`
   .ce-toolbox__button {
     color: ${({ theme }) => theme.grayText};
     cursor: pointer;
-    width: ${({ theme }) => theme.toolboxButtonSize};
-    height: ${({ theme }) => theme.toolboxButtonSize};
+    width: ${({ theme }) => theme.toolboxButtonsSize};
+    height: ${({ theme }) => theme.toolboxButtonsSize};
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -125,10 +127,11 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .ce-toolbox {
+    /* border: 1px solid blue; */
     position: absolute;
     visibility: hidden;
     transition: opacity 100ms ease;
-    will-change: opacity;
+    /* will-change: opacity; */
     display: flex;
     flex-direction: row;
     @media ${({ theme }) => theme.mobile} {
@@ -160,7 +163,7 @@ const withStyle = (Self) => styled(Self)`
       user-select: none;
       pointer-events: none;
       transition: opacity 150ms ease-in, left 0.1s linear;
-      will-change: opacity, left;
+      /* will-change: opacity, left; */
       letter-spacing: 0.02em;
       line-height: 1em;
       &-shortcut {
@@ -321,7 +324,7 @@ const sidebar = (options: any = {}) => {
         }
         const containerBound = this.containerNode.getBoundingClientRect()
         const { top: containerBoundTop } = containerBound
-        const top = rect.top - containerBoundTop - 3
+        const top = rect.top - containerBoundTop
         // console.log(rect.height)
         const rectOffset = Math.floor(rect.height / 2)
         this.plusButtonNode.style.transform = `translate3d(0, calc(${rectOffset}px - 50%), 0)`
@@ -382,14 +385,14 @@ const sidebar = (options: any = {}) => {
           return null
         }
         return (
-          <div ref={this.wrapperRef} className="ce-toolbar">
+          <div ref={this.wrapperRef} className="ce-toolbar ce-toolbar--opened">
             <div className="ce-toolbar__content">
               <div ref={this.plusButtonRef} className="ce-toolbar__button ce-toolbar__plus">
                 {/* TODO ce-toolbar__plus--hidden */}
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
                 +
               </div>
-              <div ref={this.toolboxRef} className="ce-toolbox">
+              <div ref={this.toolboxRef} className="ce-toolbox ce-toolbox--opened">
                 <ul>
                   <li className="ce-toolbox__button" data-tool="header">
                     123
@@ -445,7 +448,6 @@ const sidebar = (options: any = {}) => {
         const { className, externalClassName, ...rest } = this.props as any
         return (
           <div className={className} ref={this.containerRef}>
-            {this.renderSidebar()}
             <Editor
               {...{
                 className: externalClassName,
@@ -454,6 +456,7 @@ const sidebar = (options: any = {}) => {
                 onKeyDown: this.handleKeyDown,
               }}
             />
+            {this.renderSidebar()}
           </div>
         )
       }
