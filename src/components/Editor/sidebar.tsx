@@ -8,6 +8,27 @@ const withStyle = (Self) => styled(Self)`
   position: relative;
   margin: 0 auto;
   max-width: ${({ theme }) => theme.contentWidth};
+  /**
+   * Styles for Toolbox Buttons and Plus Button
+   */
+  .ce-toolbar__button,
+  .ce-toolbox__button {
+    color: ${({ theme }) => theme.grayText};
+    cursor: pointer;
+    width: ${({ theme }) => theme.toolboxButtonsSize};
+    height: ${({ theme }) => theme.toolboxButtonsSize};
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &:hover,
+    &--active {
+      color: ${({ theme }) => theme.colorActiveIcon};
+    }
+    &--active {
+      animation: bounceIn 0.75s 1;
+      animation-fill-mode: forwards;
+    }
+  }
   .ce-toolbar {
     /* border: 1px solid red; */
     position: absolute;
@@ -52,6 +73,7 @@ const withStyle = (Self) => styled(Self)`
       }
     }
     &__plus {
+      /* TODO apply .ce-toolbar__button */
       position: absolute;
       left: -${({ theme }) => theme.toolboxButtonsSize};
       &--hidden {
@@ -71,11 +93,13 @@ const withStyle = (Self) => styled(Self)`
      * -------------------------
      */
     &__actions {
+      border: 1px solid orange;
       position: absolute;
       right: 0;
-      top: 10px;
+      top: 0px;
       padding-right: 16px;
       opacity: 0;
+      visibility: hidden;
       @media ${({ theme }) => theme.mobile} {
         position: static;
         margin-left: auto;
@@ -84,6 +108,7 @@ const withStyle = (Self) => styled(Self)`
       }
       &--opened {
         opacity: 1;
+        visibility: visible;
       }
       &-buttons {
         text-align: right;
@@ -95,27 +120,6 @@ const withStyle = (Self) => styled(Self)`
       height: 24px;
       color: ${({ theme }) => theme.grayText};
       cursor: pointer;
-    }
-  }
-  /**
-   * Styles for Toolbox Buttons and Plus Button
-   */
-  .ce-toolbar__button,
-  .ce-toolbox__button {
-    color: ${({ theme }) => theme.grayText};
-    cursor: pointer;
-    width: ${({ theme }) => theme.toolboxButtonsSize};
-    height: ${({ theme }) => theme.toolboxButtonsSize};
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    &:hover,
-    &--active {
-      color: ${({ theme }) => theme.colorActiveIcon};
-    }
-    &--active {
-      animation: bounceIn 0.75s 1;
-      animation-fill-mode: forwards;
     }
   }
   /**
@@ -198,6 +202,15 @@ const withStyle = (Self) => styled(Self)`
       z-index: 2;
     }
   }
+  /* TODO https://docs.slatejs.org/slate-react/plugins#rendernode */
+  /* .ce-block--focused {
+    background-image: linear-gradient(
+      17deg,
+      rgba(243, 248, 255, 0.03) 63.45%,
+      rgba(207, 214, 229, 0.27) 98%
+    );
+    border-radius: 3px;
+  } */
   /* .sidebar-container {
     position: absolute;
     display: flex;
@@ -318,10 +331,14 @@ const sidebar = (options: any = {}) => {
         if (this.state.isOpen) {
           return
         }
+        // console.log(this.wrapperNode)
         const rect = getVisibleSelectionRect()
-        if (!rect || !this.wrapperNode || !this.containerNode) {
+        if (!rect) {
           return
         }
+        // if (!rect || !this.wrapperNode || !this.containerNode) {
+        //   return
+        // }
         const containerBound = this.containerNode.getBoundingClientRect()
         const { top: containerBoundTop } = containerBound
         const top = rect.top - containerBoundTop
@@ -373,26 +390,44 @@ const sidebar = (options: any = {}) => {
       }
 
       renderSidebar = () => {
-        const { value } = this.props as any
+        const {
+          value: { focusBlock },
+        } = this.props as any
         const { isOpen: open } = this.state
-        const { texts, focusBlock } = value
-        const currentTextNode = texts.get(0)
-        if (!currentTextNode) {
-          return null
-        }
-        const currentLineText = currentTextNode.text
-        if (currentLineText.length !== 0 || focusBlock.type !== 'paragraph') {
-          return null
-        }
+        // const { focusBlock } = value
+        // const currentTextNode = texts.get(0)
+        // if (!currentTextNode) {
+        //   return null
+        // }
+        // const currentLineText = currentTextNode.text
+        // if (currentLineText.length !== 0 || focusBlock.type !== 'paragraph') {
+        //   return null
+        // }
+        const isEmptyParagraph =
+          focusBlock && focusBlock.type === 'paragraph' && focusBlock.text === ''
+        const isReadOnly = false // TODO
         return (
-          <div ref={this.wrapperRef} className="ce-toolbar ce-toolbar--opened">
+          <div
+            ref={this.wrapperRef}
+            className={classNames('ce-toolbar', {
+              'ce-toolbar--opened': !isReadOnly,
+            })}
+          >
             <div className="ce-toolbar__content">
-              <div ref={this.plusButtonRef} className="ce-toolbar__button ce-toolbar__plus">
+              <div
+                ref={this.plusButtonRef}
+                className={classNames('ce-toolbar__button', 'ce-toolbar__plus', {
+                  'ce-toolbar__plus--hidden': !isEmptyParagraph,
+                })}
+              >
                 {/* TODO ce-toolbar__plus--hidden */}
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
                 +
               </div>
-              <div ref={this.toolboxRef} className="ce-toolbox ce-toolbox--opened">
+              <div
+                ref={this.toolboxRef}
+                className={classNames('ce-toolbox', { 'ce-toolbox--opened': isEmptyParagraph })}
+              >
                 <ul>
                   <li className="ce-toolbox__button" data-tool="header">
                     123
@@ -410,7 +445,22 @@ const sidebar = (options: any = {}) => {
               </div>
               {/* <div class="ce-toolbox__tooltip" style="left: 288px; transform: translate3d(-50%, 34px, 0px);">Raw HTML</div> */}
             </div>
-            {/* <div class="ce-toolbar__actions"><div class="ce-toolbar__actions-buttons"><span class="ce-toolbar__settings-btn"><svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg></span></div><div class="ce-settings"><div class="ce-settings__plugin-zone"></div><div class="ce-settings__default-zone"></div></div></div> */}
+            <div
+              className={classNames('ce-toolbar__actions', {
+                'ce-toolbar__actions--opened': focusBlock && focusBlock.type !== 'title',
+              })}
+            >
+              <div className="ce-toolbar__actions-buttons">
+                <span className="ce-toolbar__settings-btn">
+                  ...
+                  {/* <svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg> */}
+                </span>
+              </div>
+              <div className="ce-settings">
+                <div className="ce-settings__plugin-zone" />
+                <div className="ce-settings__default-zone" />
+              </div>
+            </div>
           </div>
         )
         // return (
