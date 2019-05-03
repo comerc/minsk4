@@ -35,10 +35,16 @@ class CheckListItem extends React.Component {
   }
 
   render() {
-    const { className, attributes, children, node, readOnly } = this.props as any
+    const {
+      className,
+      attributes: { className: externalClassName, ...attributes },
+      children,
+      node,
+      readOnly,
+    } = this.props as any
     const checked = node.data.get('checked')
     return (
-      <div {...attributes} className={className}>
+      <div {...attributes} className={classNames(externalClassName, className)}>
         <span className="checkbox-wrapper" contentEditable={false}>
           <input
             {...{
