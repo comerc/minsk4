@@ -267,8 +267,11 @@ const withStyle = (Self) => styled(Self)`
 `
 
 const sidebar = (options: any = {}) => {
-  let { content = () => '', leftOffset = 0 } = options
-  let i = 0
+  let {
+    content = () => '',
+    // leftOffset = 0
+  } = options
+  // let i = 0
   return (Editor) => {
     @withTheme
     @withStyle
@@ -403,6 +406,7 @@ const sidebar = (options: any = {}) => {
         // if (currentLineText.length !== 0 || focusBlock.type !== 'paragraph') {
         //   return null
         // }
+        const isTitle = focusBlock && focusBlock.type === 'title'
         const isEmptyParagraph =
           focusBlock && focusBlock.type === 'paragraph' && focusBlock.text === ''
         const isReadOnly = false // TODO
@@ -410,7 +414,7 @@ const sidebar = (options: any = {}) => {
           <div
             ref={this.wrapperRef}
             className={classNames('ce-toolbar', {
-              'ce-toolbar--opened': !isReadOnly,
+              'ce-toolbar--opened': focusBlock && !isReadOnly,
             })}
           >
             <div className="ce-toolbar__content">
@@ -420,7 +424,6 @@ const sidebar = (options: any = {}) => {
                   'ce-toolbar__plus--hidden': !isEmptyParagraph,
                 })}
               >
-                {/* TODO ce-toolbar__plus--hidden */}
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
                 +
               </div>
@@ -447,7 +450,7 @@ const sidebar = (options: any = {}) => {
             </div>
             <div
               className={classNames('ce-toolbar__actions', {
-                'ce-toolbar__actions--opened': focusBlock && focusBlock.type !== 'title',
+                'ce-toolbar__actions--opened': !isTitle,
               })}
             >
               <div className="ce-toolbar__actions-buttons">
