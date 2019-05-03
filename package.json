@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "src/packages/*"
   ],
   "devDependencies": {
     "@types/jest": "^23.3.12",
