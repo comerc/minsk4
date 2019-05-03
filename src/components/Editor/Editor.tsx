@@ -2,9 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { Button } from 'antd'
-import { Editor } from 'slate-react'
+import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import sidebar from './sidebar'
+import toolbar from 'src/packages/slate-toolbar'
 import placeholder from './placeholder'
 import CheckListItem from './CheckListItem'
 import initialValueAsJson from './value.json'
@@ -34,18 +35,22 @@ const schema = {
   },
 }
 
-const renderNode = (props, _editor, next) => {
-  const { attributes, children, node } = props
-  switch (node.type) {
-    case 'title':
-      return <h2 {...attributes}>{children}</h2>
-    case 'paragraph':
-      return <p {...attributes}>{children}</p>
-    case 'check-list-item':
-      return <CheckListItem {...props} />
-    default:
-      return next()
+const other = () => {
+  const renderNode = (props, _editor, next) => {
+    const { attributes, children, node } = props
+    switch (node.type) {
+      case 'title':
+        return <h2 {...attributes}>{children}</h2>
+      case 'paragraph':
+        return <p {...attributes}>{children}</p>
+      case 'check-list-item':
+        return <CheckListItem {...props} />
+      // default:
+    }
+    return next()
   }
+
+  return { renderNode }
 }
 
 const handleKeyDown = _.memoize((onKeyDown) => (event, editor, next) => {
@@ -76,6 +81,8 @@ const handleKeyDown = _.memoize((onKeyDown) => (event, editor, next) => {
 const plugins = [
   placeholder({ type: 'title', placeholder: 'Title' }),
   placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
+  toolbar(),
+  other(),
 ]
 
 const addCheckListItemBlock = _.memoize((editor) => (event) => {
@@ -83,39 +90,39 @@ const addCheckListItemBlock = _.memoize((editor) => (event) => {
   editor.setBlocks({ type: 'check-list-item', data: { checked: false } }).focus()
 })
 
-const sidebarOptions = {
-  leftOffset: 10,
-  content: (editor) => (
-    <React.Fragment>
-      <Button onClick={addCheckListItemBlock(editor)}>
-        <FontAwesomeIcon icon="tasks" />
-      </Button>
-    </React.Fragment>
-  ),
-}
+// const sidebarOptions = {
+//   // leftOffset: 10,
+//   content: (editor) => (
+//     <React.Fragment>
+//       <Button onClick={addCheckListItemBlock(editor)}>
+//         <FontAwesomeIcon icon="tasks" />
+//       </Button>
+//     </React.Fragment>
+//   ),
+// }
 
-@sidebar(sidebarOptions)
-class Container extends React.Component {
-  render() {
-    const { editorRef, onKeyDown, ...rest } = this.props as any
-    return (
-      <Editor
-        {...{
-          autoFocus: true,
-          schema,
-          renderNode,
-          plugins,
-          ref: editorRef,
-          onKeyDown: handleKeyDown(onKeyDown),
-          ...rest,
-        }}
-      />
-    )
-  }
-}
+// @sidebar(sidebarOptions)
+// class Container extends React.Component {
+//   render() {
+//     const { editorRef, onKeyDown, ...rest } = this.props as any
+//     return (
+//       <SlateEditor
+//         {...{
+//           autoFocus: true,
+//           schema,
+//           // renderNode,
+//           plugins,
+//           // ref: editorRef,
+//           // onKeyDown: handleKeyDown(onKeyDown),
+//           ...rest,
+//         }}
+//       />
+//     )
+//   }
+// }
 
 @withStyle
-class ControlledEditor extends React.Component {
+class Editor extends React.Component {
   state = {
     value: Value.fromJSON(initialValueAsJson),
   }
@@ -128,15 +135,18 @@ class ControlledEditor extends React.Component {
     const { className } = this.props as any
     const { value } = this.state
     return (
-      <Container
+      <SlateEditor
         {...{
           className,
           value,
           onChange: this.handleChange,
+          autoFocus: true,
+          schema,
+          plugins,
         }}
       />
     )
   }
 }
 
-export default ControlledEditor
+export default Editor
