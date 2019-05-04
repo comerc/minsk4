@@ -194,14 +194,18 @@ class Toolbar extends React.Component<any> {
       isEmptyParagraph,
       isReadOnly,
       onIconClick,
+      toolbarRef,
       toolboxRef,
       plusRef,
     } = this.props
     return (
       <div
-        className={classNames(className, {
-          '--opened': !isReadOnly,
-        })}
+        {...{
+          className: classNames(className, {
+            '--opened': !isReadOnly,
+          }),
+          ref: toolbarRef,
+        }}
       >
         <div className="content">
           <Button

@@ -5,12 +5,10 @@ import { getVisibleSelectionRect } from 'get-selection-range'
 import Toolbar from './Toolbar'
 
 const withStyle = (Self) => styled(Self)`
-  padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
-  .wrapper {
-    position: relative;
-    margin: 0 auto;
-    max-width: ${({ theme }) => theme.contentWidth};
-  }
+  /* padding: 0 ${({ theme }) => theme.toolboxButtonsSize}; */
+  position: relative;
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.contentWidth};
   .editor-block--focused {
     background-image: linear-gradient(
       17deg,
@@ -22,7 +20,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class Wrapper extends React.Component<any, any> {
+class Container extends React.Component<any, any> {
   state = {
     toolbarTop: 0,
     visibleSelectionRectOffset: 0,
@@ -30,7 +28,7 @@ class Wrapper extends React.Component<any, any> {
   }
 
   containerRef = React.createRef() as any
-  wrapperRef = React.createRef() as any
+  toolbarRef = React.createRef() as any
   toolboxRef = React.createRef() as any
   plusRef = React.createRef() as any
 
@@ -59,21 +57,21 @@ class Wrapper extends React.Component<any, any> {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      editor: {
-        value: { focusBlock, focusText },
-      },
-    } = this.props
+    // const {
+    //   editor: {
+    //     value: { focusBlock, focusText },
+    //   },
+    // } = this.props
     const { isOpenedToolbox } = this.state
-    const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-    if (isOpenedToolbox && !isEmptyParagraph) {
-      //   // if (!isEmptyParagraph) {
-      this.setState({
-        isOpenedToolbox: false,
-      })
-      //   // }
-      return
-    }
+    // const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+    // if (isOpenedToolbox && !isEmptyParagraph) {
+    //   //   // if (!isEmptyParagraph) {
+    //   this.setState({
+    //     isOpenedToolbox: false,
+    //   })
+    //   //   // }
+    //   return
+    // }
     if (!isOpenedToolbox) {
       const visibleSelectionRect = getVisibleSelectionRect()
       if (visibleSelectionRect === null) {
@@ -83,12 +81,15 @@ class Wrapper extends React.Component<any, any> {
       const { top: containerBoundTop } = this.containerRef.current.getBoundingClientRect()
       const toolbarTop = Math.floor(visibleSelectionRect.top - containerBoundTop)
       const visibleSelectionRectOffset = Math.floor(visibleSelectionRect.height / 2)
+      // setTimeout(() => {
       const plusNode = this.plusRef.current
       plusNode.style.transform = `translate3d(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`
       const toolboxNode = this.toolboxRef.current
       toolboxNode.style.transform = `translate3d(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`
-      const wrapperNode = this.wrapperRef.current
-      wrapperNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
+      const toolbarNode = this.toolbarRef.current
+      toolbarNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
+      // })
+
       // setTimeout(() => this.setState({ toolbarTop, visibleSelectionRectOffset }))
     }
     // console.log(containerBoundTop)
@@ -112,26 +113,25 @@ class Wrapper extends React.Component<any, any> {
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     return (
       <div className={className} ref={this.containerRef}>
-        <div className="wrapper" ref={this.wrapperRef}>
-          <Toolbar
-            {...{
-              theme,
-              toolbarTop,
-              visibleSelectionRectOffset,
-              isOpenedToolbox,
-              isTitle,
-              isEmptyParagraph,
-              isReadOnly,
-              onIconClick: this.handlePlusIconClick,
-              toolboxRef: this.toolboxRef,
-              plusRef: this.plusRef,
-            }}
-          />
-        </div>
+        <Toolbar
+          {...{
+            theme,
+            toolbarTop,
+            visibleSelectionRectOffset,
+            isOpenedToolbox,
+            isTitle,
+            isEmptyParagraph,
+            isReadOnly,
+            onIconClick: this.handlePlusIconClick,
+            toolbarRef: this.toolbarRef,
+            toolboxRef: this.toolboxRef,
+            plusRef: this.plusRef,
+          }}
+        />
         {children}
       </div>
     )
   }
 }
 
-export default Wrapper
+export default Container
