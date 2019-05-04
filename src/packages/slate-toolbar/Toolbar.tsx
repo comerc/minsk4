@@ -196,7 +196,7 @@ class Toolbar extends React.Component<any> {
       onIconClick,
       toolbarRef,
       toolboxRef,
-      plusRef,
+      plusButtonRef,
     } = this.props
     return (
       <div
@@ -215,7 +215,7 @@ class Toolbar extends React.Component<any> {
               }),
               theme,
               onClick: onIconClick,
-              externalRef: plusRef,
+              externalRef: plusButtonRef,
             }}
           >
             {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}

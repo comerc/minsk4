@@ -30,7 +30,7 @@ class Container extends React.Component<any, any> {
   containerRef = React.createRef() as any
   toolbarRef = React.createRef() as any
   toolboxRef = React.createRef() as any
-  plusRef = React.createRef() as any
+  plusButtonRef = React.createRef() as any
 
   handlePlusIconClick = (event) => {
     event.preventDefault()
@@ -77,13 +77,13 @@ class Container extends React.Component<any, any> {
       if (visibleSelectionRect === null) {
         return
       }
-      const { containerNode } = this.props
-      const { top: containerBoundTop } = this.containerRef.current.getBoundingClientRect()
+      const containerNode = this.containerRef.current
+      const { top: containerBoundTop } = containerNode.getBoundingClientRect()
       const toolbarTop = Math.floor(visibleSelectionRect.top - containerBoundTop)
       const visibleSelectionRectOffset = Math.floor(visibleSelectionRect.height / 2)
       // setTimeout(() => {
-      const plusNode = this.plusRef.current
-      plusNode.style.transform = `translate3d(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`
+      const plusButtonNode = this.plusButtonRef.current
+      plusButtonNode.style.transform = `translate3d(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`
       const toolboxNode = this.toolboxRef.current
       toolboxNode.style.transform = `translate3d(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`
       const toolbarNode = this.toolbarRef.current
@@ -125,7 +125,7 @@ class Container extends React.Component<any, any> {
             onIconClick: this.handlePlusIconClick,
             toolbarRef: this.toolbarRef,
             toolboxRef: this.toolboxRef,
-            plusRef: this.plusRef,
+            plusButtonRef: this.plusButtonRef,
           }}
         />
         {children}
