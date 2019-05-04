@@ -22,8 +22,8 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Button extends React.Component<any> {
   render() {
-    const { className, children } = this.props
-    return <div className={className}>{children}</div>
+    const { className, onClick, externalRef, children } = this.props
+    return <div {...{ className, onClick, ref: externalRef }}>{children}</div>
   }
 }
 
