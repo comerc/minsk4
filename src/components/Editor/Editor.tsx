@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import _ from 'lodash'
 import { Button } from 'antd'
 import { Editor as SlateEditor } from 'slate-react'
@@ -78,13 +78,6 @@ const handleKeyDown = _.memoize((onKeyDown) => (event, editor, next) => {
   return onKeyDown(event, editor, next)
 })
 
-const plugins = [
-  placeholder({ type: 'title', placeholder: 'Title' }),
-  placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
-  toolbar(),
-  other(),
-]
-
 const addCheckListItemBlock = _.memoize((editor) => (event) => {
   event.preventDefault()
   editor.setBlocks({ type: 'check-list-item', data: { checked: false } }).focus()
@@ -121,18 +114,26 @@ const addCheckListItemBlock = _.memoize((editor) => (event) => {
 //   }
 // }
 
+@withTheme
 @withStyle
-class Editor extends React.Component {
+class Editor extends React.Component<any> {
   state = {
     value: Value.fromJSON(initialValueAsJson),
   }
+
+  plugins = [
+    placeholder({ type: 'title', placeholder: 'Title' }),
+    placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
+    toolbar({ theme: this.props.theme }),
+    other(),
+  ]
 
   handleChange = ({ value }) => {
     this.setState({ value })
   }
 
   render() {
-    const { className } = this.props as any
+    const { className } = this.props
     const { value } = this.state
     return (
       <SlateEditor
@@ -142,7 +143,7 @@ class Editor extends React.Component {
           onChange: this.handleChange,
           autoFocus: true,
           schema,
-          plugins,
+          plugins: this.plugins,
         }}
       />
     )
