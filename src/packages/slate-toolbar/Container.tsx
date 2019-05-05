@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import { getVisibleSelectionRect } from 'get-selection-range'
 import Toolbar from './Toolbar'
+import { faTools } from '@fortawesome/free-solid-svg-icons'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
@@ -32,15 +33,40 @@ class Container extends React.Component<any, any> {
   containerRef = React.createRef() as any
   toolbarRef = React.createRef() as any
   toolboxRef = React.createRef() as any
-  plusButtonRef = React.createRef() as any
+  plusRef = React.createRef() as any
+
+  handleToolClick = (onClick) => (event) => {
+    onClick(event)
+    this.setState({ isOpenedToolbox: false })
+    const { editor } = this.props
+    setTimeout(() => editor.focus())
+  }
+
+  tools = this.props
+    .getTools(this.props.editor)
+    .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
+
+  handlePlusClick = (event) => {
+    event.preventDefault()
+    this.setState((prevState) => {
+      const { isOpenedToolbox } = prevState
+      if (isOpenedToolbox) {
+        const { editor } = this.props
+        setTimeout(() => editor.focus())
+      }
+      return {
+        isOpenedToolbox: !isOpenedToolbox,
+      }
+    })
+  }
 
   handleKeyDown = (event) => {
     if (event.key === 'Escape') {
       const { isOpenedToolbox } = this.state
       if (isOpenedToolbox) {
         event.preventDefault()
-        const plusButtonNode = this.plusButtonRef.current
-        plusButtonNode.click()
+        const plusNode = this.plusRef.current
+        plusNode.click()
       }
     }
     if (event.key === 'Tab') {
@@ -53,25 +79,11 @@ class Container extends React.Component<any, any> {
         const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
         if (isEmptyParagraph) {
           event.preventDefault()
-          const plusButtonNode = this.plusButtonRef.current
-          plusButtonNode.click()
+          const plusNode = this.plusRef.current
+          plusNode.click()
         }
       }
     }
-  }
-
-  handlePlusIconClick = (event) => {
-    event.preventDefault()
-    this.setState((prevState) => {
-      const { isOpenedToolbox } = prevState
-      if (isOpenedToolbox) {
-        const { editor } = this.props
-        setTimeout(() => editor.focus())
-      }
-      return {
-        isOpenedToolbox: !isOpenedToolbox,
-      }
-    })
   }
 
   shouldComponentUpdate(nextProps) {
@@ -97,8 +109,8 @@ class Container extends React.Component<any, any> {
       const { top: containerBoundTop } = containerNode.getBoundingClientRect()
       const toolbarTop = Math.floor(focusBlockBound.top - containerBoundTop)
       const focusBlockBoundOffset = Math.floor(focusBlockBound.height / 2)
-      const plusButtonNode = this.plusButtonRef.current
-      plusButtonNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
+      const plusNode = this.plusRef.current
+      plusNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
       const toolboxNode = this.toolboxRef.current
       toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
       const toolbarNode = this.toolbarRef.current
@@ -125,16 +137,17 @@ class Container extends React.Component<any, any> {
           <Toolbar
             {...{
               theme,
+              tools: this.tools,
               toolbarTop,
               focusBlockBoundOffset,
               isOpenedToolbox,
               isTitle,
               isEmptyParagraph,
               isReadOnly,
-              onIconClick: this.handlePlusIconClick,
               toolbarRef: this.toolbarRef,
               toolboxRef: this.toolboxRef,
-              plusButtonRef: this.plusButtonRef,
+              plusRef: this.plusRef,
+              onPlusClick: this.handlePlusClick,
             }}
           />
         </div>

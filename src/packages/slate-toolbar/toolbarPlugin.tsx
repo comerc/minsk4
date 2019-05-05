@@ -5,7 +5,7 @@ import Container from './Container'
 import Wrapper from './Container'
 
 const toolbarPlugin = (options: any = {}) => {
-  let { theme = {} } = options
+  let { theme = {}, getTools = () => [] } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -22,7 +22,7 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('renderEditor', props)
     const { value } = props
     const children = next()
-    return <Container {...{ editor, theme, value }}>{children}</Container>
+    return <Container {...{ editor, theme, getTools, value }}>{children}</Container>
   }
 
   return { decorateNode, renderNode, renderEditor }

@@ -100,7 +100,7 @@ const withStyle = (Self) => styled(Self)`
   /**
    * Styles for Narrow mode
    */
-  .editor--narrow .plus { /* TODO */
+  .editor--narrow .plus { /* TODO: */
     @media ${({ theme }) => theme.notMobile} {
       left: 5px;
     }
@@ -176,7 +176,7 @@ const withStyle = (Self) => styled(Self)`
   /**
    * Styles for Narrow mode
    */
-  .editor--narrow .toolbox { /* TODO */
+  .editor--narrow .toolbox { /* TODO: */
     @media ${({ theme }) => theme.notMobile} {
       background: #fff;
       z-index: 2;
@@ -190,14 +190,15 @@ class Toolbar extends React.Component<any> {
     const {
       className,
       theme,
+      tools,
       isOpenedToolbox,
       isTitle,
       isEmptyParagraph,
       isReadOnly,
-      onIconClick,
+      onPlusClick,
       toolbarRef,
       toolboxRef,
-      plusButtonRef,
+      plusRef,
     } = this.props
     return (
       <div
@@ -215,8 +216,8 @@ class Toolbar extends React.Component<any> {
                 'plus--hidden': !isEmptyParagraph,
               }),
               theme,
-              onClick: onIconClick,
-              externalRef: plusButtonRef,
+              onClick: onPlusClick,
+              externalRef: plusRef,
             }}
           >
             {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
@@ -227,16 +228,11 @@ class Toolbar extends React.Component<any> {
             ref={toolboxRef}
           >
             <ul>
-              <li>
-                <Button theme={theme} tool="header">
-                  123
-                </Button>
-              </li>
-              <li>
-                <Button theme={theme} tool="image">
-                  123
-                </Button>
-              </li>
+              {tools.map(({ src, alt, onClick }) => (
+                <li key={alt}>
+                  <Button {...{ theme, onClick: onClick }}>{alt}</Button>
+                </li>
+              ))}
               {/* <li class="toolbox__button" data-tool="header"><svg width="11" height="14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M7.6 8.15H2.25v4.525a1.125 1.125 0 0 1-2.25 0V1.125a1.125 1.125 0 1 1 2.25 0V5.9H7.6V1.125a1.125 1.125 0 0 1 2.25 0v11.55a1.125 1.125 0 0 1-2.25 0V8.15z"></path></svg></li> */}
               {/* <li class="toolbox__button" data-tool="image"><svg width="17" height="15" viewBox="0 0 336 276" xmlns="http://www.w3.org/2000/svg"><path d="M291 150.242V79c0-18.778-15.222-34-34-34H79c-18.778 0-34 15.222-34 34v42.264l67.179-44.192 80.398 71.614 56.686-29.14L291 150.242zm-.345 51.622l-42.3-30.246-56.3 29.884-80.773-66.925L45 174.187V197c0 18.778 15.222 34 34 34h178c17.126 0 31.295-12.663 33.655-29.136zM79 0h178c43.63 0 79 35.37 79 79v118c0 43.63-35.37 79-79 79H79c-43.63 0-79-35.37-79-79V79C0 35.37 35.37 0 79 0z"></path></svg></li> */}
               {/* <li class="toolbox__button" data-tool="list"><svg width="17" height="13" viewBox="0 0 17 13" xmlns="http://www.w3.org/2000/svg"> <path d="M5.625 4.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm0-4.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm0 9.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm-4.5-5a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25zm0-4.85a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25zm0 9.85a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25z"></path></svg></li> */}

@@ -1,7 +1,5 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
-import _ from 'lodash'
-import { Button } from 'antd'
 import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import sidebar from './sidebar'
@@ -71,19 +69,16 @@ const other = () => {
       editor.setBlocks('paragraph')
       return
     }
+    // TODO: how to check item without mouse?
     return next()
   }
   return { renderNode, onKeyDown }
 }
 
-// const handleKeyDown =
-// _.memoize((onKeyDown) =>
-// )
-
-const addCheckListItemBlock = _.memoize((editor) => (event) => {
+const addCheckListItemBlock = (editor) => (event) => {
   event.preventDefault()
-  editor.setBlocks({ type: 'check-list-item', data: { checked: false } }).focus()
-})
+  editor.setBlocks({ type: 'check-list-item', data: { checked: false } })
+}
 
 // const sidebarOptions = {
 //   // leftOffset: 10,
@@ -126,7 +121,24 @@ class Editor extends React.Component<any> {
   plugins = [
     placeholder({ type: 'title', placeholder: 'Title' }),
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
-    toolbar({ theme: this.props.theme }),
+    toolbar({
+      theme: this.props.theme,
+      getTools: (editor) => [
+        { src: '', alt: 'Check List', onClick: addCheckListItemBlock(editor) },
+      ],
+    }),
+    // lists({
+    //   blocks: {
+    //     ordered_list: 'ordered-list',
+    //     unordered_list: 'unordered-list',
+    //     list_item: 'list-item',
+    //   },
+    //   classNames: {
+    //     ordered_list: 'ordered-list',
+    //     unordered_list: 'unordered-list',
+    //     list_item: 'list-item',
+    //   },
+    // }),
     other(),
   ]
 
