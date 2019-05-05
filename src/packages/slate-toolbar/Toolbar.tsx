@@ -60,8 +60,9 @@ const withStyle = (Self) => styled(Self)`
   .plus,
   .toolbox {
     top: 50%;
-    /* transform: ${({ visibleSelectionRectOffset }) =>
-      `translate3D(0, calc(${visibleSelectionRectOffset}px - 50%), 0)`}; */
+    transform: translateY(-50%);    
+    /* transform: ${({ focusBlockBoundOffset }) =>
+      `translate3D(0, calc(${focusBlockBoundOffset}px - 50%), 0)`}; */
   }
   /**
      * Block actions Zone
@@ -99,7 +100,7 @@ const withStyle = (Self) => styled(Self)`
   /**
    * Styles for Narrow mode
    */
-  .editor--narrow .plus {
+  .editor--narrow .plus { /* TODO */
     @media ${({ theme }) => theme.notMobile} {
       left: 5px;
     }
@@ -175,7 +176,7 @@ const withStyle = (Self) => styled(Self)`
   /**
    * Styles for Narrow mode
    */
-  .editor--narrow .toolbox {
+  .editor--narrow .toolbox { /* TODO */
     @media ${({ theme }) => theme.notMobile} {
       background: #fff;
       z-index: 2;

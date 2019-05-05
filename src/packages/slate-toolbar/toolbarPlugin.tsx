@@ -13,16 +13,18 @@ const toolbarPlugin = (options: any = {}) => {
   }
   const renderNode = (props, _editor, next) => {
     // console.log('renderNode', props)
-    if (props.isFocused) {
-      props.attributes.className = classNames(props.attributes.className, 'editor-block--focused')
+    if (props.isSelected) {
+      props.attributes.className = classNames(props.attributes.className, 'editor-block--selected')
     }
     return next()
   }
   const renderEditor = (props, editor, next) => {
-    // console.log('renderEditor', editor)
+    // console.log('renderEditor', props)
+    const { value } = props
     const children = next()
-    return <Container {...{ editor, theme }}>{children}</Container>
+    return <Container {...{ editor, theme, value }}>{children}</Container>
   }
+
   return { decorateNode, renderNode, renderEditor }
 }
 

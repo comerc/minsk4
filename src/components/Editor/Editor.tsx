@@ -49,34 +49,36 @@ const other = () => {
     }
     return next()
   }
-
-  return { renderNode }
+  const onKeyDown = (event, editor, next) => {
+    const { value } = editor
+    if (event.key === 'Enter' && value.startBlock.type === 'title') {
+      event.preventDefault()
+      editor.moveToStartOfNextBlock()
+      return
+    }
+    if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
+      event.preventDefault()
+      editor.splitBlock().setBlocks({ data: { checked: false } })
+      return
+    }
+    if (
+      event.key === 'Backspace' &&
+      value.selection.isCollapsed &&
+      value.startBlock.type === 'check-list-item' &&
+      value.selection.start.offset === 0
+    ) {
+      event.preventDefault()
+      editor.setBlocks('paragraph')
+      return
+    }
+    return next()
+  }
+  return { renderNode, onKeyDown }
 }
 
-const handleKeyDown = _.memoize((onKeyDown) => (event, editor, next) => {
-  const { value } = editor
-  if (event.key === 'Enter' && value.startBlock.type === 'title') {
-    event.preventDefault()
-    editor.moveToStartOfNextBlock()
-    return
-  }
-  if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
-    event.preventDefault()
-    editor.splitBlock().setBlocks({ data: { checked: false } })
-    return
-  }
-  if (
-    event.key === 'Backspace' &&
-    value.selection.isCollapsed &&
-    value.startBlock.type === 'check-list-item' &&
-    value.selection.start.offset === 0
-  ) {
-    event.preventDefault()
-    editor.setBlocks('paragraph')
-    return
-  }
-  return onKeyDown(event, editor, next)
-})
+// const handleKeyDown =
+// _.memoize((onKeyDown) =>
+// )
 
 const addCheckListItemBlock = _.memoize((editor) => (event) => {
   event.preventDefault()
@@ -117,9 +119,9 @@ const addCheckListItemBlock = _.memoize((editor) => (event) => {
 @withTheme
 @withStyle
 class Editor extends React.Component<any> {
-  state = {
-    value: Value.fromJSON(initialValueAsJson),
-  }
+  // state = {
+  //   value: Value.fromJSON(initialValueAsJson),
+  // }
 
   plugins = [
     placeholder({ type: 'title', placeholder: 'Title' }),
@@ -128,19 +130,19 @@ class Editor extends React.Component<any> {
     other(),
   ]
 
-  handleChange = ({ value }) => {
-    this.setState({ value })
-  }
+  // handleChange = ({ value }) => {
+  //   this.setState({ value })
+  // }
 
   render() {
     const { className } = this.props
-    const { value } = this.state
+    // const { value } = this.state
     return (
       <SlateEditor
         {...{
           className,
-          value,
-          onChange: this.handleChange,
+          defaultValue: Value.fromJSON(initialValueAsJson),
+          // onChange: this.handleChange,
           autoFocus: true,
           schema,
           plugins: this.plugins,
