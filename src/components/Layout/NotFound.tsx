@@ -4,9 +4,9 @@ import styled from 'styled-components'
 const withStyle = (Self) => styled(Self)``
 
 @withStyle
-class NotFound extends React.Component {
+class NotFound extends React.Component<any> {
   render() {
-    const { className } = this.props as any
+    const { className } = this.props
     return <div className={className}>Not Found</div>
   }
 }

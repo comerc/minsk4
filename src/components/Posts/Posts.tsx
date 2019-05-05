@@ -15,13 +15,13 @@ const withStyle = (Self) => styled(Self)`
 
 @connect(mapStateToProps)
 @withStyle
-class Posts extends React.Component {
+class Posts extends React.Component<any> {
   componentDidMount() {
     dispatch(readPosts())
   }
 
   render() {
-    const { className, items } = this.props as any
+    const { className, items } = this.props
     return (
       <div className={className}>
         {items.map(({ id, title, teaser }) => (

@@ -24,7 +24,7 @@ const withStyle = (Self) => styled(Self)``
 
 @connect(mapStateToProps)
 @withStyle
-class Header extends React.Component {
+class Header extends React.Component<any> {
   csrf = null
 
   language =
@@ -95,7 +95,7 @@ class Header extends React.Component {
   })
 
   render() {
-    const { className, isLogged } = this.props as any
+    const { className, isLogged } = this.props
     return (
       <div className={className}>
         <div>

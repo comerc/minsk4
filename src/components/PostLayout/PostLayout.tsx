@@ -15,7 +15,7 @@ const withStyle = (Self) => styled(Self)`
 
 @connect(mapStateToProps)
 @withStyle
-class PostLayout extends React.Component<{ id: number }> {
+class PostLayout extends React.Component<any> {
   state = { isFirstLoaded: false }
 
   componentDidMount() {
@@ -23,7 +23,7 @@ class PostLayout extends React.Component<{ id: number }> {
       match: {
         params: { id },
       },
-    } = this.props as any
+    } = this.props
     dispatch(readPost(id)).then(() => this.setState({ isFirstLoaded: true }))
   }
 
@@ -32,7 +32,7 @@ class PostLayout extends React.Component<{ id: number }> {
       className,
       route: { routes },
       item,
-    } = this.props as any
+    } = this.props
     const { isFirstLoaded } = this.state
     return (
       <div className={className}>

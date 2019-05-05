@@ -12,10 +12,10 @@ const withStyle = (Self) => styled(Self)`
 
 @formCreate()
 @withStyle
-class EditPostPage extends React.Component {
+class EditPostPage extends React.Component<any> {
   handleSubmit = (event) => {
     event.preventDefault()
-    const { form } = this.props as any
+    const { form } = this.props
     form.validateFields((error, values) => {
       if (!error) {
         console.log('Received values of form: ', values)
@@ -28,7 +28,7 @@ class EditPostPage extends React.Component {
       className,
       item: { title, text },
       form: { getFieldDecorator },
-    } = this.props as any
+    } = this.props
     return (
       <Form
         {...{

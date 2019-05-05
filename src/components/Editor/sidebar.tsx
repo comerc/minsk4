@@ -275,7 +275,7 @@ const sidebar = (options: any = {}) => {
   return (Editor) => {
     @withTheme
     @withStyle
-    class Sidebar extends React.Component {
+    class Sidebar extends React.Component<any> {
       state = {
         isOpen: false,
       }
@@ -313,7 +313,7 @@ const sidebar = (options: any = {}) => {
       }
 
       componentDidUpdate(prevProps) {
-        const { value } = this.props as any
+        const { value } = this.props
         const { texts, focusBlock } = value
         const currentTextNode = texts.get(0)
         if (!currentTextNode) {
@@ -395,7 +395,7 @@ const sidebar = (options: any = {}) => {
       renderSidebar = () => {
         const {
           value: { focusBlock },
-        } = this.props as any
+        } = this.props
         const { isOpen: open } = this.state
         // const { focusBlock } = value
         // const currentTextNode = texts.get(0)
@@ -498,7 +498,7 @@ const sidebar = (options: any = {}) => {
       }
 
       render() {
-        const { className, externalClassName, ...rest } = this.props as any
+        const { className, externalClassName, ...rest } = this.props
         return (
           <div className={className} ref={this.containerRef}>
             <Editor
@@ -515,9 +515,9 @@ const sidebar = (options: any = {}) => {
       }
     }
 
-    return class SidebarDecorator extends React.Component {
+    return class SidebarDecorator extends React.Component<any> {
       // shouldComponentUpdate(nextProps) {
-      //   const { value } = this.props as any
+      //   const { value } = this.props
       //   if (value === nextProps.value) {
       //     console.log(false)
       //     return false
@@ -526,7 +526,7 @@ const sidebar = (options: any = {}) => {
       // }
 
       render() {
-        const { className, ...rest } = this.props as any
+        const { className, ...rest } = this.props
         return <Sidebar {...rest} externalClassName={className} />
       }
     }

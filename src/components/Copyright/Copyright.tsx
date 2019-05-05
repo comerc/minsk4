@@ -6,9 +6,9 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class Copyright extends React.Component {
+class Copyright extends React.Component<any> {
   render() {
-    const { className } = this.props as any
+    const { className } = this.props
     return <div className={className}>© {new Date().getFullYear()} MyCompany</div>
   }
 }

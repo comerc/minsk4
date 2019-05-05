@@ -92,9 +92,9 @@ const addCheckListItemBlock = (editor) => (event) => {
 // }
 
 // @sidebar(sidebarOptions)
-// class Container extends React.Component {
+// class Container extends React.Component<any>{
 //   render() {
-//     const { editorRef, onKeyDown, ...rest } = this.props as any
+//     const { editorRef, onKeyDown, ...rest } = this.props
 //     return (
 //       <SlateEditor
 //         {...{

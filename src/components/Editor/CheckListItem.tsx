@@ -27,9 +27,9 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class CheckListItem extends React.Component {
+class CheckListItem extends React.Component<any> {
   handleChange = (event) => {
-    const { editor, node } = this.props as any
+    const { editor, node } = this.props
     const checked = event.target.checked
     editor.setNodeByKey(node.key, { data: { checked } })
   }
@@ -41,7 +41,7 @@ class CheckListItem extends React.Component {
       children,
       node,
       readOnly,
-    } = this.props as any
+    } = this.props
     const checked = node.data.get('checked')
     return (
       <div {...attributes} className={classNames(externalClassName, className)}>

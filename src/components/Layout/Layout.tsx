@@ -9,7 +9,7 @@ import Footer from './Footer'
 const withStyle = (Self) => styled(Self)``
 
 @withStyle
-class Layout extends React.Component {
+class Layout extends React.Component<any> {
   state = { pathname: null, isNotFound: false }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -27,7 +27,7 @@ class Layout extends React.Component {
     const {
       className,
       route: { routes },
-    } = this.props as any
+    } = this.props
     const { isNotFound } = this.state
     return (
       <div className={className}>

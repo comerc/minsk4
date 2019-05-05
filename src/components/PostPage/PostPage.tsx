@@ -9,12 +9,12 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class PostPage extends React.Component {
+class PostPage extends React.Component<any> {
   render() {
     const {
       className,
       item: { title, text },
-    } = this.props as any
+    } = this.props
     return (
       <div className={className}>
         <h1>{title}</h1>

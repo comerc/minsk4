@@ -6,9 +6,9 @@ import { Button } from 'antd'
 const withStyle = (Self) => styled(Self)``
 
 @withStyle
-class HomePage extends React.Component {
+class HomePage extends React.Component<any> {
   render() {
-    const { className } = this.props as any
+    const { className } = this.props
     return (
       <div className={className}>
         <h1>HomePage</h1>
