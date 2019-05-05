@@ -3,10 +3,16 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import { getVisibleSelectionRect } from 'get-selection-range'
 import Button from './Button'
-// import { faTools } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { ReactComponent as Plus } from './plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
+  svg {
+    fill: currentColor;
+    vertical-align: middle;
+    max-height: 100%;
+  }
   .wrapper {
     position: relative;
     margin: 0 auto;
@@ -21,7 +27,7 @@ const withStyle = (Self) => styled(Self)`
     border-radius: 3px;
   }
   .toolbar {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     position: absolute;
     left: 0;
     right: 0;
@@ -65,13 +71,38 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .plus {
+    /* border: 1px solid red; */
     position: absolute;
     left: -${({ theme }) => theme.toolboxButtonsSize};
+    animation: fadeIn 0.4s;
     &--hidden {
       display: none;
     }
     @media ${({ theme }) => theme.mobile} {
       display: none !important;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+  .plus-icon {
+    transform: rotate(45deg);
+    &--x {
+      animation: spin 0.4s;
+      animation-fill-mode: forwards;
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(45deg);
+      }
+      to {
+        transform: rotate(90deg);
+      }
     }
   }
   .plus,
@@ -84,11 +115,11 @@ const withStyle = (Self) => styled(Self)`
      * -------------------------
      */
   .actions {
-    border: 1px solid orange;
+    /* border: 1px solid orange; */
     position: absolute;
     right: 0;
     top: 0px;
-    padding-right: 16px;
+    /* padding-right: 16px; */
     opacity: 0;
     visibility: hidden;
     @media ${({ theme }) => theme.mobile} {
@@ -106,11 +137,14 @@ const withStyle = (Self) => styled(Self)`
     text-align: right;
   }
   .settings-btn {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
+    /* display: inline-block; */
+    width: 21px;
+    height: 21px;
     color: ${({ theme }) => theme.grayText};
     cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
   }
   /**
    * Styles for Narrow mode
@@ -291,8 +325,8 @@ class Toolbar extends React.Component<any, any> {
       const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
       const focusBlockBound = focusBlockNode.getBoundingClientRect()
       const { top: containerBoundTop } = containerNode.getBoundingClientRect()
-      const toolbarTop = Math.floor(focusBlockBound.top - containerBoundTop)
-      const focusBlockBoundOffset = Math.floor(focusBlockBound.height / 2)
+      const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
+      const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
       const plusNode = this.plusRef.current
       plusNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
       const toolboxNode = this.toolboxRef.current
@@ -337,7 +371,21 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
-                +
+                <FontAwesomeIcon
+                  {...{
+                    className: classNames('plus-icon', {
+                      'plus-icon--x': isOpenedToolbox,
+                    }),
+                    icon: 'times-circle',
+                  }}
+                />
+                {/* <Plus
+                  {...{
+                    className: classNames('plus-icon', {
+                      'plus-icon--x': isOpenedToolbox,
+                    }),
+                  }}
+                /> */}
               </Button>
               <div
                 {...{
@@ -348,7 +396,7 @@ class Toolbar extends React.Component<any, any> {
                 <ul>
                   {this.tools.map(({ src, alt, onClick }) => (
                     <li key={alt}>
-                      <Button {...{ theme, onClick }}>{alt}</Button>
+                      <Button {...{ theme, alt, onClick }}>{src}</Button>
                     </li>
                   ))}
                 </ul>
@@ -364,7 +412,11 @@ class Toolbar extends React.Component<any, any> {
             >
               <div className="actions-buttons">
                 <span className="settings-btn">
-                  ...
+                  <FontAwesomeIcon
+                    {...{
+                      icon: 'ellipsis-h',
+                    }}
+                  />
                   {/* <svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg> */}
                 </span>
               </div>

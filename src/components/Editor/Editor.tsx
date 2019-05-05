@@ -8,7 +8,6 @@ import placeholder from './placeholder'
 import CheckListItem from './CheckListItem'
 import initialValueAsJson from './value.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTasks } from '@fortawesome/free-solid-svg-icons'
 
 const withStyle = (Self) => styled(Self)``
 
@@ -124,7 +123,11 @@ class Editor extends React.Component<any> {
     toolbar({
       theme: this.props.theme,
       getTools: (editor) => [
-        { src: '', alt: 'Check List', onClick: addCheckListItemBlock(editor) },
+        {
+          src: <FontAwesomeIcon icon="tasks" />,
+          alt: 'Check List',
+          onClick: addCheckListItemBlock(editor),
+        },
       ],
     }),
     // lists({
