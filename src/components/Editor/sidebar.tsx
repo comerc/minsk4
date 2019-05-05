@@ -73,7 +73,7 @@ const withStyle = (Self) => styled(Self)`
       }
     }
     &__plus {
-      /* TODO apply .ce-toolbar__button */
+      /* TODO: apply .ce-toolbar__button */
       position: absolute;
       left: -${({ theme }) => theme.toolboxButtonsSize};
       &--hidden {
@@ -202,7 +202,7 @@ const withStyle = (Self) => styled(Self)`
       z-index: 2;
     }
   }
-  /* TODO https://docs.slatejs.org/slate-react/plugins#rendernode */
+  /* TODO: https://docs.slatejs.org/slate-react/plugins#rendernode */
   /* .ce-block--focused {
     background-image: linear-gradient(
       17deg,
@@ -409,7 +409,7 @@ const sidebar = (options: any = {}) => {
         const isTitle = focusBlock && focusBlock.type === 'title'
         const isEmptyParagraph =
           focusBlock && focusBlock.type === 'paragraph' && focusBlock.text === ''
-        const isReadOnly = false // TODO
+        const isReadOnly = false // TODO:
         return (
           <div
             ref={this.wrapperRef}
