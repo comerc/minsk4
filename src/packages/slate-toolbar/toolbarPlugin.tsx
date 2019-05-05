@@ -1,8 +1,7 @@
 import React from 'react'
 // import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
-import Container from './Container'
-import Wrapper from './Container'
+import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
   let { theme = {}, getTools = () => [] } = options
@@ -22,7 +21,7 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('renderEditor', props)
     const { value } = props
     const children = next()
-    return <Container {...{ editor, theme, getTools, value }}>{children}</Container>
+    return <Toolbar {...{ editor, theme, getTools, value }}>{children}</Toolbar>
   }
 
   return { decorateNode, renderNode, renderEditor }
