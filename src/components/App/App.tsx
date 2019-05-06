@@ -7,7 +7,6 @@ import { ConnectedRouter } from 'connected-react-router'
 import { renderRoutes } from 'react-router-config'
 import routes from 'src/routes'
 import GlobalStyle, { theme } from './GlobalStyle'
-import './iconsCache'
 
 class App extends React.Component {
   history = createBrowserHistory()
