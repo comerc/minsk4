@@ -288,11 +288,15 @@ class Toolbar extends React.Component<any, any> {
       }
     }
     if (event.key === 'Tab') {
+      const { value } = this.props
+      const { selection } = value
+      if (!selection.isFocused) {
+        return
+      }
       const { isOpenedToolbox } = this.state
       if (isOpenedToolbox) {
         event.preventDefault()
       } else {
-        const { value } = this.props
         const { focusBlock, focusText } = value
         const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
         if (isEmptyParagraph) {
@@ -426,6 +430,7 @@ class Toolbar extends React.Component<any, any> {
               </div>
             </div>
           </div>
+          <button>111</button>
         </div>
       </div>
     )
