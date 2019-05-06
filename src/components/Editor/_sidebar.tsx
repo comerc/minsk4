@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Icon, Popover } from 'antd'
-import { getVisibleSelectionRect } from 'get-selection-range'
+// import { getVisibleSelectionRect } from 'get-selection-range'
 
 const withStyle = (Self) => styled(Self)`
   position: relative;
@@ -87,46 +87,46 @@ const sidebar = (options: any = {}) => {
 
       // fakeInputRef = (node) => (this.fakeInputNode = node)
 
-      componentDidMount() {
-        window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
-      }
+      // componentDidMount() {
+      //   window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
+      // }
 
-      componentWillUnmount() {
-        window.removeEventListener('scroll', () => this.componentDidUpdate(this.props))
-      }
+      // componentWillUnmount() {
+      //   window.removeEventListener('scroll', () => this.componentDidUpdate(this.props))
+      // }
 
-      componentDidUpdate(prevProps) {
-        const { value } = this.props
-        const { texts, focusBlock } = value
-        const currentTextNode = texts.get(0)
-        if (!currentTextNode) {
-          return
-        }
-        const currentLineText = currentTextNode.text
-        if (
-          (currentLineText.length !== 0 ||
-            focusBlock.type !== 'paragraph' ||
-            value !== prevProps.value) &&
-          this.state.isOpen
-        ) {
-          this.setState({
-            isOpen: false,
-          })
-          return
-        }
-        if (this.state.isOpen) {
-          return
-        }
-        const rect = getVisibleSelectionRect()
-        if (!rect || !this.sidebarContainerNode || !this.containerNode) {
-          return
-        }
-        const containerBound = this.containerNode.getBoundingClientRect()
-        const { top: containerBoundTop } = containerBound
-        this.sidebarContainerNode.style.left = `${leftOffset}px`
-        const top = rect.top - containerBoundTop - 3
-        this.sidebarContainerNode.style.top = `${top}px`
-      }
+      // componentDidUpdate(prevProps) {
+      //   const { value } = this.props
+      //   const { texts, focusBlock } = value
+      //   const currentTextNode = texts.get(0)
+      //   if (!currentTextNode) {
+      //     return
+      //   }
+      //   const currentLineText = currentTextNode.text
+      //   if (
+      //     (currentLineText.length !== 0 ||
+      //       focusBlock.type !== 'paragraph' ||
+      //       value !== prevProps.value) &&
+      //     this.state.isOpen
+      //   ) {
+      //     this.setState({
+      //       isOpen: false,
+      //     })
+      //     return
+      //   }
+      //   if (this.state.isOpen) {
+      //     return
+      //   }
+      //   const rect = getVisibleSelectionRect()
+      //   if (!rect || !this.sidebarContainerNode || !this.containerNode) {
+      //     return
+      //   }
+      //   const containerBound = this.containerNode.getBoundingClientRect()
+      //   const { top: containerBoundTop } = containerBound
+      //   this.sidebarContainerNode.style.left = `${leftOffset}px`
+      //   const top = rect.top - containerBoundTop - 3
+      //   this.sidebarContainerNode.style.top = `${top}px`
+      // }
 
       handlePlusIconClick = (event) => {
         event.preventDefault()

@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
 import { Icon, Popover } from 'antd'
-import { getVisibleSelectionRect } from 'get-selection-range'
+// import { getVisibleSelectionRect } from 'get-selection-range'
 
 const withStyle = (Self) => styled(Self)`
   position: relative;
@@ -304,53 +304,53 @@ const sidebar = (options: any = {}) => {
       plusButtonRef = (node) => (this.plusButtonNode = node)
       toolboxRef = (node) => (this.toolboxNode = node)
 
-      componentDidMount() {
-        window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
-      }
+      // componentDidMount() {
+      //   window.addEventListener('scroll', () => this.componentDidUpdate(this.props))
+      // }
 
-      componentWillUnmount() {
-        window.removeEventListener('scroll', () => this.componentDidUpdate(this.props))
-      }
+      // componentWillUnmount() {
+      //   window.removeEventListener('scroll', () => this.componentDidUpdate(this.props))
+      // }
 
-      componentDidUpdate(prevProps) {
-        const { value } = this.props
-        const { texts, focusBlock } = value
-        const currentTextNode = texts.get(0)
-        if (!currentTextNode) {
-          return
-        }
-        const currentLineText = currentTextNode.text
-        if (
-          (currentLineText.length !== 0 ||
-            focusBlock.type !== 'paragraph' ||
-            value !== prevProps.value) &&
-          this.state.isOpen
-        ) {
-          this.setState({
-            isOpen: false,
-          })
-          return
-        }
-        if (this.state.isOpen) {
-          return
-        }
-        // console.log(this.wrapperNode)
-        const rect = getVisibleSelectionRect()
-        if (!rect) {
-          return
-        }
-        // if (!rect || !this.wrapperNode || !this.containerNode) {
-        //   return
-        // }
-        const containerBound = this.containerNode.getBoundingClientRect()
-        const { top: containerBoundTop } = containerBound
-        const top = rect.top - containerBoundTop
-        // console.log(rect.height)
-        const rectOffset = Math.floor(rect.height / 2)
-        this.plusButtonNode.style.transform = `translate3d(0, calc(${rectOffset}px - 50%), 0)`
-        this.toolboxNode.style.transform = `translate3d(0, calc(${rectOffset}px - 50%), 0)`
-        this.wrapperNode.style.transform = `translate3D(0, ${Math.floor(top)}px, 0)`
-      }
+      // componentDidUpdate(prevProps) {
+      //   const { value } = this.props
+      //   const { texts, focusBlock } = value
+      //   const currentTextNode = texts.get(0)
+      //   if (!currentTextNode) {
+      //     return
+      //   }
+      //   const currentLineText = currentTextNode.text
+      //   if (
+      //     (currentLineText.length !== 0 ||
+      //       focusBlock.type !== 'paragraph' ||
+      //       value !== prevProps.value) &&
+      //     this.state.isOpen
+      //   ) {
+      //     this.setState({
+      //       isOpen: false,
+      //     })
+      //     return
+      //   }
+      //   if (this.state.isOpen) {
+      //     return
+      //   }
+      //   // console.log(this.wrapperNode)
+      //   const rect = getVisibleSelectionRect()
+      //   if (!rect) {
+      //     return
+      //   }
+      //   // if (!rect || !this.wrapperNode || !this.containerNode) {
+      //   //   return
+      //   // }
+      //   const containerBound = this.containerNode.getBoundingClientRect()
+      //   const { top: containerBoundTop } = containerBound
+      //   const top = rect.top - containerBoundTop
+      //   // console.log(rect.height)
+      //   const rectOffset = Math.floor(rect.height / 2)
+      //   this.plusButtonNode.style.transform = `translate3d(0, calc(${rectOffset}px - 50%), 0)`
+      //   this.toolboxNode.style.transform = `translate3d(0, calc(${rectOffset}px - 50%), 0)`
+      //   this.wrapperNode.style.transform = `translate3D(0, ${Math.floor(top)}px, 0)`
+      // }
 
       handlePlusIconClick = (event) => {
         event.preventDefault()
