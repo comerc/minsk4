@@ -7,7 +7,10 @@ import toolbar from 'src/packages/slate-toolbar'
 import placeholder from './placeholder'
 import CheckListItem from './CheckListItem'
 import initialValueAsJson from './value.json'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ReactComponent as TasksIcon } from 'src/icons/ce-code.svg'
+import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
+import { ReactComponent as ListIcon } from 'src/icons/ce-list.svg'
 
 const withStyle = (Self) => styled(Self)``
 
@@ -124,9 +127,15 @@ class Editor extends React.Component<any> {
       theme: this.props.theme,
       getTools: (editor) => [
         {
-          src: <FontAwesomeIcon icon="tasks" />,
+          src: <TasksIcon />,
           alt: 'Check List',
           onClick: addCheckListItemBlock(editor),
+        },
+        {
+          src: <ImageIcon />,
+        },
+        {
+          src: <ListIcon />,
         },
       ],
     }),

@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import { getVisibleSelectionRect } from 'get-selection-range'
 import Button from './Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { ReactComponent as Plus } from './plus.svg'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
+import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
@@ -90,21 +91,21 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  .plus-icon {
-    transform: rotate(45deg);
+  /* FIXME: при включенной анимации, пропадает MoreIcon, если кликнуть по PlusIcon  */
+  /* .plus-icon {
     &--x {
       animation: spin 0.4s;
       animation-fill-mode: forwards;
     }
     @keyframes spin {
       from {
-        transform: rotate(45deg);
+        transform: rotate(0deg);
       }
       to {
-        transform: rotate(90deg);
+        transform: rotate(45deg);
       }
     }
-  }
+  } */
   .plus,
   .toolbox {
     top: 50%;
@@ -375,21 +376,21 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
-                <FontAwesomeIcon
+                {/* <FontAwesomeIcon
                   {...{
                     className: classNames('plus-icon', {
                       'plus-icon--x': isOpenedToolbox,
                     }),
                     icon: 'times-circle',
                   }}
-                />
-                {/* <Plus
+                /> */}
+                <PlusIcon
                   {...{
                     className: classNames('plus-icon', {
                       'plus-icon--x': isOpenedToolbox,
                     }),
                   }}
-                /> */}
+                />
               </Button>
               <div
                 {...{
@@ -416,11 +417,12 @@ class Toolbar extends React.Component<any, any> {
             >
               <div className="actions-buttons">
                 <span className="settings-btn">
-                  <FontAwesomeIcon
+                  {/* <FontAwesomeIcon
                     {...{
                       icon: 'ellipsis-h',
                     }}
-                  />
+                  /> */}
+                  <MoreIcon />
                   {/* <svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg> */}
                 </span>
               </div>
