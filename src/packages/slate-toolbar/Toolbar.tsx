@@ -258,25 +258,31 @@ class Toolbar extends React.Component<any, any> {
     onClick(event)
     this.setState({ isOpenedToolbox: false })
     const { editor } = this.props
-    setTimeout(() => editor.focus())
+    if (!editor.value.selection.isFocused) {
+      editor.focus()
+    }
   }
 
   tools = this.props
     .getTools(this.props.editor)
     .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
 
-  handlePlusClick = (event) => {
+  handleMouseDown = (event) => {
+    // for stop of double click by PlusIcon or MoreIcon
     event.preventDefault()
+  }
+
+  handlePlusClick = (event) => {
     this.setState((prevState) => {
       const { isOpenedToolbox } = prevState
-      if (isOpenedToolbox) {
-        const { editor } = this.props
-        setTimeout(() => editor.focus())
-      }
       return {
         isOpenedToolbox: !isOpenedToolbox,
       }
     })
+    const { editor } = this.props
+    if (!editor.value.selection.isFocused) {
+      editor.focus()
+    }
   }
 
   handleKeyDown = (event) => {
@@ -319,13 +325,13 @@ class Toolbar extends React.Component<any, any> {
   componentDidUpdate(prevProps) {
     const { value } = this.props
     const { focusBlock } = value
-    const { isOpenedToolbox } = this.state
-    if (value !== prevProps.value && isOpenedToolbox) {
-      this.setState({
-        isOpenedToolbox: false,
-      })
-    }
-    if (focusBlock !== prevProps.value.focusBlock) {
+    if (focusBlock.key !== prevProps.value.focusBlock.key) {
+      const { isOpenedToolbox } = this.state
+      if (isOpenedToolbox) {
+        this.setState({
+          isOpenedToolbox: false,
+        })
+      }
       const containerNode = this.containerRef.current
       const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
       const focusBlockBound = focusBlockNode.getBoundingClientRect()
@@ -362,6 +368,7 @@ class Toolbar extends React.Component<any, any> {
                 'toolbar--opened': !isReadOnly,
               }),
               ref: this.toolbarRef,
+              onMouseDown: this.handleMouseDown,
             }}
           >
             <div className="content">
