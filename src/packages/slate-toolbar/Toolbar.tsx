@@ -254,10 +254,12 @@ class Toolbar extends React.Component<any, any> {
   plusRef = React.createRef() as any
 
   focus = () => {
-    const { value } = this.props
-    if (!value.selection.isFocused) {
+    const {
+      value: { selection, document },
+    } = this.props
+    if (!selection.isFocused) {
       const containerNode = this.containerRef.current
-      const documentNode = containerNode.querySelector(`[data-key="${value.document.key}"`)
+      const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
       documentNode.focus()
     }
   }
@@ -273,18 +275,25 @@ class Toolbar extends React.Component<any, any> {
     .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
 
   handleMouseDown = (event) => {
-    // for stop of double click by PlusIcon or MoreIcon
-    event.preventDefault()
+    const {
+      value: { selection },
+    } = this.props
+    if (!selection.isFocused) {
+      // for stop of double click by PlusIcon or MoreIcon
+      event.preventDefault()
+    }
   }
 
   handlePlusClick = (event) => {
     this.setState((prevState) => {
       const { isOpenedToolbox } = prevState
+      if (isOpenedToolbox) {
+        this.focus()
+      }
       return {
         isOpenedToolbox: !isOpenedToolbox,
       }
     })
-    this.focus()
   }
 
   handleKeyDown = (event) => {
