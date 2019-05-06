@@ -45,6 +45,7 @@ module.exports = (config, env) => {
   rewireAbsolutePath(config, env)
   createRewireBabel((options) => {
     const plugins = [...options.plugins]
+    plugins.push([require.resolve('babel-plugin-idx')])
     plugins.push([
       require.resolve('babel-plugin-import'),
       {
