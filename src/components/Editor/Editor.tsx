@@ -133,9 +133,13 @@ class Editor extends React.Component<any> {
         },
         {
           src: <ImageIcon />,
+          alt: 'Image',
+          onClick: () => {},
         },
         {
           src: <ListIcon />,
+          alt: 'List',
+          onClick: () => {},
         },
       ],
     }),
