@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import { getVisibleSelectionRect } from 'get-selection-range'
+import idx from 'idx'
 import Button from './Button'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
 
@@ -254,13 +253,19 @@ class Toolbar extends React.Component<any, any> {
   toolboxRef = React.createRef() as any
   plusRef = React.createRef() as any
 
+  focus = () => {
+    const { value } = this.props
+    if (!value.selection.isFocused) {
+      const containerNode = this.containerRef.current
+      const documentNode = containerNode.querySelector(`[data-key="${value.document.key}"`)
+      documentNode.focus()
+    }
+  }
+
   handleToolClick = (onClick) => (event) => {
     onClick(event)
     this.setState({ isOpenedToolbox: false })
-    const { editor } = this.props
-    if (!editor.value.selection.isFocused) {
-      editor.focus()
-    }
+    this.focus()
   }
 
   tools = this.props
@@ -279,10 +284,7 @@ class Toolbar extends React.Component<any, any> {
         isOpenedToolbox: !isOpenedToolbox,
       }
     })
-    const { editor } = this.props
-    if (!editor.value.selection.isFocused) {
-      editor.focus()
-    }
+    this.focus()
   }
 
   handleKeyDown = (event) => {
@@ -324,14 +326,16 @@ class Toolbar extends React.Component<any, any> {
 
   componentDidUpdate(prevProps) {
     const { value } = this.props
-    const { focusBlock } = value
-    if (focusBlock.key !== prevProps.value.focusBlock.key) {
-      const { isOpenedToolbox } = this.state
-      if (isOpenedToolbox) {
-        this.setState({
-          isOpenedToolbox: false,
-        })
-      }
+    const { focusBlock, focusText } = value
+    const { isOpenedToolbox } = this.state
+    const isOtherBlock = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
+    const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+    if (isOpenedToolbox && (isOtherBlock || !isEmptyParagraph)) {
+      this.setState({
+        isOpenedToolbox: false,
+      })
+    }
+    if (isOtherBlock) {
       const containerNode = this.containerRef.current
       const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
       const focusBlockBound = focusBlockNode.getBoundingClientRect()
@@ -383,14 +387,6 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
-                {/* <FontAwesomeIcon
-                  {...{
-                    className: classNames('plus-icon', {
-                      'plus-icon--x': isOpenedToolbox,
-                    }),
-                    icon: 'times-circle',
-                  }}
-                /> */}
                 <PlusIcon
                   {...{
                     className: classNames('plus-icon', {
@@ -424,11 +420,6 @@ class Toolbar extends React.Component<any, any> {
             >
               <div className="actions-buttons">
                 <span className="settings-btn">
-                  {/* <FontAwesomeIcon
-                    {...{
-                      icon: 'ellipsis-h',
-                    }}
-                  /> */}
                   <MoreIcon />
                   {/* <svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg> */}
                 </span>
@@ -439,7 +430,7 @@ class Toolbar extends React.Component<any, any> {
               </div>
             </div>
           </div>
-          <button>111</button>
+          {/* <button>111</button> */}
         </div>
       </div>
     )
