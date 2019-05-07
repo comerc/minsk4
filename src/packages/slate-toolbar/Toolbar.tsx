@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import idx from 'idx'
+import { Tooltip } from 'antd'
 import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
@@ -27,7 +28,6 @@ const withStyle = (Self) => styled(Self)`
     border-radius: 3px;
   }
   .toolbar {
-    /* border: 1px solid red; */
     position: absolute;
     left: 0;
     right: 0;
@@ -70,13 +70,13 @@ const withStyle = (Self) => styled(Self)`
       overflow-x: auto;
     }
   }
-  .plus {
-    /* border: 1px solid red; */
+  .plus-wrapper {
     position: absolute;
     left: -${({ theme }) => theme.toolboxButtonsSize};
     animation: fadeIn 0.4s;
-    &--hidden {
-      display: none;
+    display: none;
+    &--opened {
+      display: block;
     }
     @media ${({ theme }) => theme.mobile} {
       display: none !important;
@@ -90,7 +90,7 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  .plus-icon {
+  .plus {
     &--x {
       animation: spin 0.4s;
       animation-fill-mode: forwards;
@@ -104,21 +104,19 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  .plus,
+  .plus-wrapper,
   .toolbox {
     top: 50%;
     transform: translateY(-50%);
   }
   /**
-     * Block actions Zone
+     * Block more-wrapper Zone
      * -------------------------
      */
-  .actions {
-    /* border: 1px solid orange; */
+  .more-wrapper {
     position: absolute;
     right: -21px;
     top: 0;
-    /* padding-right: 16px; */
     opacity: 0;
     visibility: hidden;
     @media ${({ theme }) => theme.mobile} {
@@ -144,14 +142,13 @@ const withStyle = (Self) => styled(Self)`
   /**
    * Styles for Narrow mode
    */
-  .editor--narrow .plus {
+  .editor--narrow .plus-wrapper {
     /* TODO: */
     @media ${({ theme }) => theme.notMobile} {
       left: 5px;
     }
   }
   .toolbox {
-    /* border: 1px solid blue; */
     position: absolute;
     visibility: hidden;
     opacity: 0;
@@ -180,46 +177,6 @@ const withStyle = (Self) => styled(Self)`
       visibility: visible;
     }
   }
-  /* .tooltip {
-    position: absolute;
-    top: 25px;
-    padding: 6px 10px;
-    border-radius: 5px;
-    line-height: 21px;
-    opacity: 0;
-    background: ${({ theme }) => theme.bgLight};
-    box-shadow: 0 10px 12px -9px rgba(26, 39, 54, 0.32), 0 3px 2px -2px rgba(33, 48, 73, 0.05);
-    color: #5c6174;
-    font-size: 12px;
-    text-align: center;
-    user-select: none;
-    pointer-events: none;
-    transition: opacity 150ms ease-in, left 0.1s linear;
-    will-change: opacity, left;
-    letter-spacing: 0.02em;
-    line-height: 1em;
-    &-shortcut {
-      color: rgba(100, 105, 122, 0.6);
-      word-spacing: -2px;
-      margin-top: 5px;
-    }
-    &--shown {
-      opacity: 1;
-      transition-delay: 0.1s, 0s;
-    }
-    &::before {
-      content: '';
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      top: -5px;
-      left: 50%;
-      margin-left: -5px;
-      transform: rotate(-45deg);
-      background-color: ${({ theme }) => theme.bgLight};
-      z-index: -1;
-    }
-  } */
   /**
    * Styles for Narrow mode
    */
@@ -249,7 +206,7 @@ class Toolbar extends React.Component<any, any> {
   containerRef = React.createRef() as any
   toolbarRef = React.createRef() as any
   toolboxRef = React.createRef() as any
-  plusRef = React.createRef() as any
+  plusWrapperRef = React.createRef() as any
 
   move = () => {
     const {
@@ -261,8 +218,8 @@ class Toolbar extends React.Component<any, any> {
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-    const plusNode = this.plusRef.current
-    plusNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
+    const plusWrapperNode = this.plusWrapperRef.current
+    plusWrapperNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
     const toolboxNode = this.toolboxRef.current
     toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
     const toolbarNode = this.toolbarRef.current
@@ -348,7 +305,7 @@ class Toolbar extends React.Component<any, any> {
   }
 
   handleToolbarMouseDown = (event) => {
-    // for stop of double click by PlusIcon or MoreIcon
+    /* for stop of double click by PlusIcon or MoreIcon */
     event.preventDefault()
   }
 
@@ -456,27 +413,30 @@ class Toolbar extends React.Component<any, any> {
             }}
           >
             <div className="content">
-              <Button
+              <div
                 {...{
-                  className: classNames('plus', {
-                    'plus--hidden': !isEmptyParagraph,
+                  className: classNames('plus-wrapper', {
+                    'plus-wrapper--opened': isEmptyParagraph,
                   }),
-                  theme,
-                  onClick: this.handlePlusClick,
-                  externalRef: this.plusRef,
+                  ref: this.plusWrapperRef,
                 }}
               >
-                <div
-                  {...{
-                    className: classNames('plus-icon', {
-                      'plus-icon--x': isOpenedToolbox,
-                    }),
-                  }}
-                >
-                  <PlusIcon />
-                </div>
-              </Button>
-
+                <Tooltip>
+                  <span>
+                    <Button
+                      {...{
+                        className: classNames('plus', {
+                          'plus--x': isOpenedToolbox,
+                        }),
+                        theme,
+                        onClick: this.handlePlusClick,
+                      }}
+                    >
+                      <PlusIcon />
+                    </Button>
+                  </span>
+                </Tooltip>
+              </div>
               <div
                 {...{
                   className: classNames('toolbox', { 'toolbox--opened': isOpenedToolbox }),
@@ -486,26 +446,28 @@ class Toolbar extends React.Component<any, any> {
                 <ul>
                   {this.tools.map(({ id, src, alt, onClick }) => (
                     <li key={id}>
-                      <Button
-                        {...{
-                          isActive: id === activeToolId,
-                          theme,
-                          alt,
-                          onClick,
-                        }}
-                      >
-                        {src}
-                      </Button>
+                      <Tooltip title={alt}>
+                        <span>
+                          <Button
+                            {...{
+                              isActive: id === activeToolId,
+                              theme,
+                              onClick,
+                            }}
+                          >
+                            {src}
+                          </Button>
+                        </span>
+                      </Tooltip>
                     </li>
                   ))}
                 </ul>
               </div>
-              {/* <div class="tooltip" style="left: 288px; transform: translate3d(-50%, 34px, 0px);">Raw HTML</div> */}
             </div>
             <div
               {...{
-                className: classNames('actions', {
-                  'actions--opened': !isTitle,
+                className: classNames('more-wrapper', {
+                  'more-wrapper--opened': !isTitle,
                 }),
               }}
             >
@@ -518,7 +480,6 @@ class Toolbar extends React.Component<any, any> {
               </div> */}
             </div>
           </div>
-          {/* <button>111</button> */}
         </div>
       </div>
     )

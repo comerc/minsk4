@@ -20,10 +20,6 @@ export const theme = {
    * Blue icons
    */
   colorActiveIcon: '#388AE5',
-  /**
-   * Toolbar buttons
-   */
-  bgLight: '#eff2f5',
 }
 
 const GlobalStyle = createGlobalStyle``
