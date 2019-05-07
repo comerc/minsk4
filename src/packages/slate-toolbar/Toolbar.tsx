@@ -34,7 +34,7 @@ const withStyle = (Self) => styled(Self)`
     top: 0;
     /* opacity: 0; */
     /* visibility: hidden; */
-    transition: opacity 100ms ease;
+    /* transition: opacity 100ms ease; */
     /* will-change: opacity, transform; */
     display: none;
     @media ${({ theme }) => theme.mobile} {
@@ -90,8 +90,7 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  /* FIXME: при включенной анимации, пропадает MoreIcon, если кликнуть по PlusIcon  */
-  /* .plus-icon {
+  .plus-icon {
     &--x {
       animation: spin 0.4s;
       animation-fill-mode: forwards;
@@ -104,7 +103,7 @@ const withStyle = (Self) => styled(Self)`
         transform: rotate(45deg);
       }
     }
-  } */
+  }
   .plus,
   .toolbox {
     top: 50%;
@@ -159,7 +158,8 @@ const withStyle = (Self) => styled(Self)`
     /* border: 1px solid blue; */
     position: absolute;
     visibility: hidden;
-    transition: opacity 100ms ease;
+    opacity: 0;
+    transition: opacity 0.4s ease; /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
     /* will-change: opacity; */
     ul {
       margin: 0;
@@ -173,6 +173,7 @@ const withStyle = (Self) => styled(Self)`
     @media ${({ theme }) => theme.mobile} {
       position: static;
       transform: none !important;
+      opacity: 1 !important;
       visibility: visible !important;
       ul {
         align-items: center;
@@ -197,7 +198,7 @@ const withStyle = (Self) => styled(Self)`
     text-align: center;
     user-select: none;
     pointer-events: none;
-    transition: opacity 150ms ease-in, left 0.1s linear;
+    /* transition: opacity 150ms ease-in, left 0.1s linear; */
     /* will-change: opacity, left; */
     letter-spacing: 0.02em;
     line-height: 1em;
@@ -208,7 +209,7 @@ const withStyle = (Self) => styled(Self)`
     }
     &--shown {
       opacity: 1;
-      transition-delay: 0.1s, 0s;
+      /* transition-delay: 0.1s, 0s; */
     }
     &::before {
       content: '';
@@ -469,15 +470,17 @@ class Toolbar extends React.Component<any, any> {
                   externalRef: this.plusRef,
                 }}
               >
-                {/* <svg class="icon icon--plus" width="14px" height="14px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#plus"></use></svg> */}
-                <PlusIcon
+                <div
                   {...{
                     className: classNames('plus-icon', {
                       'plus-icon--x': isOpenedToolbox,
                     }),
                   }}
-                />
+                >
+                  <PlusIcon />
+                </div>
               </Button>
+
               <div
                 {...{
                   className: classNames('toolbox', { 'toolbox--opened': isOpenedToolbox }),
@@ -513,7 +516,6 @@ class Toolbar extends React.Component<any, any> {
               <div className="actions-buttons">
                 <span className="settings-btn">
                   <MoreIcon />
-                  {/* <svg class="icon icon--dots" width="18px" height="4px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#dots"></use></svg> */}
                 </span>
               </div>
               <div className="editor-settings">
@@ -522,7 +524,7 @@ class Toolbar extends React.Component<any, any> {
               </div>
             </div>
           </div>
-          <button>111</button>
+          {/* <button>111</button> */}
         </div>
       </div>
     )
