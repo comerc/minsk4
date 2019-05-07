@@ -12,7 +12,7 @@ const toolbarPlugin = (options: any = {}) => {
   }
   const renderNode = (props, _editor, next) => {
     // console.log('renderNode', props)
-    if (props.isSelected) {
+    if (props.node.type !== 'title' && props.isSelected) {
       props.attributes.className = classNames(props.attributes.className, 'editor-block--selected')
     }
     return next()
