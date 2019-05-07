@@ -246,12 +246,31 @@ const withStyle = (Self) => styled(Self)`
 class Toolbar extends React.Component<any, any> {
   state = {
     isOpenedToolbox: false,
+    activeToolId: -1,
   }
 
   containerRef = React.createRef() as any
   toolbarRef = React.createRef() as any
   toolboxRef = React.createRef() as any
   plusRef = React.createRef() as any
+
+  move = () => {
+    const {
+      value: { focusBlock },
+    } = this.props
+    const containerNode = this.containerRef.current
+    const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
+    const focusBlockBound = focusBlockNode.getBoundingClientRect()
+    const { top: containerBoundTop } = containerNode.getBoundingClientRect()
+    const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
+    const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
+    const plusNode = this.plusRef.current
+    plusNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
+    const toolboxNode = this.toolboxRef.current
+    toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
+    const toolbarNode = this.toolbarRef.current
+    toolbarNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
+  }
 
   focus = () => {
     const {
@@ -266,61 +285,112 @@ class Toolbar extends React.Component<any, any> {
 
   handleToolClick = (onClick) => (event) => {
     onClick(event)
-    this.setState({ isOpenedToolbox: false })
+    this.close()
     this.focus()
   }
 
   tools = this.props
     .getTools(this.props.editor)
-    .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
+    .map(({ onClick, ...rest }, id) => ({ id, onClick: this.handleToolClick(onClick), ...rest }))
+
+  /**
+   * Leaf
+   * flip through the toolbox items
+   */
+  leaf = (isReverseDirection = false) => {
+    const { activeToolId } = this.state
+    let id = activeToolId
+    /**
+     * Count index for next Tool
+     */
+    if (isReverseDirection) {
+      /**
+       * If activeToolId === -1 then we have no chosen Tool in Toolbox
+       */
+      if (id === -1) {
+        /**
+         * Normalize "previous" Tool index depending on direction.
+         * We need to do this to highlight "first" Tool correctly
+         *
+         * Order of Tools: [0] [1] ... [n - 1]
+         *   [0 = n] because of: n % n = 0 % n
+         *
+         * Direction 'right': for [0] the [n - 1] is a previous index
+         *   [n - 1] -> [0]
+         *
+         * Direction 'left': for [n - 1] the [0] is a previous index
+         *   [n - 1] <- [0]
+         */
+        id = 0
+      }
+      /**
+       * If we go left then choose previous (-1) Tool
+       * Before counting module we need to add length before because of "The JavaScript Modulo Bug"
+       */
+      id = (this.tools.length + id - 1) % this.tools.length
+    } else {
+      /**
+       * If we go right then choose next (+1) Tool
+       */
+      id = (id + 1) % this.tools.length
+    }
+    this.setState({ activeToolId: id })
+  }
+
+  open = () => {
+    this.setState({
+      isOpenedToolbox: true,
+    })
+  }
+
+  close = () => {
+    this.setState({
+      isOpenedToolbox: false,
+      activeToolId: -1,
+    })
+  }
 
   handleMouseDown = (event) => {
-    const {
-      value: { selection },
-    } = this.props
-    if (!selection.isFocused) {
-      // for stop of double click by PlusIcon or MoreIcon
-      event.preventDefault()
-    }
+    /* TODO: how to close toolbox? */
+    // for stop of double click by PlusIcon or MoreIcon
+    event.preventDefault()
   }
 
   handlePlusClick = (event) => {
-    this.setState((prevState) => {
-      const { isOpenedToolbox } = prevState
-      if (isOpenedToolbox) {
-        this.focus()
-      }
-      return {
-        isOpenedToolbox: !isOpenedToolbox,
-      }
-    })
+    if (this.state.isOpenedToolbox) {
+      this.close()
+    } else {
+      this.open()
+    }
+    this.focus()
   }
 
   handleKeyDown = (event) => {
     if (event.key === 'Escape') {
-      const { isOpenedToolbox } = this.state
-      if (isOpenedToolbox) {
+      if (this.state.isOpenedToolbox) {
         event.preventDefault()
-        const plusNode = this.plusRef.current
-        plusNode.click()
+        this.close()
       }
     }
     if (event.key === 'Tab') {
-      const { value } = this.props
-      const { selection } = value
+      const {
+        value: { selection },
+      } = this.props
       if (!selection.isFocused) {
         return
       }
-      const { isOpenedToolbox } = this.state
-      if (isOpenedToolbox) {
+      if (this.state.isOpenedToolbox) {
         event.preventDefault()
+        this.leaf(event.shiftKey)
       } else {
-        const { focusBlock, focusText } = value
+        const {
+          value: { focusBlock, focusText },
+        } = this.props
         const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
         if (isEmptyParagraph) {
           event.preventDefault()
-          const plusNode = this.plusRef.current
-          plusNode.click()
+          this.open()
+          this.leaf(event.shiftKey)
         }
       }
     }
@@ -336,27 +406,13 @@ class Toolbar extends React.Component<any, any> {
   componentDidUpdate(prevProps) {
     const { value } = this.props
     const { focusBlock, focusText } = value
-    const { isOpenedToolbox } = this.state
     const isOtherBlock = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-    if (isOpenedToolbox && (isOtherBlock || !isEmptyParagraph)) {
-      this.setState({
-        isOpenedToolbox: false,
-      })
+    if (this.state.isOpenedToolbox && (isOtherBlock || !isEmptyParagraph)) {
+      this.close()
     }
     if (isOtherBlock) {
-      const containerNode = this.containerRef.current
-      const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
-      const focusBlockBound = focusBlockNode.getBoundingClientRect()
-      const { top: containerBoundTop } = containerNode.getBoundingClientRect()
-      const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
-      const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-      const plusNode = this.plusRef.current
-      plusNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
-      const toolboxNode = this.toolboxRef.current
-      toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
-      const toolbarNode = this.toolbarRef.current
-      toolbarNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
+      this.move()
     }
   }
 
@@ -368,11 +424,17 @@ class Toolbar extends React.Component<any, any> {
       value: { focusBlock, focusText },
       children,
     } = this.props
-    const { isOpenedToolbox } = this.state
+    const { isOpenedToolbox, activeToolId } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     return (
-      <div {...{ className, ref: this.containerRef, onKeyDown: this.handleKeyDown }}>
+      <div
+        {...{
+          className,
+          ref: this.containerRef,
+          onKeyDown: this.handleKeyDown,
+        }}
+      >
         <div className="wrapper">
           {children}
           <div
@@ -411,9 +473,18 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 <ul>
-                  {this.tools.map(({ src, alt, onClick }) => (
-                    <li key={alt}>
-                      <Button {...{ theme, alt, onClick }}>{src}</Button>
+                  {this.tools.map(({ id, src, alt, onClick }) => (
+                    <li key={id}>
+                      <Button
+                        {...{
+                          isActive: id === activeToolId,
+                          theme,
+                          alt,
+                          onClick,
+                        }}
+                      >
+                        {src}
+                      </Button>
                     </li>
                   ))}
                 </ul>

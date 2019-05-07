@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import classNames from 'classnames'
 
 const withStyle = (Self) => styled(Self)`
   color: ${({ theme }) => theme.grayText};
@@ -9,11 +10,11 @@ const withStyle = (Self) => styled(Self)`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  &:hover,
-  &--active {
+  &&:hover,
+  &&.--active {
     color: ${({ theme }) => theme.colorActiveIcon};
   }
-  &--active {
+  &&.--active {
     animation: bounceIn 0.75s 1;
     animation-fill-mode: forwards;
   }
@@ -22,11 +23,11 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Button extends React.Component<any> {
   render() {
-    const { className, onClick, externalRef, children } = this.props
+    const { className, isActive, onClick, externalRef, children } = this.props
     return (
       <div
         {...{
-          className,
+          className: classNames(className, { '--active': isActive }),
           onClick,
           ref: externalRef,
         }}
