@@ -20,7 +20,7 @@ const withStyle = (Self) => styled(Self)`
   }
   .editor-block--selected {
     background-image: linear-gradient(
-      17deg,
+      45deg,
       rgba(243, 248, 255, 0.03) 63.45%,
       rgba(207, 214, 229, 0.27) 98%
     );
