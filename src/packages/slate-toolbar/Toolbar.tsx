@@ -350,8 +350,7 @@ class Toolbar extends React.Component<any, any> {
     })
   }
 
-  handleMouseDown = (event) => {
-    /* TODO: how to close toolbox? */
+  handleToolbarMouseDown = (event) => {
     // for stop of double click by PlusIcon or MoreIcon
     event.preventDefault()
   }
@@ -396,6 +395,18 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
+  handleClick = (event) => {
+    if (this.state.isOpenedToolbox) {
+      const key = event.target.dataset.key
+      const {
+        value: { focusBlock, document },
+      } = this.props
+      if ([focusBlock.key, document.key].includes(key)) {
+        this.close()
+      }
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.value.focusBlock === null) {
       return false
@@ -433,6 +444,7 @@ class Toolbar extends React.Component<any, any> {
           className,
           ref: this.containerRef,
           onKeyDown: this.handleKeyDown,
+          onClick: this.handleClick,
         }}
       >
         <div className="wrapper">
@@ -443,7 +455,7 @@ class Toolbar extends React.Component<any, any> {
                 'toolbar--opened': !isReadOnly,
               }),
               ref: this.toolbarRef,
-              onMouseDown: this.handleMouseDown,
+              onMouseDown: this.handleToolbarMouseDown,
             }}
           >
             <div className="content">
@@ -510,7 +522,7 @@ class Toolbar extends React.Component<any, any> {
               </div>
             </div>
           </div>
-          {/* <button>111</button> */}
+          <button>111</button>
         </div>
       </div>
     )
