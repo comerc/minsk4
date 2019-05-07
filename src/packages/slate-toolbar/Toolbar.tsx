@@ -180,7 +180,7 @@ const withStyle = (Self) => styled(Self)`
       visibility: visible;
     }
   }
-  .tooltip {
+  /* .tooltip {
     position: absolute;
     top: 25px;
     padding: 6px 10px;
@@ -194,8 +194,8 @@ const withStyle = (Self) => styled(Self)`
     text-align: center;
     user-select: none;
     pointer-events: none;
-    /* transition: opacity 150ms ease-in, left 0.1s linear; */
-    /* will-change: opacity, left; */
+    transition: opacity 150ms ease-in, left 0.1s linear;
+    will-change: opacity, left;
     letter-spacing: 0.02em;
     line-height: 1em;
     &-shortcut {
@@ -205,7 +205,7 @@ const withStyle = (Self) => styled(Self)`
     }
     &--shown {
       opacity: 1;
-      /* transition-delay: 0.1s, 0s; */
+      transition-delay: 0.1s, 0s;
     }
     &::before {
       content: '';
@@ -219,7 +219,7 @@ const withStyle = (Self) => styled(Self)`
       background-color: ${({ theme }) => theme.bgLight};
       z-index: -1;
     }
-  }
+  } */
   /**
    * Styles for Narrow mode
    */
