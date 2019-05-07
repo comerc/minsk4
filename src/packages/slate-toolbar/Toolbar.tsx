@@ -116,8 +116,8 @@ const withStyle = (Self) => styled(Self)`
   .actions {
     /* border: 1px solid orange; */
     position: absolute;
-    right: 0;
-    top: 0px;
+    right: -21px;
+    top: 0;
     /* padding-right: 16px; */
     opacity: 0;
     visibility: hidden;
@@ -132,11 +132,7 @@ const withStyle = (Self) => styled(Self)`
       visibility: visible;
     }
   }
-  .actions-buttons {
-    text-align: right;
-  }
-  .settings-btn {
-    /* display: inline-block; */
+  .more {
     width: 21px;
     height: 21px;
     color: ${({ theme }) => theme.grayText};
@@ -235,12 +231,12 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   /* TODO: */
-  .editor-settings {
+  /* .editor-settings {
     &__plugin-zone {
     }
     &__default-zone {
     }
-  }
+  } */
 `
 
 @withStyle
@@ -513,15 +509,13 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <div className="actions-buttons">
-                <span className="settings-btn">
-                  <MoreIcon />
-                </span>
+              <div className="more">
+                <MoreIcon />
               </div>
-              <div className="editor-settings">
+              {/* <div className="editor-settings">
                 <div className="editor-settings__plugin-zone" />
                 <div className="editor-settings__default-zone" />
-              </div>
+              </div> */}
             </div>
           </div>
           {/* <button>111</button> */}
