@@ -421,21 +421,17 @@ class Toolbar extends React.Component<any, any> {
                   ref: this.plusWrapperRef,
                 }}
               >
-                <Tooltip>
-                  <span>
-                    <Button
-                      {...{
-                        className: classNames('plus', {
-                          'plus--x': isOpenedToolbox,
-                        }),
-                        theme,
-                        onClick: this.handlePlusClick,
-                      }}
-                    >
-                      <PlusIcon />
-                    </Button>
-                  </span>
-                </Tooltip>
+                <Button
+                  {...{
+                    className: classNames('plus', {
+                      'plus--x': isOpenedToolbox,
+                    }),
+                    theme,
+                    onClick: this.handlePlusClick,
+                  }}
+                >
+                  <PlusIcon />
+                </Button>
               </div>
               <div
                 {...{
