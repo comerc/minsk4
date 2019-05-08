@@ -33,12 +33,12 @@ class Settings extends React.Component<any> {
       <Tooltip
         {...{
           overlayClassName: className,
-          placement: 'bottom',
+          placement: 'bottomRight',
           trigger: 'click',
-          align: { offset: [0, 0] },
+          align: { offset: [10, 0] },
           title: (
             <div>
-              121
+              1212121
               <br />
               212
             </div>
