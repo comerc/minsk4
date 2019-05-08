@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import idx from 'idx'
 import { Tooltip } from 'antd'
 import Button from './Button'
+import Settings from './Settings'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
 
@@ -45,7 +46,7 @@ const withStyle = (Self) => styled(Self)`
       left: 0;
       right: 0;
       z-index: 9;
-      height: 50px;
+      height: 34px;
       background: #fff;
       box-shadow: 0 -2px 12px rgba(60, 67, 81, 0.18);
       transform: none !important;
@@ -472,11 +473,11 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <Tooltip title="111">
+              <Settings>
                 <div className="more">
                   <MoreIcon />
                 </div>
-              </Tooltip>
+              </Settings>
               {/* <div className="editor-settings">
                 <div className="editor-settings__plugin-zone" />
                 <div className="editor-settings__default-zone" />
