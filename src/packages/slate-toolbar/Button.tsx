@@ -39,17 +39,15 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Button extends React.Component<any> {
   render() {
-    const { className, isActive, onClick, externalRef, children } = this.props
+    const { className, isActive, onClick, children } = this.props
     return (
       <div
         {...{
           className: classNames(className, { '--active': isActive }),
           onClick,
-          ref: externalRef,
+          children,
         }}
-      >
-        {children}
-      </div>
+      />
     )
   }
 }
