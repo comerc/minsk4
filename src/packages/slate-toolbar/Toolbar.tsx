@@ -442,7 +442,13 @@ class Toolbar extends React.Component<any, any> {
                 <ul>
                   {this.tools.map(({ id, src, alt, onClick }) => (
                     <li key={id}>
-                      <Tooltip title={alt}>
+                      <Tooltip
+                        {...{
+                          title: alt,
+                          placement: 'bottom',
+                          align: { offset: [0, -3] },
+                        }}
+                      >
                         <span>
                           <Button
                             {...{
@@ -467,9 +473,11 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <div className="more">
-                <MoreIcon />
-              </div>
+              <Tooltip title="111">
+                <div className="more">
+                  <MoreIcon />
+                </div>
+              </Tooltip>
               {/* <div className="editor-settings">
                 <div className="editor-settings__plugin-zone" />
                 <div className="editor-settings__default-zone" />

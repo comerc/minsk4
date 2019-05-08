@@ -7,7 +7,7 @@ const withStyle = (Self) => styled(Self)`
   cursor: pointer;
   width: ${({ theme }) => theme.toolboxButtonsSize};
   height: ${({ theme }) => theme.toolboxButtonsSize};
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   &&:hover,
