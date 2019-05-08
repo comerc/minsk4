@@ -135,7 +135,7 @@ const withStyle = (Self) => styled(Self)`
     height: 21px;
     color: ${({ theme }) => theme.grayText};
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -445,8 +445,7 @@ class Toolbar extends React.Component<any, any> {
                       <Tooltip
                         {...{
                           title: alt,
-                          placement: 'bottom',
-                          align: { offset: [0, -3] },
+                          align: { offset: [0, 3] },
                         }}
                       >
                         <span>
