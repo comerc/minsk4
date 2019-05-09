@@ -1,13 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Tooltip } from 'antd'
+import { Tooltip, Button } from 'antd'
 
-/* TODO: move variables to theme */
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const top = 4
 const right = 16
-const backgroundColor = '#fff'
 
 const withStyle = (Self) => styled(Self)`
   .ant-tooltip-arrow {
@@ -25,7 +23,7 @@ const withStyle = (Self) => styled(Self)`
   }
   .ant-tooltip-inner {
     color: rgba(0, 0, 0, 0.65);
-    background-color: ${backgroundColor};
+    background-color: ${({ theme }) => theme.backgroundColor};
     background-clip: padding-box;
     position: relative;
     &::before {
@@ -35,7 +33,7 @@ const withStyle = (Self) => styled(Self)`
       right: ${right}px;
       width: ${sqrtArrowWidth}px;
       height: ${sqrtArrowWidth}px;
-      background-color: ${backgroundColor};
+      background-color: ${({ theme }) => theme.backgroundColor};
       transform: rotate(45deg);
     }
   }
@@ -43,6 +41,10 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Settings extends React.Component<any> {
+  handleClick = (event) => {
+    // event.preventDefault()
+  }
+
   render() {
     const { className, children } = this.props
     return (
@@ -56,7 +58,12 @@ class Settings extends React.Component<any> {
             <div>
               1212121
               <br />
-              212
+              <Button tabIndex={-1} onClick={this.handleClick} size="small">
+                ...
+              </Button>
+              <Button tabIndex={-1} onClick={this.handleClick} size="small">
+                ...
+              </Button>
             </div>
           ),
           children,

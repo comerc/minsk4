@@ -473,7 +473,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <Settings>
+              <Settings {...{ theme }}>
                 <div className="more">
                   <MoreIcon />
                 </div>

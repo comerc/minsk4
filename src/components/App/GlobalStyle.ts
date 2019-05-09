@@ -20,6 +20,10 @@ export const theme = {
    * Blue icons
    */
   colorActiveIcon: '#388AE5',
+  /**
+   * Background Color
+   */
+  backgroundColor: '#FFF',
 }
 
 const GlobalStyle = createGlobalStyle``
