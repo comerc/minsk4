@@ -62,7 +62,7 @@ module.exports = (config, env) => {
     }
   })(config, env)
   createRewireLess({
-    modifyVars: { '@primary-color': '#a51d7c' },
+    // modifyVars: { '@primary-color': '#a51d7c' },
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)
