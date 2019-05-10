@@ -4,8 +4,8 @@ import { Tooltip, Button } from 'antd'
 
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
-const top = 4
-const right = 16
+const arrowTop = 4
+const arrowRight = 16
 
 const withStyle = (Self) => styled(Self)`
   .ant-tooltip-arrow {
@@ -13,8 +13,8 @@ const withStyle = (Self) => styled(Self)`
     height: ${sqrtArrowWidth}px !important;
     border-width: ${sqrtArrowWidth / 2}px !important;
     transform: rotate(45deg);
-    top: ${top}px !important;
-    right: ${right}px !important;
+    top: ${arrowTop}px !important;
+    right: ${arrowRight}px !important;
     border-top-color: transparent !important;
     border-right-color: transparent !important;
     border-bottom-color: transparent !important;
@@ -22,18 +22,23 @@ const withStyle = (Self) => styled(Self)`
     box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
   }
   .ant-tooltip-inner {
-    color: rgba(0, 0, 0, 0.65);
+    color: ${({ theme }) => theme.popoverColor};
     background-color: ${({ theme }) => theme.popoverBg};
     background-clip: padding-box;
     position: relative;
     &::before {
       content: '';
       position: absolute;
-      top: -${top}px;
-      right: ${right}px;
+      top: -${arrowTop}px;
+      right: ${arrowRight}px;
       width: ${sqrtArrowWidth}px;
       height: ${sqrtArrowWidth}px;
-      background-color: ${({ theme }) => theme.popoverBg};
+      border-width: ${sqrtArrowWidth / 2}px;
+      border-style: solid;
+      border-top-color: ${({ theme }) => theme.popoverBg};
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: ${({ theme }) => theme.popoverBg};
       transform: rotate(45deg);
     }
   }
