@@ -12,8 +12,6 @@ const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
   svg {
     fill: currentColor;
-    vertical-align: middle;
-    max-height: 100%;
   }
   .wrapper {
     position: relative;
@@ -46,7 +44,7 @@ const withStyle = (Self) => styled(Self)`
       left: 0;
       right: 0;
       z-index: 9;
-      height: 34px;
+      height: ${({ theme }) => theme.toolboxButtonsSize};
       background: #fff;
       box-shadow: 0 -2px 12px rgba(60, 67, 81, 0.18);
       transform: none !important;
@@ -136,7 +134,7 @@ const withStyle = (Self) => styled(Self)`
     height: 21px;
     color: ${({ theme }) => theme.grayText};
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
   }
@@ -449,7 +447,7 @@ class Toolbar extends React.Component<any, any> {
                           align: { offset: [0, 3] },
                         }}
                       >
-                        <span>
+                        <div>
                           <Button
                             {...{
                               isActive: id === activeToolId,
@@ -459,7 +457,7 @@ class Toolbar extends React.Component<any, any> {
                           >
                             {src}
                           </Button>
-                        </span>
+                        </div>
                       </Tooltip>
                     </li>
                   ))}

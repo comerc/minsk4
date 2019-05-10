@@ -25,6 +25,7 @@ let theme = {
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
   grayText: '#707684', // All gray texts: placeholders, settings
   colorActiveIcon: '#388ae5', // Blue icons
+  settingsWidth: '134px',
 }
 
 let antdVars = {
