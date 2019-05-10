@@ -1,4 +1,4 @@
-// analog of less fade
+// analog of less fade()
 const fade = (rgb, alpha) => {
   if (rgb[0] !== '#' || (rgb.length !== 4 && rgb.length !== 7)) {
     throw new Error('Invalid value')
