@@ -61,8 +61,12 @@ module.exports = (config, env) => {
       plugins,
     }
   })(config, env)
+  const requireForES6 = require('esm')(module /*, options*/)
+  const theme = requireForES6(path.resolve('./src/theme.js')).default
   createRewireLess({
-    // modifyVars: { '@primary-color': '#a51d7c' },
+    modifyVars: {
+      '@popover-bg': theme.popoverBg,
+    },
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)
