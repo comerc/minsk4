@@ -23,7 +23,7 @@ const withStyle = (Self) => styled(Self)`
   }
   .ant-tooltip-inner {
     color: rgba(0, 0, 0, 0.65);
-    background-color: ${({ theme }) => theme.backgroundColor};
+    background-color: ${({ theme }) => theme.popoverBg};
     background-clip: padding-box;
     position: relative;
     &::before {
@@ -33,7 +33,7 @@ const withStyle = (Self) => styled(Self)`
       right: ${right}px;
       width: ${sqrtArrowWidth}px;
       height: ${sqrtArrowWidth}px;
-      background-color: ${({ theme }) => theme.backgroundColor};
+      background-color: ${({ theme }) => theme.popoverBg};
       transform: rotate(45deg);
     }
   }
