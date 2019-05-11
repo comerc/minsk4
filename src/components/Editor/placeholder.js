@@ -1,15 +1,25 @@
 import PlaceholderPlugin from 'slate-react-placeholder'
 
-const isOnlyTitle = (node) =>
-  node.object === 'document' && node.nodes.size === 2 && node.text === node.getTexts().get(0).text
+const isOnlyTitle = (document) => {
+  const firstNode = document.nodes.get(0)
+  const result =
+    document.nodes.size === 2 && firstNode.text === document.text && firstNode.type === 'title'
+  return result
+}
 
 const whens = {
-  title: (_editor, node) => node.object === 'block' && node.type === 'title' && node.text === '',
-  paragraph: (editor, node) =>
-    node.object === 'block' &&
-    node.type === 'paragraph' &&
-    node.text === '' &&
-    isOnlyTitle(editor.value.document),
+  title: (_editor, node) => {
+    return node.object === 'block' && node.type === 'title' && node.text === ''
+  },
+
+  paragraph: (editor, node) => {
+    return (
+      node.object === 'block' &&
+      node.type === 'paragraph' &&
+      node.text === '' &&
+      isOnlyTitle(editor.value.document)
+    )
+  },
 }
 
 const fixedCursorStyle = { float: 'left' }

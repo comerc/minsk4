@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import { Block } from 'slate'
 import { Tooltip, Button } from 'antd'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
@@ -125,8 +126,23 @@ class Settings extends React.Component<any> {
     const { isConfirmDelete } = this.state
     if (isConfirmDelete) {
       this.close()
-      const { editor } = this.props
-      editor.removeNodeByKey(editor.value.focusBlock.key)
+      const {
+        editor,
+        editor: {
+          value: { focusBlock, document },
+        },
+      } = this.props
+      const hasTitle = document.nodes.get(0).type === 'title'
+      const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
+      if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
+        const lastNode = document.nodes.get(hasTitle ? 2 : 1)
+        if (lastNode.text === '') {
+          // fixed placeholder
+          editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
+          return
+        }
+      }
+      editor.removeNodeByKey(focusBlock.key)
     } else {
       this.setState({ isConfirmDelete: true })
     }
@@ -157,8 +173,9 @@ class Settings extends React.Component<any> {
     const nextNode = document.getNextNode(focusBlock.key)
     const isArrowDownDisabled = !nextNode
     const { isConfirmDelete } = this.state
-    const isDeleteDisabled =
-      document.nodes.count() === (document.nodes.get(0).type === 'title' ? 2 : 1)
+    const hasTitle = document.nodes.get(0).type === 'title'
+    const firstNode = document.nodes.get(hasTitle ? 1 : 0)
+    const isDeleteDisabled = document.nodes.size === (hasTitle ? 2 : 1) && firstNode.text === ''
     return (
       <div className="container">
         <div className="plugin-zone" />
