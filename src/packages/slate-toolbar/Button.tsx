@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 
 const withStyle = (Self) => styled(Self)`
-  color: ${({ theme }) => theme.grayText};
+  color: ${({ theme }) => theme.textColor};
   cursor: pointer;
   width: ${({ theme }) => theme.toolboxButtonsSize};
   height: ${({ theme }) => theme.toolboxButtonsSize};
@@ -12,7 +12,7 @@ const withStyle = (Self) => styled(Self)`
   align-items: center;
   &&:hover,
   &&.--active {
-    color: ${({ theme }) => theme.colorActiveIcon};
+    color: ${({ theme }) => theme.primaryColor};
   }
   &&.--active {
     animation: bounceIn 0.75s;
