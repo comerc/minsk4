@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
-import sidebar from './sidebar'
 import toolbar from 'src/packages/slate-toolbar'
 import placeholder from './placeholder'
 import CheckListItem from './CheckListItem'
@@ -81,44 +80,9 @@ const addCheckListItemBlock = (editor) => (event) => {
   editor.setBlocks({ type: 'check-list-item', data: { checked: false } })
 }
 
-// const sidebarOptions = {
-//   // leftOffset: 10,
-//   content: (editor) => (
-//     <React.Fragment>
-//       <Button onClick={addCheckListItemBlock(editor)}>
-//         <FontAwesomeIcon icon="tasks" />
-//       </Button>
-//     </React.Fragment>
-//   ),
-// }
-
-// @sidebar(sidebarOptions)
-// class Container extends React.Component<any>{
-//   render() {
-//     const { editorRef, onKeyDown, ...rest } = this.props
-//     return (
-//       <SlateEditor
-//         {...{
-//           autoFocus: true,
-//           schema,
-//           // renderNode,
-//           plugins,
-//           // ref: editorRef,
-//           // onKeyDown: handleKeyDown(onKeyDown),
-//           ...rest,
-//         }}
-//       />
-//     )
-//   }
-// }
-
 @withTheme
 @withStyle
 class Editor extends React.Component<any> {
-  // state = {
-  //   value: Value.fromJSON(initialValueAsJson),
-  // }
-
   plugins = [
     placeholder({ type: 'title', placeholder: 'Title' }),
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
@@ -157,19 +121,13 @@ class Editor extends React.Component<any> {
     other(),
   ]
 
-  // handleChange = ({ value }) => {
-  //   this.setState({ value })
-  // }
-
   render() {
     const { className } = this.props
-    // const { value } = this.state
     return (
       <SlateEditor
         {...{
           className,
           defaultValue: Value.fromJSON(initialValueAsJson),
-          // onChange: this.handleChange,
           autoFocus: true,
           schema,
           plugins: this.plugins,
