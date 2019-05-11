@@ -23,9 +23,7 @@ let theme = {
   notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
-  grayText: '#707684', // All gray texts: placeholders, settings
-  colorActiveIcon: '#388ae5', // Blue icons
-  settingsWidth: '134px',
+  settingsWidth: '134px', // Toolbar Settings width - TODO: how to remove?
 }
 
 let antdVars = {
@@ -33,6 +31,10 @@ let antdVars = {
   black: '#000',
   textColor: (theme) => fade(theme.black, 0.65),
   popoverColor: (theme) => theme.textColor,
+  red6: '#f5222d',
+  errorColor: (theme) => theme.red6,
+  blue6: '#1890ff',
+  primaryColor: (theme) => theme.blue6,
 }
 
 const normalizeTheme = (theme) => {
