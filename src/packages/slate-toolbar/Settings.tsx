@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import classNames from 'classnames'
 import { Tooltip, Button } from 'antd'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
@@ -63,30 +64,53 @@ const withStyle = (Self) => styled(Self)`
   .ant-btn {
     width: ${({ theme }) => theme.toolboxButtonsSize};
     height: ${({ theme }) => theme.toolboxButtonsSize};
-    color: ${({ theme }) => theme.grayText};
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    &:not(:nth-child(3n + 3)) {
+      margin-right: 8px;
+    }
+    &:nth-child(n + 4) {
+      margin-top: 6px;
+    }
     svg {
       fill: currentColor;
     }
   }
-  .ant-btn:not(:nth-child(3n + 3)) {
-    margin-right: 8px;
-  }
-  .ant-btn:nth-child(n + 4) {
-    margin-top: 6px;
+  .delete {
+    svg {
+      transform: rotate(45deg);
+    }
   }
 `
 
 @withStyle
 class Settings extends React.Component<any> {
-  handleClick = (event) => {
-    // event.preventDefault()
+  state = { isConfirm: false }
+
+  handleArrowUpClick = (event) => {
+    event.preventDefault()
+  }
+
+  handleDeleteClick = (event) => {
+    event.preventDefault()
+    const { isConfirm } = this.state
+    if (isConfirm) {
+      this.setState({ isConfirm: false })
+      const { editor } = this.props
+      editor.removeNodeByKey(editor.value.focusBlock.key)
+    } else {
+      this.setState({ isConfirm: true })
+    }
+  }
+
+  handleArrowDownClick = (event) => {
+    event.preventDefault()
   }
 
   render() {
     const { className, children } = this.props
+    const { isConfirm } = this.state
     return (
       <Tooltip
         {...{
@@ -96,40 +120,35 @@ class Settings extends React.Component<any> {
           align: { offset: [10, 0] },
           title: (
             <div className="container">
-              <div className="plugin-zone">
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowUpIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <DeleteIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowDownIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowUpIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowUpIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <DeleteIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowDownIcon />
-                </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
-                  <ArrowUpIcon />
-                </Button>
-              </div>
+              <div className="plugin-zone" />
               <div className="default-zone">
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
+                <Button
+                  {...{
+                    tabIndex: -1,
+                    onClick: this.handleArrowUpClick,
+                    size: 'small',
+                  }}
+                >
                   <ArrowUpIcon />
                 </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
+                <Button
+                  {...{
+                    className: 'delete',
+                    tabIndex: -1,
+                    onClick: this.handleDeleteClick,
+                    size: 'small',
+                    type: isConfirm ? 'danger' : 'default',
+                  }}
+                >
                   <DeleteIcon />
                 </Button>
-                <Button tabIndex={-1} onClick={this.handleClick} size="small">
+                <Button
+                  {...{
+                    tabIndex: -1,
+                    onClick: this.handleArrowDownClick,
+                    size: 'small',
+                  }}
+                >
                   <ArrowDownIcon />
                 </Button>
               </div>

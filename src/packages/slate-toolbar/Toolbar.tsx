@@ -134,7 +134,7 @@ const withStyle = (Self) => styled(Self)`
   .more {
     width: 21px;
     height: 21px;
-    color: ${({ theme }) => theme.grayText};
+    color: ${({ theme }) => theme.textColor};
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
@@ -386,6 +386,7 @@ class Toolbar extends React.Component<any, any> {
     const {
       className,
       theme,
+      editor,
       editor: { readOnly: isReadOnly },
       value: { focusBlock, focusText },
       children,
@@ -473,7 +474,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <Settings {...{ theme }}>
+              <Settings {...{ theme, editor }}>
                 <div className="more">
                   <MoreIcon />
                 </div>
