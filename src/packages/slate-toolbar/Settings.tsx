@@ -86,31 +86,123 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Settings extends React.Component<any> {
-  state = { isConfirm: false }
+  state = { visible: false, isConfirmDelete: false }
+  isNeedToRenderContainer = false
+
+  handleVisibleChange = (visible) => {
+    if (visible) {
+      this.isNeedToRenderContainer = true
+    } else {
+      // it is need for animation before invisible state
+      setTimeout(() => {
+        this.isNeedToRenderContainer = false
+      })
+    }
+    this.setState({ visible, isConfirmDelete: false })
+  }
+
+  close = () => {
+    this.setState({ visible: false, isConfirmDelete: false })
+  }
 
   handleArrowUpClick = (event) => {
     event.preventDefault()
+    event.preventDefault()
+    const {
+      editor,
+      editor: {
+        value: { focusBlock, document },
+      },
+    } = this.props
+    const prevNode = document.getPreviousNode(focusBlock.key)
+    const newIndex = document.nodes.indexOf(prevNode)
+    editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+    this.close()
   }
 
   handleDeleteClick = (event) => {
     event.preventDefault()
-    const { isConfirm } = this.state
-    if (isConfirm) {
-      this.setState({ isConfirm: false })
+    const { isConfirmDelete } = this.state
+    if (isConfirmDelete) {
+      this.close()
       const { editor } = this.props
       editor.removeNodeByKey(editor.value.focusBlock.key)
     } else {
-      this.setState({ isConfirm: true })
+      this.setState({ isConfirmDelete: true })
     }
   }
 
   handleArrowDownClick = (event) => {
     event.preventDefault()
+    const {
+      editor,
+      editor: {
+        value: { focusBlock, document },
+      },
+    } = this.props
+    const nextNode = document.getNextNode(focusBlock.key)
+    const newIndex = document.nodes.indexOf(nextNode)
+    editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+    this.close()
+  }
+
+  renderContainer = () => {
+    const {
+      editor: {
+        value: { focusBlock, document },
+      },
+    } = this.props
+    const prevNode = document.getPreviousNode(focusBlock.key)
+    const isArrowUpDisabled = !prevNode || prevNode.type === 'title'
+    const nextNode = document.getNextNode(focusBlock.key)
+    const isArrowDownDisabled = !nextNode
+    const { isConfirmDelete } = this.state
+    const isDeleteDisabled =
+      document.nodes.count() === (document.nodes.get(0).type === 'title' ? 2 : 1)
+    return (
+      <div className="container">
+        <div className="plugin-zone" />
+        <div className="default-zone">
+          <Button
+            {...{
+              tabIndex: -1,
+              onClick: this.handleArrowUpClick,
+              size: 'small',
+              disabled: isArrowUpDisabled,
+            }}
+          >
+            <ArrowUpIcon />
+          </Button>
+          <Button
+            {...{
+              className: 'delete',
+              tabIndex: -1,
+              onClick: this.handleDeleteClick,
+              size: 'small',
+              type: isConfirmDelete ? 'danger' : 'default',
+              disabled: isDeleteDisabled,
+            }}
+          >
+            <DeleteIcon />
+          </Button>
+          <Button
+            {...{
+              tabIndex: -1,
+              onClick: this.handleArrowDownClick,
+              size: 'small',
+              disabled: isArrowDownDisabled,
+            }}
+          >
+            <ArrowDownIcon />
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   render() {
     const { className, children } = this.props
-    const { isConfirm } = this.state
+    const { visible } = this.state
     return (
       <Tooltip
         {...{
@@ -118,42 +210,9 @@ class Settings extends React.Component<any> {
           placement: 'bottomRight',
           trigger: 'click',
           align: { offset: [10, 0] },
-          title: (
-            <div className="container">
-              <div className="plugin-zone" />
-              <div className="default-zone">
-                <Button
-                  {...{
-                    tabIndex: -1,
-                    onClick: this.handleArrowUpClick,
-                    size: 'small',
-                  }}
-                >
-                  <ArrowUpIcon />
-                </Button>
-                <Button
-                  {...{
-                    className: 'delete',
-                    tabIndex: -1,
-                    onClick: this.handleDeleteClick,
-                    size: 'small',
-                    type: isConfirm ? 'danger' : 'default',
-                  }}
-                >
-                  <DeleteIcon />
-                </Button>
-                <Button
-                  {...{
-                    tabIndex: -1,
-                    onClick: this.handleArrowDownClick,
-                    size: 'small',
-                  }}
-                >
-                  <ArrowDownIcon />
-                </Button>
-              </div>
-            </div>
-          ),
+          visible,
+          onVisibleChange: this.handleVisibleChange,
+          title: this.isNeedToRenderContainer ? this.renderContainer() : <div />,
           children,
         }}
       />
