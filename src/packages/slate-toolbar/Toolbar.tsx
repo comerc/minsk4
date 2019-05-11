@@ -91,8 +91,10 @@ const withStyle = (Self) => styled(Self)`
   }
   .plus {
     &--x {
-      animation: spin 0.4s;
-      animation-fill-mode: forwards;
+      svg {
+        animation: spin 0.4s;
+        animation-fill-mode: forwards;
+      }
     }
     @keyframes spin {
       from {
