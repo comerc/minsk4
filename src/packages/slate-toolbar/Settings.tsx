@@ -14,6 +14,9 @@ const arrowIndentY = 4
 const arrowIndentX = 16
 
 const withStyle = (Self) => styled(Self)`
+  &&.ant-tooltip {
+    max-width: none;
+  }
   .ant-tooltip-arrow {
     width: ${sqrtArrowWidth}px !important;
     height: ${sqrtArrowWidth}px !important;
@@ -27,7 +30,7 @@ const withStyle = (Self) => styled(Self)`
     background-color: ${({ theme }) => theme.popoverBg};
     background-clip: padding-box;
     position: relative;
-    padding: 0;
+    padding: 6px 8px;
     &::before {
       content: '';
       position: absolute;
@@ -62,34 +65,14 @@ const withStyle = (Self) => styled(Self)`
       border-left-color: ${({ theme }) => theme.popoverBg};
     }
   }
-  .container {
-    /* TODO: remove plugin-zone */
-    .plugin-zone {
-      display: inline-flex;
-      flex-wrap: wrap;
-    }
-    .plugin-zone:not(:empty) {
-      padding: 6px 8px 0;
-    }
-    .default-zone {
-      display: inline-flex;
-      flex-wrap: nowrap;
-    }
-    .default-zone:not(:empty) {
-      padding: 6px 8px;
-    }
-  }
   .ant-btn {
     width: ${({ theme }) => theme.toolboxButtonsSize};
     height: ${({ theme }) => theme.toolboxButtonsSize};
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    &:not(:nth-child(3n + 3)) {
-      margin-right: 8px;
-    }
-    &:nth-child(n + 4) {
-      margin-top: 6px;
+    &:not(:last-child) {
+      margin-right: 6px;
     }
     svg {
       fill: currentColor;
@@ -99,6 +82,15 @@ const withStyle = (Self) => styled(Self)`
     svg {
       transform: rotate(45deg);
     }
+  }
+  .button {
+    width: ${({ theme }) => theme.moreWidth};
+    height: ${({ theme }) => theme.moreWidth};
+    color: ${({ theme }) => theme.textColor};
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
   }
 `
 
@@ -211,43 +203,40 @@ class Settings extends React.Component<any> {
       firstNode.type === 'paragraph' &&
       firstNode.text === ''
     return (
-      <div className="container">
-        <div className="plugin-zone" />
-        <div className="default-zone">
-          <Button
-            {...{
-              tabIndex: -1,
-              onClick: this.handleArrowUpClick,
-              size: 'small',
-              disabled: isArrowUpDisabled,
-            }}
-          >
-            <ArrowUpIcon />
-          </Button>
-          <Button
-            {...{
-              className: 'delete',
-              tabIndex: -1,
-              onClick: this.handleDeleteClick,
-              size: 'small',
-              type: isConfirmDelete ? 'danger' : 'default',
-              disabled: isDeleteDisabled,
-            }}
-          >
-            <DeleteIcon />
-          </Button>
-          <Button
-            {...{
-              tabIndex: -1,
-              onClick: this.handleArrowDownClick,
-              size: 'small',
-              disabled: isArrowDownDisabled,
-            }}
-          >
-            <ArrowDownIcon />
-          </Button>
-        </div>
-      </div>
+      <React.Fragment>
+        <Button
+          {...{
+            tabIndex: -1,
+            onClick: this.handleArrowUpClick,
+            size: 'small',
+            disabled: isArrowUpDisabled,
+          }}
+        >
+          <ArrowUpIcon />
+        </Button>
+        <Button
+          {...{
+            className: 'delete',
+            tabIndex: -1,
+            onClick: this.handleDeleteClick,
+            size: 'small',
+            type: isConfirmDelete ? 'danger' : 'default',
+            disabled: isDeleteDisabled,
+          }}
+        >
+          <DeleteIcon />
+        </Button>
+        <Button
+          {...{
+            tabIndex: -1,
+            onClick: this.handleArrowDownClick,
+            size: 'small',
+            disabled: isArrowDownDisabled,
+          }}
+        >
+          <ArrowDownIcon />
+        </Button>
+      </React.Fragment>
     )
   }
 
@@ -259,15 +248,16 @@ class Settings extends React.Component<any> {
         <Tooltip
           {...{
             overlayClassName: className,
-            placement: 'bottomRight',
+            placement: 'topRight',
             trigger: 'click',
             align: { offset: [10, 0] },
             visible,
             onVisibleChange: this.handleVisibleChange,
             title: this.isNeedToRenderContainer ? this.renderContainer() : <React.Fragment />,
-            children,
           }}
-        />
+        >
+          <div className="button">{children}</div>
+        </Tooltip>
       </div>
     )
   }

@@ -137,15 +137,6 @@ const withStyle = (Self) => styled(Self)`
       visibility: visible;
     }
   }
-  .more {
-    width: ${({ theme }) => theme.moreWidth};
-    height: ${({ theme }) => theme.moreWidth};
-    color: ${({ theme }) => theme.textColor};
-    cursor: pointer;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-  }
   /**
    * Styles for Narrow mode
    */
@@ -477,9 +468,7 @@ class Toolbar extends React.Component<any, any> {
               }}
             >
               <Settings {...{ theme, editor, onMove: this.move }}>
-                <div className="more">
-                  <MoreIcon />
-                </div>
+                <MoreIcon />
               </Settings>
             </div>
           </div>
