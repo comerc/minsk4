@@ -244,6 +244,13 @@ class Settings extends React.Component<any> {
     )
   }
 
+  componentDidUpdate(prevProps) {
+    const { bodyWidth } = this.props
+    if (bodyWidth !== prevProps.bodyWidth) {
+      this.close()
+    }
+  }
+
   render() {
     const { className, children } = this.props
     const { visible } = this.state

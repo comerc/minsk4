@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import withSizes from 'react-sizes'
 import idx from 'idx'
 import { Tooltip } from 'antd'
 import Button from './Button'
@@ -112,6 +113,7 @@ const withStyle = (Self) => styled(Self)`
   }
 `
 
+@withSizes(({ width }) => ({ bodyWidth: width }))
 @withStyle
 class Toolbar extends React.Component<any, any> {
   state = {
@@ -288,14 +290,16 @@ class Toolbar extends React.Component<any, any> {
   }
 
   componentDidUpdate(prevProps) {
-    const { value } = this.props
-    const { focusBlock, focusText } = value
+    const {
+      value: { focusBlock, focusText },
+      bodyWidth,
+    } = this.props
     const isOtherBlock = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     if (this.state.isOpenedToolbox && (isOtherBlock || !isEmptyParagraph)) {
       this.close()
     }
-    if (isOtherBlock) {
+    if (isOtherBlock || bodyWidth !== prevProps.bodyWidth) {
       this.move()
     }
   }
@@ -307,6 +311,7 @@ class Toolbar extends React.Component<any, any> {
       editor,
       editor: { readOnly: isReadOnly },
       value: { focusBlock, focusText },
+      bodyWidth,
       children,
     } = this.props
     const { isOpenedToolbox, activeToolId } = this.state
@@ -392,7 +397,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <More {...{ theme, editor, onMove: this.move }}>
+              <More {...{ theme, editor, bodyWidth, onMove: this.move }}>
                 <MoreIcon />
               </More>
             </div>
