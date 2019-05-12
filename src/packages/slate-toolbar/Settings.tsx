@@ -124,28 +124,28 @@ class Settings extends React.Component<any> {
   handleDeleteClick = (event) => {
     event.preventDefault()
     const { isConfirmDelete } = this.state
-    if (isConfirmDelete) {
-      this.close()
-      const {
-        editor,
-        editor: {
-          value: { focusBlock, document },
-        },
-      } = this.props
-      const hasTitle = document.nodes.get(0).type === 'title'
-      const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
-      if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
-        const lastNode = document.nodes.get(hasTitle ? 2 : 1)
-        if (lastNode.text === '') {
-          // fixed placeholder
-          editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
-          return
-        }
-      }
-      editor.removeNodeByKey(focusBlock.key)
-    } else {
+    if (!isConfirmDelete) {
       this.setState({ isConfirmDelete: true })
+      return
     }
+    this.close()
+    const {
+      editor,
+      editor: {
+        value: { focusBlock, document },
+      },
+    } = this.props
+    const hasTitle = document.nodes.get(0).type === 'title'
+    const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
+    if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
+      const lastNode = document.nodes.get(hasTitle ? 2 : 1)
+      if (lastNode.type === 'paragraph' && lastNode.text === '') {
+        // fixed placeholder
+        editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
+        return
+      }
+    }
+    editor.removeNodeByKey(focusBlock.key)
   }
 
   handleArrowDownClick = (event) => {
@@ -168,14 +168,17 @@ class Settings extends React.Component<any> {
         value: { focusBlock, document },
       },
     } = this.props
+    const { isConfirmDelete } = this.state
     const prevNode = document.getPreviousNode(focusBlock.key)
     const isArrowUpDisabled = !prevNode || prevNode.type === 'title'
     const nextNode = document.getNextNode(focusBlock.key)
     const isArrowDownDisabled = !nextNode
-    const { isConfirmDelete } = this.state
     const hasTitle = document.nodes.get(0).type === 'title'
     const firstNode = document.nodes.get(hasTitle ? 1 : 0)
-    const isDeleteDisabled = document.nodes.size === (hasTitle ? 2 : 1) && firstNode.text === ''
+    const isDeleteDisabled =
+      document.nodes.size === (hasTitle ? 2 : 1) &&
+      firstNode.type === 'paragraph' &&
+      firstNode.text === ''
     return (
       <div className="container">
         <div className="plugin-zone" />
@@ -229,7 +232,7 @@ class Settings extends React.Component<any> {
           align: { offset: [10, 0] },
           visible,
           onVisibleChange: this.handleVisibleChange,
-          title: this.isNeedToRenderContainer ? this.renderContainer() : <div />,
+          title: this.isNeedToRenderContainer ? this.renderContainer() : <React.Fragment />,
           children,
         }}
       />
