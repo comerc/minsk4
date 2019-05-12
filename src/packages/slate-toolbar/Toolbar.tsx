@@ -18,6 +18,12 @@ const withStyle = (Self) => styled(Self)`
     margin: 0 auto;
     max-width: ${({ theme }) => theme.contentWidth};
   }
+  /* [data-slate-editor='true'] {
+    margin-right: -34px; 
+    > * {
+      padding-right: 34px; 
+    }
+  } */
   .editor-block--selected {
     background-image: linear-gradient(
       45deg,
@@ -116,7 +122,7 @@ const withStyle = (Self) => styled(Self)`
      */
   .more-wrapper {
     position: absolute;
-    right: -21px;
+    right: -${({ theme }) => theme.moreWidth};
     top: 0;
     opacity: 0;
     visibility: hidden;
@@ -132,8 +138,8 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .more {
-    width: 21px;
-    height: 21px;
+    width: ${({ theme }) => theme.moreWidth};
+    height: ${({ theme }) => theme.moreWidth};
     color: ${({ theme }) => theme.textColor};
     cursor: pointer;
     display: inline-flex;

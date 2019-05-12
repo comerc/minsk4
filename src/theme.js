@@ -24,6 +24,7 @@ let theme = {
   contentWidth: '650px', // Block content width
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
   settingsWidth: '134px', // Toolbar Settings width - TODO: how to remove?
+  moreWidth: '21px', // Toolbar Settings "more" button
 }
 
 let antdVars = {
