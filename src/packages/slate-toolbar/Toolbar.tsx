@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import idx from 'idx'
 import { Tooltip } from 'antd'
 import Button from './Button'
-import Settings from './Settings'
+import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
 
@@ -467,9 +467,9 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <Settings {...{ theme, editor, onMove: this.move }}>
+              <More {...{ theme, editor, onMove: this.move }}>
                 <MoreIcon />
-              </Settings>
+              </More>
             </div>
           </div>
         </div>
