@@ -78,6 +78,10 @@ const withStyle = (Self) => styled(Self)`
       fill: currentColor;
     }
   }
+  .container {
+    display: inline-flex;
+    flex-wrap: nowrap;
+  }
   .delete {
     svg {
       transform: rotate(45deg);
@@ -203,7 +207,7 @@ class Settings extends React.Component<any> {
       firstNode.type === 'paragraph' &&
       firstNode.text === ''
     return (
-      <React.Fragment>
+      <div className="container">
         <Button
           {...{
             tabIndex: -1,
@@ -236,7 +240,7 @@ class Settings extends React.Component<any> {
         >
           <ArrowDownIcon />
         </Button>
-      </React.Fragment>
+      </div>
     )
   }
 
