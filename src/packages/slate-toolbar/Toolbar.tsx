@@ -188,13 +188,6 @@ const withStyle = (Self) => styled(Self)`
       z-index: 2;
     }
   }
-  /* TODO: */
-  /* .editor-settings {
-    &__plugin-zone {
-    }
-    &__default-zone {
-    }
-  } */
 `
 
 @withStyle
@@ -479,10 +472,6 @@ class Toolbar extends React.Component<any, any> {
                   <MoreIcon />
                 </div>
               </Settings>
-              {/* <div className="editor-settings">
-                <div className="editor-settings__plugin-zone" />
-                <div className="editor-settings__default-zone" />
-              </div> */}
             </div>
           </div>
         </div>
