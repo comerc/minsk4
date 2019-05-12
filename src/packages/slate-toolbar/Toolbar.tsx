@@ -19,9 +19,9 @@ const withStyle = (Self) => styled(Self)`
     max-width: ${({ theme }) => theme.contentWidth};
   }
   /* [data-slate-editor='true'] {
-    margin-right: -34px; 
+    margin-right: -${({ theme }) => theme.moreWidth}; 
     > * {
-      padding-right: 34px; 
+      padding-right: ${({ theme }) => theme.moreWidth}; 
     }
   } */
   .editor-block--selected {
