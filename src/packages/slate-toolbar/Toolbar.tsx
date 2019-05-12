@@ -18,12 +18,6 @@ const withStyle = (Self) => styled(Self)`
     margin: 0 auto;
     max-width: ${({ theme }) => theme.contentWidth};
   }
-  /* [data-slate-editor='true'] {
-    margin-right: -${({ theme }) => theme.moreWidth}; 
-    > * {
-      padding-right: ${({ theme }) => theme.moreWidth}; 
-    }
-  } */
   .editor-block--selected {
     background-image: linear-gradient(
       45deg,
@@ -37,43 +31,15 @@ const withStyle = (Self) => styled(Self)`
     left: 0;
     right: 0;
     top: 0;
-    /* opacity: 0; */
-    /* visibility: hidden; */
-    /* transition: opacity 100ms ease; */
-    /* will-change: opacity, transform; */
     display: none;
-    @media ${({ theme }) => theme.mobile} {
-      border: 1px solid green;
-      position: fixed;
-      bottom: 0;
-      top: auto;
-      left: 0;
-      right: 0;
-      z-index: 9;
-      height: ${({ theme }) => theme.toolboxButtonsSize};
-      background: #fff;
-      box-shadow: 0 -2px 12px rgba(60, 67, 81, 0.18);
-      transform: none !important;
-    }
     &--opened {
       display: block;
-      @media ${({ theme }) => theme.mobile} {
-        display: flex;
-      }
     }
   }
   .content {
     max-width: ${({ theme }) => theme.contentWidth};
     margin: 0 auto;
     position: relative;
-    @media ${({ theme }) => theme.mobile} {
-      display: flex;
-      align-content: center;
-      margin: 0;
-      padding: 0 10px;
-      max-width: calc(100% - 70px);
-      overflow-x: auto;
-    }
   }
   .plus-wrapper {
     position: absolute;
@@ -82,9 +48,6 @@ const withStyle = (Self) => styled(Self)`
     display: none;
     &--opened {
       display: block;
-    }
-    @media ${({ theme }) => theme.mobile} {
-      display: none !important;
     }
     @keyframes fadeIn {
       from {
@@ -116,34 +79,15 @@ const withStyle = (Self) => styled(Self)`
     top: 50%;
     transform: translateY(-50%);
   }
-  /**
-     * Block more-wrapper Zone
-     * -------------------------
-     */
   .more-wrapper {
     position: absolute;
     right: -${({ theme }) => theme.moreWidth};
     top: 0;
     opacity: 0;
     visibility: hidden;
-    @media ${({ theme }) => theme.mobile} {
-      position: static;
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-    }
     &--opened {
       opacity: 1;
       visibility: visible;
-    }
-  }
-  /**
-   * Styles for Narrow mode
-   */
-  .editor--narrow .plus-wrapper {
-    /* TODO: */
-    @media ${({ theme }) => theme.notMobile} {
-      left: 5px;
     }
   }
   .toolbox {
@@ -161,28 +105,9 @@ const withStyle = (Self) => styled(Self)`
         display: inline;
       }
     }
-    @media ${({ theme }) => theme.mobile} {
-      position: static;
-      transform: none !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      ul {
-        align-items: center;
-      }
-    }
     &--opened {
       opacity: 1;
       visibility: visible;
-    }
-  }
-  /**
-   * Styles for Narrow mode
-   */
-  .editor--narrow .toolbox {
-    /* TODO: */
-    @media ${({ theme }) => theme.notMobile} {
-      background: #fff;
-      z-index: 2;
     }
   }
 `

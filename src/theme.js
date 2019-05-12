@@ -19,8 +19,8 @@ const fade = (rgb, alpha) => {
 }
 
 let theme = {
-  mobile: '(max-width: 650px)',
-  notMobile: '(min-width: 651px)',
+  // mobile: '(max-width: 650px)',
+  // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
   moreWidth: '21px', // Toolbar Settings "more" button
