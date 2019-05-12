@@ -46,7 +46,7 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .container {
-    width: ${({ theme }) => theme.settingsWidth};
+    /* TODO: remove plugin-zone */
     .plugin-zone {
       display: inline-flex;
       flex-wrap: wrap;
