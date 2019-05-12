@@ -310,6 +310,7 @@ class Toolbar extends React.Component<any, any> {
   }
 
   handlePlusClick = (event) => {
+    event.preventDefault()
     if (this.state.isOpenedToolbox) {
       this.close()
     } else {
@@ -324,6 +325,7 @@ class Toolbar extends React.Component<any, any> {
         event.preventDefault()
         this.close()
       }
+      return
     }
     if (event.key === 'Tab') {
       const {
@@ -346,6 +348,7 @@ class Toolbar extends React.Component<any, any> {
           this.leaf(event.shiftKey)
         }
       }
+      return
     }
   }
 
@@ -473,7 +476,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <Settings {...{ theme, editor }}>
+              <Settings {...{ theme, editor, onMove: this.move }}>
                 <div className="more">
                   <MoreIcon />
                 </div>

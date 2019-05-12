@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Block } from 'slate'
@@ -9,8 +10,8 @@ import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
-const arrowTop = 4
-const arrowRight = 16
+const arrowIndentY = 4
+const arrowIndentX = 16
 
 const withStyle = (Self) => styled(Self)`
   .ant-tooltip-arrow {
@@ -18,10 +19,8 @@ const withStyle = (Self) => styled(Self)`
     height: ${sqrtArrowWidth}px !important;
     border-width: ${sqrtArrowWidth / 2}px !important;
     transform: rotate(45deg);
-    top: ${arrowTop}px !important;
-    right: ${arrowRight}px !important;
+    right: ${arrowIndentX}px !important;
     border-color: transparent !important;
-    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
   }
   .ant-tooltip-inner {
     color: ${({ theme }) => theme.popoverColor};
@@ -32,17 +31,35 @@ const withStyle = (Self) => styled(Self)`
     &::before {
       content: '';
       position: absolute;
-      top: -${arrowTop}px;
-      right: ${arrowRight}px;
+      right: ${arrowIndentX}px;
       width: ${sqrtArrowWidth}px;
       height: ${sqrtArrowWidth}px;
       border-width: ${sqrtArrowWidth / 2}px;
       border-style: solid;
-      border-top-color: ${({ theme }) => theme.popoverBg};
-      border-right-color: transparent;
-      border-bottom-color: transparent;
-      border-left-color: ${({ theme }) => theme.popoverBg};
+      border-color: transparent;
       transform: rotate(45deg);
+    }
+  }
+  &&.ant-tooltip-placement-topRight {
+    .ant-tooltip-arrow {
+      bottom: ${arrowIndentY}px !important;
+      box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
+    }
+    .ant-tooltip-inner::before {
+      bottom: -${arrowIndentY}px;
+      border-right-color: ${({ theme }) => theme.popoverBg};
+      border-bottom-color: ${({ theme }) => theme.popoverBg};
+    }
+  }
+  &&.ant-tooltip-placement-bottomRight {
+    .ant-tooltip-arrow {
+      top: ${arrowIndentY}px !important;
+      box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
+    }
+    .ant-tooltip-inner::before {
+      top: -${arrowIndentY}px;
+      border-top-color: ${({ theme }) => theme.popoverBg};
+      border-left-color: ${({ theme }) => theme.popoverBg};
     }
   }
   .container {
@@ -90,35 +107,44 @@ class Settings extends React.Component<any> {
   state = { visible: false, isConfirmDelete: false }
   isNeedToRenderContainer = false
 
+  close = () => {
+    this.setState({ visible: false, isConfirmDelete: false })
+  }
+
+  open = () => {
+    this.setState({ visible: true })
+  }
+
   handleVisibleChange = (visible) => {
     if (visible) {
       this.isNeedToRenderContainer = true
+      this.open()
     } else {
       // it is need for animation before invisible state
       setTimeout(() => {
         this.isNeedToRenderContainer = false
       })
+      this.close()
     }
-    this.setState({ visible, isConfirmDelete: false })
-  }
-
-  close = () => {
-    this.setState({ visible: false, isConfirmDelete: false })
   }
 
   handleArrowUpClick = (event) => {
-    event.preventDefault()
     event.preventDefault()
     const {
       editor,
       editor: {
         value: { focusBlock, document },
       },
+      onMove,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
     editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
     this.close()
+    setTimeout(() => {
+      onMove()
+      this.open()
+    })
   }
 
   handleDeleteClick = (event) => {
@@ -155,11 +181,16 @@ class Settings extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
+      onMove,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
     editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
     this.close()
+    setTimeout(() => {
+      onMove()
+      this.open()
+    })
   }
 
   renderContainer = () => {
