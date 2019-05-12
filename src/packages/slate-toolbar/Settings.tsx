@@ -224,18 +224,20 @@ class Settings extends React.Component<any> {
     const { className, children } = this.props
     const { visible } = this.state
     return (
-      <Tooltip
-        {...{
-          overlayClassName: className,
-          placement: 'bottomRight',
-          trigger: 'click',
-          align: { offset: [10, 0] },
-          visible,
-          onVisibleChange: this.handleVisibleChange,
-          title: this.isNeedToRenderContainer ? this.renderContainer() : <React.Fragment />,
-          children,
-        }}
-      />
+      <div className={className}>
+        <Tooltip
+          {...{
+            overlayClassName: className,
+            placement: 'bottomRight',
+            trigger: 'click',
+            align: { offset: [10, 0] },
+            visible,
+            onVisibleChange: this.handleVisibleChange,
+            title: this.isNeedToRenderContainer ? this.renderContainer() : <React.Fragment />,
+            children,
+          }}
+        />
+      </div>
     )
   }
 }
