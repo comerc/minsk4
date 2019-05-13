@@ -11,7 +11,7 @@ import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4
-const arrowIndentX = 16
+const arrowIndentX = 14
 
 const withStyle = (Self) => styled(Self)`
   &&.ant-tooltip {
