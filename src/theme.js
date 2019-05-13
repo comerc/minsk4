@@ -22,9 +22,9 @@ let theme = {
   // mobile: '(max-width: 650px)',
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
-  toolboxButtonsSize: '34px', // Toolbar buttons height and width
-  toolbarButtonWidth: '30px', // Toolbar buttons width
-  toolbarButtonHeight: '24px', // Toolbar button height
+  toolbarPaddingHorizontal: '40px',
+  toolbarButtonWidth: '30px', // Toolbar buttons width (like Antd)
+  toolbarButtonHeight: '24px', // Toolbar button height (like Antd @btn-height-sm)
 }
 
 let antdVars = {

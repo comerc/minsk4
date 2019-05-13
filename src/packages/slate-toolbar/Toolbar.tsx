@@ -3,16 +3,28 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
-import { Tooltip } from 'antd'
-import Button from './Button'
+import { Tooltip, Button } from 'antd'
+// import Button from './Button'
 import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
-  padding: 0 ${({ theme }) => theme.toolboxButtonsSize};
-  svg {
-    fill: currentColor;
+  padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
+  .ant-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    /* box-shadow: none; */
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
+    &:not(:hover) {
+      /* border-color: white; */
+    }
+    svg {
+      fill: currentColor;
+    }
   }
   .wrapper {
     position: relative;
@@ -44,7 +56,7 @@ const withStyle = (Self) => styled(Self)`
   }
   .plus-wrapper {
     position: absolute;
-    left: -${({ theme }) => theme.toolboxButtonsSize};
+    left: -${({ theme }) => theme.toolbarButtonWidth};
     animation: fadeIn 0.4s;
     display: none;
     &--opened {
@@ -104,6 +116,9 @@ const withStyle = (Self) => styled(Self)`
       flex-direction: row;
       li {
         display: inline;
+      }
+      li:not(:last-child) {
+        margin-right: 6px;
       }
     }
     &--opened {
@@ -351,6 +366,8 @@ class Toolbar extends React.Component<any, any> {
                       'plus--x': isOpenedToolbox,
                     }),
                     theme,
+                    size: 'small',
+                    shape: 'circle',
                     onClick: this.handlePlusClick,
                   }}
                 >
@@ -377,6 +394,7 @@ class Toolbar extends React.Component<any, any> {
                             {...{
                               isActive: id === activeToolId,
                               theme,
+                              size: 'small',
                               onClick,
                             }}
                           >

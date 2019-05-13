@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 
 const withStyle = (Self) => styled(Self)`
-  color: ${({ theme }) => theme.textColorSecondary};
+  color: ${({ theme }) => theme.textColor};
+  background-color: ${({ theme }) => theme.white};
+  width: ${({ theme }) => theme.toolbarButtonWidth};
+  height: ${({ theme }) => theme.toolbarButtonHeight};
   cursor: pointer;
-  width: ${({ theme }) => theme.toolboxButtonsSize};
-  height: ${({ theme }) => theme.toolboxButtonsSize};
   display: inline-flex;
   justify-content: center;
   align-items: center;

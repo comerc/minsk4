@@ -11,7 +11,7 @@ import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4
-const arrowIndentX = 14
+const arrowIndentX = 20
 
 const withStyle = (Self) => styled(Self)`
   &&.ant-tooltip {
@@ -30,7 +30,6 @@ const withStyle = (Self) => styled(Self)`
     background-color: ${({ theme }) => theme.popoverBg};
     background-clip: padding-box;
     position: relative;
-    padding: 6px 8px;
     &::before {
       content: '';
       position: absolute;
@@ -69,9 +68,13 @@ const withStyle = (Self) => styled(Self)`
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    /* box-shadow: none; */
     &:not(:last-child) {
       margin-right: 6px;
     }
+    /* &:not(:hover) {
+      border-color: white;
+    } */
     svg {
       fill: currentColor;
     }
@@ -91,7 +94,7 @@ const withStyle = (Self) => styled(Self)`
     padding: 0 4px;
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.white};
-    opacity: 0.45;
+    opacity: 0.65;
     border-radius: 2px;
     cursor: pointer;
     display: inline-flex;
@@ -101,6 +104,9 @@ const withStyle = (Self) => styled(Self)`
     &--open {
       opacity: 1;
       color: ${({ theme }) => theme.textColor};
+    }
+    svg {
+      fill: currentColor;
     }
   }
 `
@@ -155,10 +161,15 @@ class Settings extends React.Component<any> {
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
     editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-    this.close()
     setTimeout(() => {
-      onMove()
-      this.open()
+      this.close()
+      setTimeout(() => {
+        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+        setTimeout(() => {
+          onMove()
+          this.open()
+        })
+      })
     })
   }
 
@@ -198,11 +209,15 @@ class Settings extends React.Component<any> {
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
-    editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-    this.close()
     setTimeout(() => {
-      onMove()
-      this.open()
+      this.close()
+      setTimeout(() => {
+        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+        setTimeout(() => {
+          onMove()
+          this.open()
+        })
+      })
     })
   }
 
