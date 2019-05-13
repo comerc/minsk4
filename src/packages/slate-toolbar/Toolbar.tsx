@@ -92,7 +92,6 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.4s ease; /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
     /* will-change: opacity; */
     background-color: ${({ theme }) => theme.btnDefaultBg};
     display: inline-flex;
@@ -110,6 +109,7 @@ const withStyle = (Self) => styled(Self)`
     &--opened {
       opacity: 1;
       visibility: visible;
+      transition: opacity 0.4s ease; /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
     }
   }
   .toolbox .button--active {
