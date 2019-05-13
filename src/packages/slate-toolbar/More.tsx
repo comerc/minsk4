@@ -108,31 +108,43 @@ const withStyle = (Self) => styled(Self)`
 class Settings extends React.Component<any> {
   state = { visible: false, isConfirmDelete: false }
   isNeedToRenderContainer = false
-  // isDown = false
+  isMouseDown = false
 
   close = () => {
+    // it is need for animation before invisible state
+    setTimeout(() => {
+      this.isNeedToRenderContainer = false
+    })
     this.setState({ visible: false, isConfirmDelete: false })
   }
 
   open = () => {
+    this.isNeedToRenderContainer = true
     this.setState({ visible: true })
   }
 
   handleVisibleChange = (visible) => {
     if (visible) {
-      this.isNeedToRenderContainer = true
       this.open()
     } else {
-      // it is need for animation before invisible state
-      setTimeout(() => {
-        this.isNeedToRenderContainer = false
-      })
       this.close()
     }
   }
 
+  handleButtonMouseDown = (event) => {
+    this.isMouseDown = true
+  }
+
+  handleButtonMouseUp = (event) => {
+    if (this.isMouseDown) {
+      this.isMouseDown = false
+    } else {
+      // бывает MouseUp без MouseDown, когда выбран мышкой другой блок
+      this.open()
+    }
+  }
+
   handleArrowUpClick = (event) => {
-    event.preventDefault()
     const {
       editor,
       editor: {
@@ -151,7 +163,6 @@ class Settings extends React.Component<any> {
   }
 
   handleDeleteClick = (event) => {
-    event.preventDefault()
     const { isConfirmDelete } = this.state
     if (!isConfirmDelete) {
       this.setState({ isConfirmDelete: true })
@@ -178,7 +189,6 @@ class Settings extends React.Component<any> {
   }
 
   handleArrowDownClick = (event) => {
-    event.preventDefault()
     const {
       editor,
       editor: {
@@ -277,13 +287,8 @@ class Settings extends React.Component<any> {
           <div
             {...{
               className: classNames('button', { 'button--open': visible }),
-              // onMouseDown: (event) => (this.isDown = true),
-              // onMouseUp: (event) =>
-              //   this.isDown
-              //     ? (this.isDown = false)
-              //     : setTimeout(() => {
-              //         this.open()
-              //       }),
+              onMouseDown: this.handleButtonMouseDown,
+              onMouseUp: this.handleButtonMouseUp,
             }}
           >
             {children}
