@@ -82,8 +82,8 @@ const withStyle = (Self) => styled(Self)`
   }
   .more-wrapper {
     position: absolute;
-    right: -${({ theme }) => theme.moreWidth};
-    top: 0;
+    right: 2px;
+    top: 2px;
     opacity: 0;
     visibility: hidden;
     &--opened {
