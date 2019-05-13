@@ -23,7 +23,8 @@ let theme = {
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
-  moreWidth: '17px', // Toolbar Settings "more" button
+  toolbarButtonWidth: '30px', // Toolbar buttons width
+  toolbarButtonHeight: '24px', // Toolbar button height
 }
 
 let antdVars = {

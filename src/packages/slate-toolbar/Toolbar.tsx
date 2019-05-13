@@ -7,7 +7,7 @@ import { Tooltip } from 'antd'
 import Button from './Button'
 import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
-import { ReactComponent as MoreIcon } from './icons/outline-more_vert-24px.svg'
+import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolboxButtonsSize};

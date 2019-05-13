@@ -86,8 +86,9 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .button {
-    width: ${({ theme }) => theme.moreWidth};
-    height: ${({ theme }) => theme.moreWidth};
+    width: 28px;
+    height: 17px;
+    padding: 0 4px;
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.white};
     opacity: 0.45;
