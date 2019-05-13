@@ -23,7 +23,6 @@ const toolbarPlugin = (options: any = {}) => {
     const children = next()
     return <Toolbar {...{ editor, theme, getTools, value }}>{children}</Toolbar>
   }
-
   return { decorateNode, renderNode, renderEditor }
 }
 
