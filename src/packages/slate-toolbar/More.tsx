@@ -108,7 +108,7 @@ const withStyle = (Self) => styled(Self)`
 class Settings extends React.Component<any> {
   state = { visible: false, isConfirmDelete: false }
   isNeedToRenderContainer = false
-  isMouseDown = false
+  isButtonMouseDown = false
 
   close = () => {
     // it is need for animation before invisible state
@@ -132,14 +132,13 @@ class Settings extends React.Component<any> {
   }
 
   handleButtonMouseDown = (event) => {
-    this.isMouseDown = true
+    this.isButtonMouseDown = true
   }
 
   handleButtonMouseUp = (event) => {
-    if (this.isMouseDown) {
-      this.isMouseDown = false
+    if (this.isButtonMouseDown) {
+      this.isButtonMouseDown = false
     } else {
-      // бывает MouseUp без MouseDown, когда выбран мышкой другой блок
       this.open()
     }
   }
