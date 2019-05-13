@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 
 const withStyle = (Self) => styled(Self)`
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ theme }) => theme.textColorSecondary};
   cursor: pointer;
   width: ${({ theme }) => theme.toolboxButtonsSize};
   height: ${({ theme }) => theme.toolboxButtonsSize};
