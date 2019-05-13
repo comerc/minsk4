@@ -312,6 +312,7 @@ class Settings extends React.Component<any> {
               className: classNames('button', { 'button--open': visible }),
               onMouseDown: this.handleButtonMouseDown,
               onMouseUp: this.handleButtonMouseUp,
+              role: 'button',
             }}
           >
             {children}
