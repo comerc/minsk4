@@ -3,22 +3,14 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
-import { Tooltip, Button } from 'antd'
+import { Tooltip } from 'antd'
+import Button from './Button'
 import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
-  .ant-btn {
-    width: ${({ theme }) => theme.toolbarButtonWidth};
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    svg {
-      fill: currentColor;
-    }
-  }
   .wrapper {
     position: relative;
     margin: 0 auto;
@@ -118,6 +110,28 @@ const withStyle = (Self) => styled(Self)`
     &--opened {
       opacity: 1;
       visibility: visible;
+    }
+  }
+  .button--active {
+    color: ${({ theme }) => theme.primaryColor};
+    border-color: ${({ theme }) => theme.primaryColor};
+    animation: bounceIn 0.75s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 `
@@ -276,6 +290,14 @@ class Toolbar extends React.Component<any, any> {
       }
       return
     }
+    if (event.key === 'Enter') {
+      const { activeToolId } = this.state
+      if (activeToolId > -1) {
+        event.preventDefault()
+        this.tools[activeToolId].onClick(event)
+        // FIXME: [Enter] уходит в редактор, т.к. неверно подключен handleKeyDown
+      }
+    }
   }
 
   handleClick = (event) => {
@@ -359,7 +381,6 @@ class Toolbar extends React.Component<any, any> {
                     className: classNames('plus', {
                       'plus--x': isOpenedToolbox,
                     }),
-                    theme,
                     size: 'small',
                     shape: 'circle',
                     onClick: this.handlePlusClick,
@@ -385,8 +406,9 @@ class Toolbar extends React.Component<any, any> {
                       >
                         <Button
                           {...{
-                            isActive: id === activeToolId,
-                            theme,
+                            className: classNames('button', {
+                              'button--active': id === activeToolId,
+                            }),
                             size: 'small',
                             onClick,
                           }}
