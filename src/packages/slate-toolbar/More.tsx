@@ -90,11 +90,19 @@ const withStyle = (Self) => styled(Self)`
   .button {
     width: ${({ theme }) => theme.moreWidth};
     height: ${({ theme }) => theme.moreWidth};
-    color: ${({ theme }) => theme.textColor};
+    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.white};
+    opacity: 0.45;
+    border-radius: 2px;
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    &:hover,
+    &--open {
+      opacity: 1;
+      color: ${({ theme }) => theme.textColor};
+    }
   }
 `
 
@@ -102,6 +110,7 @@ const withStyle = (Self) => styled(Self)`
 class Settings extends React.Component<any> {
   state = { visible: false, isConfirmDelete: false }
   isNeedToRenderContainer = false
+  // isDown = false
 
   close = () => {
     this.setState({ visible: false, isConfirmDelete: false })
@@ -267,7 +276,20 @@ class Settings extends React.Component<any> {
             title: this.isNeedToRenderContainer ? this.renderContainer() : <React.Fragment />,
           }}
         >
-          <div className="button">{children}</div>
+          <div
+            {...{
+              className: classNames('button', { 'button--open': visible }),
+              // onMouseDown: (event) => (this.isDown = true),
+              // onMouseUp: (event) =>
+              //   this.isDown
+              //     ? (this.isDown = false)
+              //     : setTimeout(() => {
+              //         this.open()
+              //       }),
+            }}
+          >
+            {children}
+          </div>
         </Tooltip>
       </div>
     )
