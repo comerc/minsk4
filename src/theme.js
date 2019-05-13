@@ -23,8 +23,8 @@ let theme = {
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
   toolbarPaddingHorizontal: '40px',
-  toolbarButtonWidth: '30px', // Toolbar buttons width (like Antd)
-  toolbarButtonHeight: '24px', // Toolbar button height (like Antd @btn-height-sm)
+  toolbarButtonWidth: '30px', // Toolbar button width
+  toolbarButtonHeight: (theme) => theme.btnHeightSm, // Toolbar button height
 }
 
 let antdVars = {
@@ -38,6 +38,7 @@ let antdVars = {
   textColorSecondary: (theme) => fade(theme.black, 0.45),
   popoverBg: '#fff',
   popoverColor: (theme) => theme.textColor,
+  btnDefaultBg: '#fff',
 }
 
 const normalizeTheme = (theme) => {

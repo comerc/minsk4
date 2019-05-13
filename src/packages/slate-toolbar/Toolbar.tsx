@@ -12,16 +12,10 @@ import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
   .ant-btn {
+    width: ${({ theme }) => theme.toolbarButtonWidth};
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    /* box-shadow: none; */
-    &:not(:last-child) {
-      margin-right: 6px;
-    }
-    &:not(:hover) {
-      /* border-color: white; */
-    }
     svg {
       fill: currentColor;
     }
@@ -60,7 +54,7 @@ const withStyle = (Self) => styled(Self)`
     animation: fadeIn 0.4s;
     display: none;
     &--opened {
-      display: block;
+      display: inline-flex;
     }
     @keyframes fadeIn {
       from {
@@ -109,13 +103,14 @@ const withStyle = (Self) => styled(Self)`
     opacity: 0;
     transition: opacity 0.4s ease; /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
     /* will-change: opacity; */
+    background-color: ${({ theme }) => theme.btnDefaultBg};
+    display: inline-flex;
     ul {
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: row;
+      display: inline-flex;
       li {
-        display: inline;
+        display: inline-flex;
       }
       li:not(:last-child) {
         margin-right: 6px;
@@ -389,18 +384,16 @@ class Toolbar extends React.Component<any, any> {
                           align: { offset: [0, 3] },
                         }}
                       >
-                        <div>
-                          <Button
-                            {...{
-                              isActive: id === activeToolId,
-                              theme,
-                              size: 'small',
-                              onClick,
-                            }}
-                          >
-                            {src}
-                          </Button>
-                        </div>
+                        <Button
+                          {...{
+                            isActive: id === activeToolId,
+                            theme,
+                            size: 'small',
+                            onClick,
+                          }}
+                        >
+                          {src}
+                        </Button>
                       </Tooltip>
                     </li>
                   ))}
