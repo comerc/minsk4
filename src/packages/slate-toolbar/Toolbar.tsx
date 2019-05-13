@@ -228,7 +228,6 @@ class Toolbar extends React.Component<any, any> {
   }
 
   handlePlusClick = (event) => {
-    event.preventDefault()
     if (this.state.isOpenedToolbox) {
       this.close()
     } else {
