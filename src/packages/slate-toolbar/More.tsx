@@ -66,8 +66,6 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .ant-btn {
-    width: ${({ theme }) => theme.toolboxButtonsSize};
-    height: ${({ theme }) => theme.toolboxButtonsSize};
     display: inline-flex;
     justify-content: center;
     align-items: center;
