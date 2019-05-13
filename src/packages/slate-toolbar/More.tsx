@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Block } from 'slate'
-import { Tooltip, Button } from 'antd'
+import { Tooltip } from 'antd'
+import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
 import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
@@ -12,6 +13,7 @@ const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4
 const arrowIndentX = 20
+const closeInterval = 200
 
 const withStyle = (Self) => styled(Self)`
   &&.ant-tooltip {
@@ -63,15 +65,6 @@ const withStyle = (Self) => styled(Self)`
       top: -${arrowIndentY}px;
       border-top-color: ${({ theme }) => theme.popoverBg};
       border-left-color: ${({ theme }) => theme.popoverBg};
-    }
-  }
-  .ant-btn {
-    width: ${({ theme }) => theme.toolbarButtonWidth};
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    svg {
-      fill: currentColor;
     }
   }
   ul.container {
@@ -162,17 +155,14 @@ class Settings extends React.Component<any> {
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
-    editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
     setTimeout(() => {
       this.close()
+      editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        setTimeout(() => {
-          onMove()
-          this.open()
-        })
+        onMove()
+        this.open()
       })
-    })
+    }, closeInterval)
   }
 
   handleDeleteClick = (event) => {
@@ -181,24 +171,26 @@ class Settings extends React.Component<any> {
       this.setState({ isConfirmDelete: true })
       return
     }
-    this.close()
-    const {
-      editor,
-      editor: {
-        value: { focusBlock, document },
-      },
-    } = this.props
-    const hasTitle = document.nodes.get(0).type === 'title'
-    const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
-    if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
-      const lastNode = document.nodes.get(hasTitle ? 2 : 1)
-      if (lastNode.type === 'paragraph' && lastNode.text === '') {
-        // fixed placeholder
-        editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
-        return
+    setTimeout(() => {
+      this.close()
+      const {
+        editor,
+        editor: {
+          value: { focusBlock, document },
+        },
+      } = this.props
+      const hasTitle = document.nodes.get(0).type === 'title'
+      const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
+      if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
+        const lastNode = document.nodes.get(hasTitle ? 2 : 1)
+        if (lastNode.type === 'paragraph' && lastNode.text === '') {
+          // fixed placeholder
+          editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
+          return
+        }
       }
-    }
-    editor.removeNodeByKey(focusBlock.key)
+      editor.removeNodeByKey(focusBlock.key)
+    }, closeInterval)
   }
 
   handleArrowDownClick = (event) => {
@@ -213,14 +205,12 @@ class Settings extends React.Component<any> {
     const newIndex = document.nodes.indexOf(nextNode)
     setTimeout(() => {
       this.close()
+      editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        setTimeout(() => {
-          onMove()
-          this.open()
-        })
+        onMove()
+        this.open()
       })
-    })
+    }, closeInterval)
   }
 
   renderContainer = () => {
@@ -287,6 +277,7 @@ class Settings extends React.Component<any> {
   componentDidUpdate(prevProps) {
     const { bodyWidth } = this.props
     if (bodyWidth !== prevProps.bodyWidth) {
+      // TODO: Tooltip не способен определять новое положение
       this.close()
     }
   }
