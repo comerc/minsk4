@@ -251,8 +251,8 @@ class Settings extends React.Component<any> {
               tabIndex: -1,
               onClick: this.handleDeleteClick,
               size: 'small',
-              type: isConfirmDelete ? 'danger' : 'default',
               disabled: isDeleteDisabled,
+              type: isConfirmDelete ? 'danger' : 'default',
             }}
           >
             <DeleteIcon />
