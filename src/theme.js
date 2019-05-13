@@ -39,6 +39,7 @@ let antdVars = {
   popoverBg: '#fff',
   popoverColor: (theme) => theme.textColor,
   btnDefaultBg: '#fff',
+  btnHeightSm: '24px',
 }
 
 const normalizeTheme = (theme) => {
