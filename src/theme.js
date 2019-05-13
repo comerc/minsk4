@@ -23,18 +23,20 @@ let theme = {
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
   toolboxButtonsSize: '34px', // Toolbar buttons height and width
-  moreWidth: '21px', // Toolbar Settings "more" button
+  moreWidth: '17px', // Toolbar Settings "more" button
 }
 
 let antdVars = {
-  popoverBg: '#fff',
+  white: '#fff',
   black: '#000',
-  textColor: (theme) => fade(theme.black, 0.65),
-  popoverColor: (theme) => theme.textColor,
   red6: '#f5222d',
-  errorColor: (theme) => theme.red6,
   blue6: '#1890ff',
   primaryColor: (theme) => theme.blue6,
+  errorColor: (theme) => theme.red6,
+  textColor: (theme) => fade(theme.black, 0.65),
+  textColorSecondary: (theme) => fade(theme.black, 0.45),
+  popoverBg: '#fff',
+  popoverColor: (theme) => theme.textColor,
 }
 
 const normalizeTheme = (theme) => {
