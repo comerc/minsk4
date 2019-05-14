@@ -179,9 +179,12 @@ class Toolbar extends React.Component<any, any> {
   }
 
   handleToolClick = (onClick) => (event) => {
-    onClick(event)
-    this.close()
-    this.focus()
+    const { closeInterval } = this.props
+    setTimeout(() => {
+      this.close()
+      this.focus()
+      onClick(event)
+    }, closeInterval)
   }
 
   tools = this.props
@@ -342,6 +345,7 @@ class Toolbar extends React.Component<any, any> {
       editor: { readOnly: isReadOnly },
       value: { focusBlock, focusText },
       bodyWidth,
+      closeInterval,
       children,
     } = this.props
     const { isOpenedToolbox, activeToolId } = this.state
@@ -400,6 +404,7 @@ class Toolbar extends React.Component<any, any> {
                     <li key={id}>
                       <Tooltip
                         {...{
+                          overlayClassName: classNames({ 'ant-tooltip-hidden': !isOpenedToolbox }),
                           title: alt,
                           align: { offset: [0, 3] },
                         }}
@@ -428,7 +433,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <More {...{ theme, editor, bodyWidth, onMove: this.move }}>
+              <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }}>
                 <MoreIcon />
               </More>
             </div>
