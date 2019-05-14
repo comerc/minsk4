@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
-  let { theme = {}, getTools = () => [] } = options
+  let { theme = {}, getTools = () => [], closeInterval = 200 } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -21,7 +21,7 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('renderEditor', props)
     const { value } = props
     const children = next()
-    return <Toolbar {...{ editor, theme, getTools, value }}>{children}</Toolbar>
+    return <Toolbar {...{ editor, theme, getTools, closeInterval, value }}>{children}</Toolbar>
   }
   return { decorateNode, renderNode, renderEditor }
 }

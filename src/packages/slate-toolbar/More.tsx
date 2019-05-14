@@ -13,7 +13,6 @@ const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4
 const arrowIndentX = 20
-const closeInterval = 200
 
 const withStyle = (Self) => styled(Self)`
   &&.ant-tooltip {
@@ -152,6 +151,7 @@ class Settings extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMove,
+      closeInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
@@ -171,14 +171,15 @@ class Settings extends React.Component<any> {
       this.setState({ isConfirmDelete: true })
       return
     }
+    const {
+      editor,
+      editor: {
+        value: { focusBlock, document },
+      },
+      closeInterval,
+    } = this.props
     setTimeout(() => {
       this.close()
-      const {
-        editor,
-        editor: {
-          value: { focusBlock, document },
-        },
-      } = this.props
       const hasTitle = document.nodes.get(0).type === 'title'
       const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
       if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
@@ -200,6 +201,7 @@ class Settings extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMove,
+      closeInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
