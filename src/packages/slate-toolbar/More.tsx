@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Block } from 'slate'
-import { Tooltip, Button as AntdButton } from 'antd'
+import { Tooltip } from 'antd'
 import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
 import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 
-const ButtonGroup = AntdButton.Group
 const arrowWidth = 6
 const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4
@@ -67,7 +66,7 @@ const withStyle = (Self) => styled(Self)`
       border-left-color: ${({ theme }) => theme.popoverBg};
     }
   }
-  /* ul.container {
+  ul.container {
     margin: 0;
     padding: 0;
     display: inline-flex;
@@ -77,9 +76,6 @@ const withStyle = (Self) => styled(Self)`
     li:not(:last-child) {
       margin-right: 6px;
     }
-  } */
-  .ant-btn-group {
-    display: inline-flex;
   }
   .delete {
     svg {
@@ -237,45 +233,46 @@ class Settings extends React.Component<any> {
       firstNode.type === 'paragraph' &&
       firstNode.text === ''
     return (
-      <ButtonGroup>
-        <Button
-          {...{
-            tabIndex: -1,
-            onClick: this.handleArrowUpClick,
-            size: 'small',
-            disabled: isArrowUpDisabled,
-          }}
-        >
-          <ArrowUpIcon />
-        </Button>
-        <Button
-          {...{
-            className: 'delete',
-            tabIndex: -1,
-            onClick: this.handleDeleteClick,
-            size: 'small',
-            disabled: isDeleteDisabled,
-            type: isConfirmDelete ? 'danger' : 'default',
-          }}
-        >
-          <DeleteIcon />
-        </Button>
-        <Button
-          {...{
-            tabIndex: -1,
-            onClick: this.handleArrowDownClick,
-            size: 'small',
-            disabled: isArrowDownDisabled,
-          }}
-        >
-          <ArrowDownIcon />
-        </Button>
-        {/* <ul className="container">
-          <li />
-          <li />
-          <li />
-        </ul> */}
-      </ButtonGroup>
+      <ul className="container">
+        <li>
+          <Button
+            {...{
+              tabIndex: -1,
+              onClick: this.handleArrowUpClick,
+              size: 'small',
+              disabled: isArrowUpDisabled,
+            }}
+          >
+            <ArrowUpIcon />
+          </Button>
+        </li>
+        <li>
+          <Button
+            {...{
+              className: 'delete',
+              tabIndex: -1,
+              onClick: this.handleDeleteClick,
+              size: 'small',
+              disabled: isDeleteDisabled,
+              type: isConfirmDelete ? 'danger' : 'default',
+            }}
+          >
+            <DeleteIcon />
+          </Button>
+        </li>
+        <li>
+          <Button
+            {...{
+              tabIndex: -1,
+              onClick: this.handleArrowDownClick,
+              size: 'small',
+              disabled: isArrowDownDisabled,
+            }}
+          >
+            <ArrowDownIcon />
+          </Button>
+        </li>
+      </ul>
     )
   }
 
