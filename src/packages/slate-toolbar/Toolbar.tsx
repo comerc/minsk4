@@ -47,28 +47,12 @@ const withStyle = (Self) => styled(Self)`
     &--opened {
       display: inline-flex;
     }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
   }
   .plus {
     &--x {
       svg {
         animation: spin 0.4s;
         animation-fill-mode: forwards;
-      }
-    }
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(45deg);
       }
     }
   }
@@ -81,20 +65,19 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     right: 2px;
     top: 2px;
+    display: none;
     opacity: 0;
-    visibility: hidden;
     &--opened {
+      display: inline-flex;
       opacity: 1;
-      visibility: visible;
     }
   }
   .toolbox {
     position: absolute;
-    visibility: hidden;
+    display: none;
     opacity: 0;
     /* will-change: opacity; */
     background-color: ${({ theme }) => theme.btnDefaultBg};
-    display: inline-flex;
     ul {
       margin: 0;
       padding: 0;
@@ -107,9 +90,10 @@ const withStyle = (Self) => styled(Self)`
       }
     }
     &--opened {
+      display: inline-flex;
       opacity: 1;
-      visibility: visible;
-      transition: opacity 0.4s ease; /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
+      animation: fadeIn 0.4s;
+      /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
     }
   }
   .toolbox .button--active {
@@ -117,21 +101,37 @@ const withStyle = (Self) => styled(Self)`
     border-color: ${({ theme }) => theme.primaryColor};
     animation: bounceIn 0.75s;
     animation-fill-mode: forwards;
-    @keyframes bounceIn {
-      0% {
-        opacity: 0;
-        transform: scale(0.3);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.05);
-      }
-      70% {
-        transform: scale(0.9);
-      }
-      100% {
-        transform: scale(1);
-      }
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(45deg);
+    }
+  }
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 `
