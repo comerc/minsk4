@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
-import { Tooltip } from 'antd'
+import Tooltip from './Tooltip'
 import Button from './Button'
 import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
@@ -95,6 +95,9 @@ const withStyle = (Self) => styled(Self)`
     li:not(:last-child) {
       margin-right: 6px;
     }
+  }
+  .toolbox .button-wrapper {
+    display: inline-flex;
   }
   .toolbox .button--active {
     color: ${({ theme }) => theme.primaryColor};
@@ -253,6 +256,7 @@ class Toolbar extends React.Component<any, any> {
     this.setState({
       isOpenedToolbox: false,
       activeToolId: -1,
+      visibleTooltipId: -1,
     })
   }
 
@@ -413,30 +417,31 @@ class Toolbar extends React.Component<any, any> {
               >
                 <ul>
                   {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
-                    <Tooltip
-                      {...{
-                        key: id,
-                        overlayClassName: classNames({ 'ant-tooltip-hidden': !isOpenedToolbox }),
-                        title: alt,
-                        align: { offset: [0, 3] },
-                        visible: id === visibleTooltipId,
-                        onVisibleChange: onTooltipVisibleChange,
-                      }}
-                    >
-                      <li>
-                        <Button
-                          {...{
-                            className: classNames('button', {
-                              'button--active': id === activeToolId,
-                            }),
-                            size: 'small',
-                            onClick,
-                          }}
-                        >
-                          {src}
-                        </Button>
-                      </li>
-                    </Tooltip>
+                    <li key={id}>
+                      <Tooltip
+                        {...{
+                          overlayClassName: classNames({ 'ant-tooltip-hidden': !isOpenedToolbox }),
+                          title: alt,
+                          align: { offset: [0, 3] },
+                          visible: id === visibleTooltipId,
+                          onVisibleChange: onTooltipVisibleChange,
+                        }}
+                      >
+                        <div className="button-wrapper">
+                          <Button
+                            {...{
+                              className: classNames('button', {
+                                'button--active': id === activeToolId,
+                              }),
+                              size: 'small',
+                              onClick,
+                            }}
+                          >
+                            {src}
+                          </Button>
+                        </div>
+                      </Tooltip>
+                    </li>
                   ))}
                 </ul>
               </div>
