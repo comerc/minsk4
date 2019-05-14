@@ -189,7 +189,7 @@ class Toolbar extends React.Component<any, any> {
 
   tools = this.props
     .getTools(this.props.editor)
-    .map(({ onClick, ...rest }, id) => ({ id, onClick: this.handleToolClick(onClick), ...rest }))
+    .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
 
   /**
    * Leaf
@@ -262,10 +262,11 @@ class Toolbar extends React.Component<any, any> {
     this.focus()
   }
 
-  handleKeyDown = (event) => {
+  handleKeyDownCapture = (event) => {
     if (event.key === 'Escape') {
       if (this.state.isOpenedToolbox) {
         event.preventDefault()
+        event.stopPropagation()
         this.close()
       }
       return
@@ -279,6 +280,7 @@ class Toolbar extends React.Component<any, any> {
       }
       if (this.state.isOpenedToolbox) {
         event.preventDefault()
+        event.stopPropagation()
         this.leaf(event.shiftKey)
       } else {
         const {
@@ -287,6 +289,7 @@ class Toolbar extends React.Component<any, any> {
         const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
         if (isEmptyParagraph) {
           event.preventDefault()
+          event.stopPropagation()
           this.open()
           this.leaf(event.shiftKey)
         }
@@ -297,13 +300,14 @@ class Toolbar extends React.Component<any, any> {
       const { activeToolId } = this.state
       if (activeToolId > -1) {
         event.preventDefault()
+        event.stopPropagation()
         this.tools[activeToolId].onClick(event)
-        // FIXME: [Enter] уходит в редактор, т.к. неверно подключен handleKeyDown
       }
+      return
     }
   }
 
-  handleClick = (event) => {
+  handleClickCapture = (event) => {
     if (this.state.isOpenedToolbox) {
       const key = event.target.dataset.key
       const {
@@ -356,8 +360,8 @@ class Toolbar extends React.Component<any, any> {
         {...{
           className,
           ref: this.containerRef,
-          onKeyDown: this.handleKeyDown,
-          onClick: this.handleClick,
+          onKeyDownCapture: this.handleKeyDownCapture,
+          onClickCapture: this.handleClickCapture,
         }}
       >
         <div className="wrapper">
@@ -400,7 +404,7 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 <ul>
-                  {this.tools.map(({ id, src, alt, onClick }) => (
+                  {this.tools.map(({ src, alt, onClick }, id) => (
                     <li key={id}>
                       <Tooltip
                         {...{
