@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Block } from 'slate'
@@ -15,7 +14,7 @@ const arrowIndentY = 4
 const arrowIndentX = 20
 
 const withStyle = (Self) => styled(Self)`
-  &&.ant-tooltip {
+  &.ant-tooltip {
     max-width: none;
   }
   .ant-tooltip-arrow {
@@ -44,7 +43,7 @@ const withStyle = (Self) => styled(Self)`
       transform: rotate(45deg);
     }
   }
-  &&.ant-tooltip-placement-topRight {
+  &.ant-tooltip-placement-topRight {
     .ant-tooltip-arrow {
       bottom: ${arrowIndentY}px !important;
       box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
@@ -55,7 +54,7 @@ const withStyle = (Self) => styled(Self)`
       border-bottom-color: ${({ theme }) => theme.popoverBg};
     }
   }
-  &&.ant-tooltip-placement-bottomRight {
+  &.ant-tooltip-placement-bottomRight {
     .ant-tooltip-arrow {
       top: ${arrowIndentY}px !important;
       box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
