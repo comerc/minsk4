@@ -14,7 +14,6 @@ const withStyle = (Self) => styled(Self)`
 class Tooltip extends React.Component<any> {
   render() {
     const { className, overlayClassName, ...rest } = this.props
-    console.log(className, overlayClassName)
     return (
       <div className={className}>
         <AntdTooltip
