@@ -16,7 +16,7 @@ const withStyle = (Self) => styled(Self)`
     margin: 0 auto;
     max-width: ${({ theme }) => theme.contentWidth};
   }
-  .editor-block--selected {
+  .${({ focusedBlockClass }) => focusedBlockClass} {
     background-image: linear-gradient(
       45deg,
       rgba(243, 248, 255, 0.03) 63.45%,
