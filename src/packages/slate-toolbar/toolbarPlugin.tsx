@@ -6,7 +6,7 @@ import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
   let { theme = {}, getTools = () => [], closeInterval = 200 } = options
-  const focusedBlockClass = `${nanoid(6)}_block--focused`
+  const focusedBlockClassName = `${nanoid(6)}_block--focused`
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -15,7 +15,7 @@ const toolbarPlugin = (options: any = {}) => {
   const renderNode = (props, editor, next) => {
     // console.log('renderNode')
     if (props.node.type !== 'title' && props.key === editor.value.focusBlock.key) {
-      props.attributes.className = classNames(props.attributes.className, focusedBlockClass)
+      props.attributes.className = classNames(props.attributes.className, focusedBlockClassName)
     }
     return next()
   }
@@ -30,7 +30,7 @@ const toolbarPlugin = (options: any = {}) => {
           theme,
           getTools,
           closeInterval,
-          focusedBlockClass,
+          focusedBlockClassName,
           value,
         }}
       >
