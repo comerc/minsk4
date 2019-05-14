@@ -106,7 +106,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class Settings extends React.Component<any> {
+class More extends React.Component<any> {
   state = { visible: false, isConfirmDelete: false }
   isNeedToRenderContainer = false
   isButtonMouseDown = false
@@ -316,4 +316,4 @@ class Settings extends React.Component<any> {
   }
 }
 
-export default Settings
+export default More

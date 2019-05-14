@@ -78,22 +78,22 @@ const withStyle = (Self) => styled(Self)`
     opacity: 0;
     /* will-change: opacity; */
     background-color: ${({ theme }) => theme.btnDefaultBg};
-    ul {
-      margin: 0;
-      padding: 0;
-      display: inline-flex;
-      li {
-        display: inline-flex;
-      }
-      li:not(:last-child) {
-        margin-right: 6px;
-      }
-    }
     &--opened {
       display: inline-flex;
       opacity: 1;
       animation: fadeIn 0.4s;
       /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
+    }
+  }
+  .toolbox ul {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    li {
+      display: inline-flex;
+    }
+    li:not(:last-child) {
+      margin-right: 6px;
     }
   }
   .toolbox .button--active {
@@ -142,6 +142,7 @@ class Toolbar extends React.Component<any, any> {
   state = {
     isOpenedToolbox: false,
     activeToolId: -1,
+    visibleTooltipId: -1,
   }
 
   containerRef = React.createRef() as any
@@ -187,9 +188,16 @@ class Toolbar extends React.Component<any, any> {
     }, closeInterval)
   }
 
-  tools = this.props
-    .getTools(this.props.editor)
-    .map(({ onClick, ...rest }) => ({ onClick: this.handleToolClick(onClick), ...rest }))
+  handleTooltipVisibleChange = (id) => (visible) => {
+    this.setState({ visibleTooltipId: visible ? id : -1 })
+  }
+
+  // TODO: may be getDerivedStateFromProps?
+  tools = this.props.getTools(this.props.editor).map(({ onClick, ...rest }, id) => ({
+    onClick: this.handleToolClick(onClick),
+    onTooltipVisibleChange: this.handleTooltipVisibleChange(id),
+    ...rest,
+  }))
 
   /**
    * Leaf
@@ -232,7 +240,7 @@ class Toolbar extends React.Component<any, any> {
        */
       id = (id + 1) % this.tools.length
     }
-    this.setState({ activeToolId: id })
+    this.setState({ activeToolId: id, visibleTooltipId: id })
   }
 
   open = () => {
@@ -352,7 +360,7 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const { isOpenedToolbox, activeToolId } = this.state
+    const { isOpenedToolbox, activeToolId, visibleTooltipId } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     return (
@@ -404,15 +412,18 @@ class Toolbar extends React.Component<any, any> {
                 }}
               >
                 <ul>
-                  {this.tools.map(({ src, alt, onClick }, id) => (
-                    <li key={id}>
-                      <Tooltip
-                        {...{
-                          overlayClassName: classNames({ 'ant-tooltip-hidden': !isOpenedToolbox }),
-                          title: alt,
-                          align: { offset: [0, 3] },
-                        }}
-                      >
+                  {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
+                    <Tooltip
+                      {...{
+                        key: id,
+                        overlayClassName: classNames({ 'ant-tooltip-hidden': !isOpenedToolbox }),
+                        title: alt,
+                        align: { offset: [0, 3] },
+                        visible: id === visibleTooltipId,
+                        onVisibleChange: onTooltipVisibleChange,
+                      }}
+                    >
+                      <li>
                         <Button
                           {...{
                             className: classNames('button', {
@@ -424,8 +435,8 @@ class Toolbar extends React.Component<any, any> {
                         >
                           {src}
                         </Button>
-                      </Tooltip>
-                    </li>
+                      </li>
+                    </Tooltip>
                   ))}
                 </ul>
               </div>
