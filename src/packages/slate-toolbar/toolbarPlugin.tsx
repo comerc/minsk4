@@ -2,6 +2,7 @@ import React from 'react'
 // import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
 import nanoid from 'nanoid'
+import idx from 'idx'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
@@ -14,7 +15,7 @@ const toolbarPlugin = (options: any = {}) => {
   }
   const renderNode = (props, editor, next) => {
     // console.log('renderNode')
-    if (props.node.type !== 'title' && props.key === editor.value.focusBlock.key) {
+    if (props.node.type !== 'title' && props.key === idx(editor.value.focusBlock, (_) => _.key)) {
       props.attributes.className = classNames(props.attributes.className, focusedBlockClassName)
     }
     return next()
