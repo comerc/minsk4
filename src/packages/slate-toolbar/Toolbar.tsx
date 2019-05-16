@@ -29,7 +29,7 @@ const withStyle = (Self) => styled(Self)`
         z-index: -1;
         box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor5};
       }
-      &.block--focused {
+      &.block--focused:not(.block--title) {
         background-image: linear-gradient(
           17deg,
           rgba(243, 248, 255, 0.03) 63.45%,

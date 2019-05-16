@@ -12,10 +12,9 @@ const toolbarPlugin = (options: any = {}) => {
     return [...others]
   }
   const renderNode = (props, editor, next) => {
-    const isFocusedBlock =
-      props.node.type !== 'title' && props.key === idx(editor.value.focusBlock, (_) => _.key)
     props.attributes.className = classNames(props.attributes.className, {
-      'block--focused': isFocusedBlock,
+      'block--focused': props.key === idx(editor.value.focusBlock, (_) => _.key),
+      'block--title': props.node.type === 'title',
     })
     return next()
   }
