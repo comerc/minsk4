@@ -16,13 +16,35 @@ const withStyle = (Self) => styled(Self)`
     margin: 0 auto;
     max-width: ${({ theme }) => theme.contentWidth};
   }
-  .${({ focusedBlockClassName }) => focusedBlockClassName} {
-    background-image: linear-gradient(
-      45deg,
-      rgba(243, 248, 255, 0.03) 63.45%,
-      rgba(207, 214, 229, 0.27) 98%
-    );
-    border-radius: 3px;
+  .${({ editor }) => editor.props.className.replace(' ', '.')} {
+    > :not(p):hover {
+      box-shadow: 0 0 0 1px #3eb0ef;
+    }
+    > :not(p).block--focused {
+      box-shadow: 0 0 0 2px #3eb0ef;
+      background-image: linear-gradient(
+        17deg,
+        rgba(243, 248, 255, 0.03) 63.45%,
+        rgba(207, 214, 229, 0.27) 98%
+      );
+    }
+    > p {
+      position: relative;
+      &:before {
+        content: '';
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: -14px;
+        top: 0;
+      }
+      &:hover:before {
+        box-shadow: 0 0 0 1px #3eb0ef;
+      }
+      &.block--focused:before {
+        box-shadow: 0 0 0 2px #3eb0ef;
+      }
+    }
   }
   .toolbar {
     position: absolute;
@@ -96,9 +118,6 @@ const withStyle = (Self) => styled(Self)`
       margin-right: 6px;
     }
   }
-  /* .toolbox .button-wrapper {
-    display: inline-flex;
-  } */
   .toolbox .button--active {
     color: ${({ theme }) => theme.primaryColor};
     border-color: ${({ theme }) => theme.primaryColor};
@@ -149,6 +168,7 @@ class Toolbar extends React.Component<any, any> {
     isOpenedToolbox: false,
     activeToolId: -1,
     visibleTooltipId: -1,
+    // focusBlockTop: 0,
   }
 
   containerRef = React.createRef() as any
@@ -172,6 +192,7 @@ class Toolbar extends React.Component<any, any> {
     toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
     const toolbarNode = this.toolbarRef.current
     toolbarNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
+    // this.setState({ focusBlockTop: toolbarTop })
   }
 
   focus = () => {
@@ -367,7 +388,12 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const { isOpenedToolbox, activeToolId, visibleTooltipId } = this.state
+    const {
+      isOpenedToolbox,
+      activeToolId,
+      visibleTooltipId,
+      // focusBlockTop
+    } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     return (
@@ -379,6 +405,13 @@ class Toolbar extends React.Component<any, any> {
           onClickCapture: this.handleClickCapture,
         }}
       >
+        {/* <Tooltip
+          {...{
+            title: 'alt',
+            align: { offset: [0, focusBlockTop + 3] },
+            trigger: 'contextMenu',
+          }}
+        > */}
         <div className="wrapper">
           {children}
           <div
@@ -463,6 +496,7 @@ class Toolbar extends React.Component<any, any> {
             </div>
           </div>
         </div>
+        {/* </Tooltip> */}
       </div>
     )
   }
