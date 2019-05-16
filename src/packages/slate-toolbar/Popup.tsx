@@ -10,6 +10,7 @@ const arrowIndentY = 4 // TODO: почему? 6 внутри Antd Popconfirm
 const arrowIndentX = 16
 
 const withStyle = (Self) => styled(Self)`
+  display: inline-flex;
   &.ant-tooltip {
     max-width: none;
   }

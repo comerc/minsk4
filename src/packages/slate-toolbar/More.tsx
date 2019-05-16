@@ -9,6 +9,7 @@ import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
 import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 
 const withStyle = (Self) => styled(Self)`
+  display: inline-flex;
   ul.content {
     margin: 0;
     padding: 0;
@@ -44,6 +45,7 @@ const withStyle = (Self) => styled(Self)`
     }
     svg {
       fill: currentColor;
+      pointer-events: none;
     }
   }
 `
