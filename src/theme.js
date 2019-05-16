@@ -1,21 +1,13 @@
+import tinycolor from 'tinycolor2'
+import colorPalette from './packages/color-palette'
+
 // analog of less fade()
 const fade = (rgb, alpha) => {
-  if (rgb[0] !== '#' || (rgb.length !== 4 && rgb.length !== 7)) {
+  const color = tinycolor(rgb)
+  if (!color.isValid()) {
     throw new Error('Invalid value')
   }
-  const [r, g, b] =
-    rgb.length === 4
-      ? [
-          parseInt(rgb.substring(1, 2), 16),
-          parseInt(rgb.substring(2, 3), 16),
-          parseInt(rgb.substring(3, 4), 16),
-        ]
-      : [
-          parseInt(rgb.substring(1, 3), 16),
-          parseInt(rgb.substring(3, 5), 16),
-          parseInt(rgb.substring(5, 7), 16),
-        ]
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  return color.setAlpha(alpha).toRgbString()
 }
 
 let mainVars = {
@@ -40,7 +32,7 @@ let antdVars = {
   popoverColor: (theme) => theme.textColor,
   btnDefaultBg: '#fff',
   btnHeightSm: '24px',
-  // primaryColor5: (theme) => colorPalette(theme.primaryColor, 5),
+  primaryColor5: (theme) => colorPalette(theme.primaryColor, 5),
 }
 
 const theme = new Proxy(
