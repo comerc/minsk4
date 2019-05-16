@@ -18,7 +18,7 @@ const fade = (rgb, alpha) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
-let theme = {
+let mainVars = {
   // mobile: '(max-width: 650px)',
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px', // Block content width
@@ -40,19 +40,33 @@ let antdVars = {
   popoverColor: (theme) => theme.textColor,
   btnDefaultBg: '#fff',
   btnHeightSm: '24px',
+  // primaryColor5: (theme) => colorPalette(theme.primaryColor, 5),
 }
 
-const normalizeTheme = (theme) => {
-  const result = {}
-  const getSimpleValue = (value) =>
-    typeof value === 'function' ? getSimpleValue(value(theme)) : value
-  Object.entries(theme).forEach(([key, value]) => {
-    result[key] = getSimpleValue(value)
-  })
-  return result
-}
+const theme = new Proxy(
+  { ...mainVars, ...antdVars },
+  {
+    get: (target, name) => {
+      const result = target[name]
+      if (typeof result === 'function') {
+        return result(theme)
+      }
+      return result
+    },
+  },
+)
 
-theme = normalizeTheme({ ...theme, ...antdVars })
+// const normalizeTheme = (theme) => {
+//   const result = {}
+//   const getSimpleValue = (value) =>
+//     typeof value === 'function' ? getSimpleValue(value(theme)) : value
+//   Object.entries(theme).forEach(([key, value]) => {
+//     result[key] = getSimpleValue(value)
+//   })
+//   return result
+// }
+
+// theme = normalizeTheme({ ...mainVars, ...antdVars })
 
 const normalizeAntdVars = (antdVars, theme) => {
   const result = {}
