@@ -13,7 +13,7 @@ const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
   .wrapper {
     position: relative;
-    margin: 0 auto;
+    margin: 1px auto;
     max-width: ${({ theme }) => theme.contentWidth};
   }
   .${({ editor }) => editor.props.className.replace(' ', '.')} {
