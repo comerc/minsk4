@@ -1,23 +1,22 @@
 import React from 'react'
 // import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
-import nanoid from 'nanoid'
 import idx from 'idx'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
   let { theme = {}, getTools = () => [], closeInterval = 200 } = options
-  const focusedBlockClassName = `${nanoid(6)}_block--focused`
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
     return [...others]
   }
   const renderNode = (props, editor, next) => {
-    // console.log('renderNode')
-    if (props.node.type !== 'title' && props.key === idx(editor.value.focusBlock, (_) => _.key)) {
-      props.attributes.className = classNames(props.attributes.className, focusedBlockClassName)
-    }
+    const isFocusedBlock =
+      props.node.type !== 'title' && props.key === idx(editor.value.focusBlock, (_) => _.key)
+    props.attributes.className = classNames(props.attributes.className, {
+      'block--focused': isFocusedBlock,
+    })
     return next()
   }
   const renderEditor = (props, editor, next) => {
@@ -31,7 +30,6 @@ const toolbarPlugin = (options: any = {}) => {
           theme,
           getTools,
           closeInterval,
-          focusedBlockClassName,
           value,
         }}
       >
