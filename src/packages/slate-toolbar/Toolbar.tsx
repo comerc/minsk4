@@ -19,19 +19,15 @@ const withStyle = (Self) => styled(Self)`
   .${({ editor }) => editor.props.className.replace(' ', '.')} {
     > * {
       position: relative;
-      &:before {
+      &.block--focused:before {
         content: '';
         position: absolute;
         left: 0;
         right: 0;
         top: 1px;
         bottom: 1px;
-      }
-      &:hover:before {
-        box-shadow: 0 0 0 1px #3eb0ef;
-      }
-      &.block--focused:before {
-        box-shadow: 0 0 0 2px #3eb0ef;
+        z-index: -1;
+        box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor5};
       }
       &.block--focused {
         background-image: linear-gradient(
@@ -39,11 +35,6 @@ const withStyle = (Self) => styled(Self)`
           rgba(243, 248, 255, 0.03) 63.45%,
           rgba(207, 214, 229, 0.27) 98%
         );
-      }
-    }
-    > p {
-      &:before {
-        bottom: -13px;
       }
     }
   }
