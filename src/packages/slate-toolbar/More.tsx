@@ -26,8 +26,8 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .button {
-    width: 28px;
-    height: 17px;
+    width: 24px;
+    height: 15px;
     padding: 0 4px;
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.white};
@@ -246,7 +246,7 @@ class More extends React.Component<any> {
             overlayClassName: className,
             placement: 'topRight',
             trigger: 'click',
-            align: { offset: [6, 0] },
+            align: { offset: [8, -2] },
             onVisibleChange: this.handleVisibleChange,
             renderContent: this.renderContent,
             bodyWidth,
