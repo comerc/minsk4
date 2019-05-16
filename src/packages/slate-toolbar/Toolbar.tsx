@@ -17,32 +17,33 @@ const withStyle = (Self) => styled(Self)`
     max-width: ${({ theme }) => theme.contentWidth};
   }
   .${({ editor }) => editor.props.className.replace(' ', '.')} {
-    > :not(p):hover {
-      box-shadow: 0 0 0 1px #3eb0ef;
-    }
-    > :not(p).block--focused {
-      box-shadow: 0 0 0 2px #3eb0ef;
-      background-image: linear-gradient(
-        17deg,
-        rgba(243, 248, 255, 0.03) 63.45%,
-        rgba(207, 214, 229, 0.27) 98%
-      );
-    }
-    > p {
+    > * {
       position: relative;
       &:before {
         content: '';
         position: absolute;
-        right: 0;
         left: 0;
-        bottom: -14px;
-        top: 0;
+        right: 0;
+        top: 1px;
+        bottom: 1px;
       }
       &:hover:before {
         box-shadow: 0 0 0 1px #3eb0ef;
       }
       &.block--focused:before {
         box-shadow: 0 0 0 2px #3eb0ef;
+      }
+      &.block--focused {
+        background-image: linear-gradient(
+          17deg,
+          rgba(243, 248, 255, 0.03) 63.45%,
+          rgba(207, 214, 229, 0.27) 98%
+        );
+      }
+    }
+    > p {
+      &:before {
+        bottom: -13px;
       }
     }
   }
@@ -86,7 +87,7 @@ const withStyle = (Self) => styled(Self)`
   .more-wrapper {
     position: absolute;
     right: 2px;
-    top: 2px;
+    top: 3px;
     display: none;
     opacity: 0;
     &--opened {
