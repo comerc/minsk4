@@ -160,13 +160,11 @@ class Toolbar extends React.Component<any, any> {
     isOpenedToolbox: false,
     activeToolId: -1,
     visibleTooltipId: -1,
-    // focusBlockTop: 0,
+    toolbarTop: 0,
+    focusBlockBoundOffset: 0,
   }
 
   containerRef = React.createRef() as any
-  toolbarRef = React.createRef() as any
-  toolboxRef = React.createRef() as any
-  plusWrapperRef = React.createRef() as any
 
   move = () => {
     const {
@@ -178,13 +176,7 @@ class Toolbar extends React.Component<any, any> {
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-    const plusWrapperNode = this.plusWrapperRef.current
-    plusWrapperNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
-    const toolboxNode = this.toolboxRef.current
-    toolboxNode.style.transform = `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`
-    const toolbarNode = this.toolbarRef.current
-    toolbarNode.style.transform = `translate3D(0, ${toolbarTop}px, 0)`
-    // this.setState({ focusBlockTop: toolbarTop })
+    this.setState({ toolbarTop, focusBlockBoundOffset })
   }
 
   focus = () => {
@@ -384,7 +376,8 @@ class Toolbar extends React.Component<any, any> {
       isOpenedToolbox,
       activeToolId,
       visibleTooltipId,
-      // focusBlockTop
+      toolbarTop,
+      focusBlockBoundOffset,
     } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
@@ -397,98 +390,104 @@ class Toolbar extends React.Component<any, any> {
           onClickCapture: this.handleClickCapture,
         }}
       >
-        {/* <Tooltip
+        <Tooltip
           {...{
             title: 'alt',
-            align: { offset: [0, focusBlockTop + 3] },
-            trigger: 'contextMenu',
+            align: { offset: [0, toolbarTop + 3] },
+            trigger: 'focus',
           }}
-        > */}
-        <div className="wrapper">
-          {children}
-          <div
-            {...{
-              className: classNames('toolbar', {
-                'toolbar--opened': !isReadOnly,
-              }),
-              ref: this.toolbarRef,
-              onMouseDown: this.handleToolbarMouseDown,
-            }}
-          >
-            <div className="content">
-              <div
-                {...{
-                  className: classNames('plus-wrapper', {
-                    'plus-wrapper--opened': isEmptyParagraph,
-                  }),
-                  ref: this.plusWrapperRef,
-                }}
-              >
-                <Button
-                  {...{
-                    className: classNames('plus', {
-                      'plus--x': isOpenedToolbox,
-                    }),
-                    size: 'small',
-                    shape: 'circle',
-                    onClick: this.handlePlusClick,
-                  }}
-                >
-                  <PlusIcon />
-                </Button>
-              </div>
-              <div
-                {...{
-                  className: classNames('toolbox', { 'toolbox--opened': isOpenedToolbox }),
-                  ref: this.toolboxRef,
-                }}
-              >
-                <ul>
-                  {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
-                    <Tooltip
-                      {...{
-                        key: id,
-                        overlayClassName: classNames(className, {
-                          'ant-tooltip-hidden': !isOpenedToolbox,
-                        }),
-                        title: alt,
-                        align: { offset: [0, 3] },
-                        visible: id === visibleTooltipId,
-                        onVisibleChange: onTooltipVisibleChange,
-                      }}
-                    >
-                      <li>
-                        <Button
-                          {...{
-                            className: classNames('button', {
-                              'button--active': id === activeToolId,
-                            }),
-                            size: 'small',
-                            onClick,
-                          }}
-                        >
-                          {src}
-                        </Button>
-                      </li>
-                    </Tooltip>
-                  ))}
-                </ul>
-              </div>
-            </div>
+        >
+          <div className="wrapper">
+            {children}
             <div
               {...{
-                className: classNames('more-wrapper', {
-                  'more-wrapper--opened': !isTitle,
+                className: classNames('toolbar', {
+                  'toolbar--opened': !isReadOnly,
                 }),
+                style: {
+                  transform: `translate3D(0, ${toolbarTop}px, 0)`,
+                },
+                onMouseDown: this.handleToolbarMouseDown,
               }}
             >
-              <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }}>
-                <MoreIcon />
-              </More>
+              <div className="content">
+                <div
+                  {...{
+                    className: classNames('plus-wrapper', {
+                      'plus-wrapper--opened': isEmptyParagraph,
+                    }),
+                    style: {
+                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                    },
+                  }}
+                >
+                  <Button
+                    {...{
+                      className: classNames('plus', {
+                        'plus--x': isOpenedToolbox,
+                      }),
+                      size: 'small',
+                      shape: 'circle',
+                      onClick: this.handlePlusClick,
+                    }}
+                  >
+                    <PlusIcon />
+                  </Button>
+                </div>
+                <div
+                  {...{
+                    className: classNames('toolbox', { 'toolbox--opened': isOpenedToolbox }),
+                    style: {
+                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                    },
+                  }}
+                >
+                  <ul>
+                    {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
+                      <Tooltip
+                        {...{
+                          key: id,
+                          overlayClassName: classNames(className, {
+                            'ant-tooltip-hidden': !isOpenedToolbox,
+                          }),
+                          title: alt,
+                          align: { offset: [0, 3] },
+                          visible: id === visibleTooltipId,
+                          onVisibleChange: onTooltipVisibleChange,
+                        }}
+                      >
+                        <li>
+                          <Button
+                            {...{
+                              className: classNames('button', {
+                                'button--active': id === activeToolId,
+                              }),
+                              size: 'small',
+                              onClick,
+                            }}
+                          >
+                            {src}
+                          </Button>
+                        </li>
+                      </Tooltip>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div
+                {...{
+                  className: classNames('more-wrapper', {
+                    'more-wrapper--opened': !isTitle,
+                  }),
+                }}
+              >
+                <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }}>
+                  <MoreIcon />
+                </More>
+              </div>
             </div>
           </div>
-        </div>
-        {/* </Tooltip> */}
+        </Tooltip>
       </div>
     )
   }
