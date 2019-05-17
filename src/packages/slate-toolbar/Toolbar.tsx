@@ -43,9 +43,9 @@ const withStyle = (Self) => styled(Self)`
     left: 0;
     right: 0;
     top: 0;
-    display: none;
-    &--opened {
-      display: block;
+    display: block;
+    &--hidden {
+      display: none;
     }
   }
   .toolbar .content {
@@ -57,9 +57,9 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     left: -${({ theme }) => theme.toolbarButtonWidth};
     animation: fadeIn 0.4s;
-    display: none;
-    &--opened {
-      display: inline-flex;
+    display: inline-flex;
+    &--hidden {
+      display: none;
     }
   }
   .plus {
@@ -79,11 +79,11 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     right: 2px;
     top: 3px;
-    display: none;
-    opacity: 0;
-    &--opened {
-      display: inline-flex;
-      opacity: 1;
+    display: inline-flex;
+    opacity: 1;
+    &--hidden {
+      display: none;
+      opacity: 0;
     }
   }
   .toolbox {
@@ -392,7 +392,7 @@ class Toolbar extends React.Component<any, any> {
             <div
               {...{
                 className: classNames('toolbar', {
-                  'toolbar--opened': isFocused && !isReadOnly,
+                  'toolbar--hidden': !isFocused || isReadOnly,
                 }),
                 style: {
                   transform: `translate3D(0, ${toolbarTop}px, 0)`,
@@ -404,7 +404,7 @@ class Toolbar extends React.Component<any, any> {
                 <div
                   {...{
                     className: classNames('plus-wrapper', {
-                      'plus-wrapper--opened': isEmptyParagraph,
+                      'plus-wrapper--hidden': !isEmptyParagraph,
                     }),
                     style: {
                       transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
@@ -466,7 +466,7 @@ class Toolbar extends React.Component<any, any> {
               <div
                 {...{
                   className: classNames('more-wrapper', {
-                    'more-wrapper--opened': !isTitle,
+                    'more-wrapper--hidden': isTitle,
                   }),
                 }}
               >
