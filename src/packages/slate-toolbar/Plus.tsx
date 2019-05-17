@@ -46,7 +46,7 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const { className, isVisiblePopup, onVisiblePopupChange, close } = this.props
+    const { className, isVisiblePopup, onVisiblePopupChange } = this.props
     return (
       <div className={className}>
         <Popup
@@ -58,7 +58,6 @@ class Plus extends React.Component<any> {
             visible: isVisiblePopup,
             onVisibleChange: onVisiblePopupChange,
             renderContent: this.renderContent,
-            close,
           }}
         >
           <Button

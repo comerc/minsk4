@@ -230,7 +230,6 @@ class More extends React.Component<any> {
             visible: isVisiblePopup,
             onVisibleChange: this.handlePopupVisibleChange,
             renderContent: this.renderContent,
-            close: this.close,
           }}
         >
           <div
