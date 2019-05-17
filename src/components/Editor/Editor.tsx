@@ -52,6 +52,10 @@ const other = () => {
     if (event.key === 'Enter' && value.startBlock.type === 'title') {
       event.preventDefault()
       editor.moveToStartOfNextBlock()
+      const firstNode = value.document.nodes.get(1)
+      if (firstNode.type !== 'paragraph' || firstNode.text !== '') {
+        editor.insertBlock('paragraph')
+      }
       return
     }
     if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
