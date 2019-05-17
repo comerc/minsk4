@@ -4,9 +4,10 @@ import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
 import { Tooltip } from 'antd'
-import Button from './Button'
+// import Button from './Button'
+import Plus from './Plus'
 import More from './More'
-import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
+// import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
@@ -156,7 +157,7 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Toolbar extends React.Component<any, any> {
   state = {
-    isOpenedToolbox: false,
+    isPlus: false,
     activeToolId: -1,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
@@ -191,8 +192,8 @@ class Toolbar extends React.Component<any, any> {
   handleToolClick = (onClick) => (event) => {
     const { closeInterval } = this.props
     setTimeout(() => {
-      this.close()
-      this.focus()
+      this.closePlus()
+      this.focus() // ?
       onClick(event)
     }, closeInterval)
   }
@@ -247,39 +248,48 @@ class Toolbar extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  open = () => {
+  openPlus = () => {
     this.setState({
-      isOpenedToolbox: true,
+      isPlus: true,
     })
   }
 
-  close = () => {
+  closePlus = () => {
     this.setState({
-      isOpenedToolbox: false,
+      isPlus: false,
       activeToolId: -1,
     })
   }
 
   handleToolbarMouseDown = (event) => {
     /* for stop of double click by PlusIcon or MoreIcon */
+    // TODO: проверить pointer-events: none для svg
     event.preventDefault()
   }
 
-  handlePlusClick = (event) => {
-    if (this.state.isOpenedToolbox) {
-      this.close()
+  handlePlusChange = (visible) => {
+    if (visible) {
+      this.closePlus()
     } else {
-      this.open()
+      this.openPlus()
+    }
+  }
+
+  handlePlusClick = (event) => {
+    if (this.state.isPlus) {
+      this.closePlus()
+    } else {
+      this.openPlus()
     }
     this.focus()
   }
 
   handleKeyDownCapture = (event) => {
     if (event.key === 'Escape') {
-      if (this.state.isOpenedToolbox) {
+      if (this.state.isPlus) {
         event.preventDefault()
         event.stopPropagation()
-        this.close()
+        this.closePlus()
       }
       return
     }
@@ -290,7 +300,7 @@ class Toolbar extends React.Component<any, any> {
       if (!selection.isFocused) {
         return
       }
-      if (this.state.isOpenedToolbox) {
+      if (this.state.isPlus) {
         event.preventDefault()
         event.stopPropagation()
         this.leaf(event.shiftKey)
@@ -302,7 +312,7 @@ class Toolbar extends React.Component<any, any> {
         if (isEmptyParagraph) {
           event.preventDefault()
           event.stopPropagation()
-          this.open()
+          this.openPlus()
           this.leaf(event.shiftKey)
         }
       }
@@ -320,13 +330,13 @@ class Toolbar extends React.Component<any, any> {
   }
 
   handleClickCapture = (event) => {
-    if (this.state.isOpenedToolbox) {
+    if (this.state.isPlus) {
       const key = event.target.dataset.key
       const {
         value: { focusBlock, document },
       } = this.props
       if ([focusBlock.key, document.key].includes(key)) {
-        this.close()
+        this.closePlus()
       }
     }
   }
@@ -340,15 +350,15 @@ class Toolbar extends React.Component<any, any> {
     if (isFocused) {
       const isOther = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-      if (this.state.isOpenedToolbox && (isOther || !isEmptyParagraph)) {
-        this.close()
+      if (this.state.isPlus && (isOther || !isEmptyParagraph)) {
+        this.closePlus()
       }
       if (isOther || bodyWidth !== prevProps.bodyWidth) {
         this.move()
       }
     } else {
-      if (this.state.isOpenedToolbox) {
-        this.close()
+      if (this.state.isPlus) {
+        this.closePlus()
       }
     }
   }
@@ -364,7 +374,7 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const { isOpenedToolbox, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
+    const { isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
     const isFocused = selection.isFocused && focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
@@ -411,10 +421,23 @@ class Toolbar extends React.Component<any, any> {
                     },
                   }}
                 >
-                  <Button
+                  <Plus
+                    {...{
+                      theme,
+                      isVisiblePopup: isPlus,
+                      onVisiblePopupChange: this.handlePlusChange,
+                      onClick: this.handlePlusClick,
+                      open: this.openPlus,
+                      close: this.closePlus,
+                      bodyWidth,
+                      closeInterval,
+                      tools: this.tools,
+                    }}
+                  />
+                  {/* <Button
                     {...{
                       className: classNames('plus', {
-                        'plus--x': isOpenedToolbox,
+                        'plus--x': isPlus,
                       }),
                       size: 'small',
                       shape: 'circle',
@@ -422,11 +445,11 @@ class Toolbar extends React.Component<any, any> {
                     }}
                   >
                     <PlusIcon />
-                  </Button>
+                  </Button> */}
                 </div>
-                <div
+                {/* <div
                   {...{
-                    className: classNames('toolbox', { 'toolbox--opened': isOpenedToolbox }),
+                    className: classNames('toolbox', { 'toolbox--opened': isPlus }),
                     style: {
                       transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
                     },
@@ -440,6 +463,7 @@ class Toolbar extends React.Component<any, any> {
                             className: classNames('button', {
                               'button--active': id === activeToolId,
                             }),
+                            tabIndex: -1,
                             size: 'small',
                             onClick,
                           }}
@@ -449,7 +473,7 @@ class Toolbar extends React.Component<any, any> {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </div> */}
               </div>
               <div
                 {...{
