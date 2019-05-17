@@ -9,6 +9,7 @@ export default styled(Button)`
     align-items: center;
     svg {
       fill: currentColor;
+      pointer-events: none;
     }
   }
   &.ant-btn.ant-btn-circle {
