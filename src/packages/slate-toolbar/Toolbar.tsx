@@ -162,9 +162,11 @@ class Toolbar extends React.Component<any, any> {
     visibleTooltipId: -1,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
+    offset: [0, 0] as any,
   }
 
   containerRef = React.createRef() as any
+  wrapperRef = React.createRef() as any
 
   move = () => {
     const {
@@ -339,6 +341,19 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
+  handleMouseOver = (event) => {
+    const { left, width } = event.target.getBoundingClientRect()
+    const wrapperNode = this.wrapperRef.current
+    const { left: wrapperBoundLeft } = wrapperNode.getBoundingClientRect()
+    const { width: ulBoundWidth } = event.target.parentElement.parentElement.getBoundingClientRect()
+    console.log('handleMouseOver', ulBoundWidth)
+    this.setState({ offset: [left - wrapperBoundLeft - ulBoundWidth / 2 + width / 2, 3] })
+  }
+
+  handleMouseOut = (event) => {
+    console.log('handleMouseOut', event)
+  }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.value.focusBlock === null) {
       return false
@@ -378,6 +393,7 @@ class Toolbar extends React.Component<any, any> {
       visibleTooltipId,
       toolbarTop,
       focusBlockBoundOffset,
+      offset,
     } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
@@ -393,11 +409,16 @@ class Toolbar extends React.Component<any, any> {
         <Tooltip
           {...{
             title: 'alt',
-            align: { offset: [0, toolbarTop + 3] },
+            align: { offset: [0, toolbarTop + 2] },
             trigger: 'focus',
           }}
         >
-          <div className="wrapper">
+          <div
+            {...{
+              className: 'wrapper',
+              ref: this.wrapperRef,
+            }}
+          >
             {children}
             <div
               {...{
@@ -442,21 +463,22 @@ class Toolbar extends React.Component<any, any> {
                     },
                   }}
                 >
-                  <ul>
-                    {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
-                      <Tooltip
-                        {...{
-                          key: id,
-                          overlayClassName: classNames(className, {
-                            'ant-tooltip-hidden': !isOpenedToolbox,
-                          }),
-                          title: alt,
-                          align: { offset: [0, 3] },
-                          visible: id === visibleTooltipId,
-                          onVisibleChange: onTooltipVisibleChange,
-                        }}
-                      >
-                        <li>
+                  <Tooltip
+                    {...{
+                      // key: id,
+                      overlayClassName: classNames(className, {
+                        'ant-tooltip-hidden': !isOpenedToolbox,
+                      }),
+                      // title: alt,
+                      title: '111',
+                      align: { offset },
+                      // visible: id === visibleTooltipId,
+                      // onVisibleChange: onTooltipVisibleChange,
+                    }}
+                  >
+                    <ul>
+                      {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
+                        <li key={id}>
                           <Button
                             {...{
                               className: classNames('button', {
@@ -464,14 +486,16 @@ class Toolbar extends React.Component<any, any> {
                               }),
                               size: 'small',
                               onClick,
+                              onMouseOver: this.handleMouseOver,
+                              onMouseOut: this.handleMouseOut,
                             }}
                           >
                             {src}
                           </Button>
                         </li>
-                      </Tooltip>
-                    ))}
-                  </ul>
+                      ))}
+                    </ul>
+                  </Tooltip>
                 </div>
               </div>
               <div
