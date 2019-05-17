@@ -56,12 +56,12 @@ class More extends React.Component<any> {
   state = { isVisiblePopup: false, isConfirmDelete: false }
   isButtonMouseDown = false
 
-  close = () => {
-    this.setState({ isVisiblePopup: false, isConfirmDelete: false })
-  }
-
   open = () => {
     this.setState({ isVisiblePopup: true })
+  }
+
+  close = () => {
+    this.setState({ isVisiblePopup: false, isConfirmDelete: false })
   }
 
   handlePopupVisibleChange = (visible) => {
@@ -217,7 +217,7 @@ class More extends React.Component<any> {
   }
 
   render() {
-    const { className, bodyWidth } = this.props
+    const { className } = this.props
     const { isVisiblePopup } = this.state
     return (
       <div className={className}>
@@ -230,7 +230,6 @@ class More extends React.Component<any> {
             visible: isVisiblePopup,
             onVisibleChange: this.handlePopupVisibleChange,
             renderContent: this.renderContent,
-            bodyWidth,
             close: this.close,
           }}
         >

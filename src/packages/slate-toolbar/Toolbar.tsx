@@ -269,19 +269,10 @@ class Toolbar extends React.Component<any, any> {
 
   handlePlusChange = (visible) => {
     if (visible) {
-      this.closePlus()
-    } else {
       this.openPlus()
-    }
-  }
-
-  handlePlusClick = (event) => {
-    if (this.state.isPlus) {
-      this.closePlus()
     } else {
-      this.openPlus()
+      this.closePlus()
     }
-    this.focus()
   }
 
   handleKeyDownCapture = (event) => {
@@ -370,7 +361,6 @@ class Toolbar extends React.Component<any, any> {
       editor,
       editor: { readOnly: isReadOnly },
       value: { selection, focusBlock, focusText },
-      bodyWidth,
       closeInterval,
       children,
     } = this.props
@@ -426,10 +416,8 @@ class Toolbar extends React.Component<any, any> {
                       theme,
                       isVisiblePopup: isPlus,
                       onVisiblePopupChange: this.handlePlusChange,
-                      onClick: this.handlePlusClick,
                       open: this.openPlus,
                       close: this.closePlus,
-                      bodyWidth,
                       closeInterval,
                       tools: this.tools,
                     }}
@@ -482,7 +470,7 @@ class Toolbar extends React.Component<any, any> {
                   }),
                 }}
               >
-                <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }} />
+                <More {...{ theme, editor, closeInterval, onMove: this.move }} />
               </div>
             </div>
           </div>

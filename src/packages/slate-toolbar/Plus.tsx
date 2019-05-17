@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-// import { Block } from 'slate'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
@@ -47,14 +46,7 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const {
-      className,
-      isVisiblePopup,
-      onVisiblePopupChange,
-      close,
-      onClick,
-      bodyWidth,
-    } = this.props
+    const { className, isVisiblePopup, onVisiblePopupChange, close } = this.props
     return (
       <div className={className}>
         <Popup
@@ -62,11 +54,10 @@ class Plus extends React.Component<any> {
             overlayClassName: className,
             placement: 'topRight',
             trigger: 'click',
-            align: { offset: [8, -2] },
+            align: { offset: [0, 0] },
             visible: isVisiblePopup,
             onVisibleChange: onVisiblePopupChange,
             renderContent: this.renderContent,
-            bodyWidth,
             close,
           }}
         >
@@ -77,7 +68,6 @@ class Plus extends React.Component<any> {
               }),
               size: 'small',
               shape: 'circle',
-              onClick,
               onMouseDown: this.handleButtonMouseDown,
               onMouseUp: this.handleButtonMouseUp,
             }}
