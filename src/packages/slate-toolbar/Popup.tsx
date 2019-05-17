@@ -66,23 +66,33 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Popup extends React.Component<any> {
-  componentDidUpdate(prevProps) {
-    const { bodyWidth } = this.props
-    if (bodyWidth !== prevProps.bodyWidth) {
-      // TODO: Tooltip не способен определять новое положение
-      const { close } = this.props
-      close()
+  isNeedToRenderContent = false
+
+  shouldComponentUpdate(nextProps) {
+    const { visible } = this.props
+    if (visible !== nextProps.visible && nextProps.visible) {
+      this.isNeedToRenderContent = true
+    }
+    return true
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { visible } = this.props
+    if (visible !== prevProps.visible && prevProps.visible) {
+      // it is need for animation before invisible state
+      this.isNeedToRenderContent = false
     }
   }
 
   render() {
     const { className, overlayClassName, renderContent, ...rest } = this.props
+    // console.log(overlayClassName, this.isNeedToRenderContent)
     return (
       <div className={className}>
         <Tooltip
           {...{
             overlayClassName: classNames(overlayClassName, className),
-            title: renderContent(),
+            title: this.isNeedToRenderContent ? renderContent() : <React.Fragment />,
             ...rest,
           }}
         />
