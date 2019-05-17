@@ -332,25 +332,25 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.value.focusBlock === null) {
-      return false
-    }
-    return true
-  }
-
   componentDidUpdate(prevProps) {
     const {
-      value: { focusBlock, focusText },
+      value: { selection, focusBlock, focusText },
       bodyWidth,
     } = this.props
-    const isOtherBlock = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
-    const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-    if (this.state.isOpenedToolbox && (isOtherBlock || !isEmptyParagraph)) {
-      this.close()
-    }
-    if (isOtherBlock || bodyWidth !== prevProps.bodyWidth) {
-      this.move()
+    const isFocused = selection.isFocused && focusBlock
+    if (isFocused) {
+      const isOther = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
+      const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+      if (this.state.isOpenedToolbox && (isOther || !isEmptyParagraph)) {
+        this.close()
+      }
+      if (isOther || bodyWidth !== prevProps.bodyWidth) {
+        this.move()
+      }
+    } else {
+      if (this.state.isOpenedToolbox) {
+        this.close()
+      }
     }
   }
 
@@ -360,14 +360,15 @@ class Toolbar extends React.Component<any, any> {
       theme,
       editor,
       editor: { readOnly: isReadOnly },
-      value: { focusBlock, focusText },
+      value: { selection, focusBlock, focusText },
       bodyWidth,
       closeInterval,
       children,
     } = this.props
     const { isOpenedToolbox, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
-    const isTitle = focusBlock.type === 'title'
-    const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+    const isFocused = selection.isFocused && focusBlock
+    const isTitle = isFocused && focusBlock.type === 'title'
+    const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
     return (
       <div
         {...{
@@ -379,6 +380,9 @@ class Toolbar extends React.Component<any, any> {
       >
         <Tooltip
           {...{
+            overlayClassName: classNames(className, {
+              'ant-tooltip-hidden': !isFocused || isTitle || isEmptyParagraph,
+            }),
             title: 'alt',
             align: { offset: [0, toolbarTop + 2] },
             trigger: 'focus',
@@ -389,7 +393,7 @@ class Toolbar extends React.Component<any, any> {
             <div
               {...{
                 className: classNames('toolbar', {
-                  'toolbar--opened': !isReadOnly,
+                  'toolbar--opened': isFocused && !isReadOnly,
                 }),
                 style: {
                   transform: `translate3D(0, ${toolbarTop}px, 0)`,
