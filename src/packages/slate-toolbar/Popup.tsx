@@ -66,72 +66,26 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Popup extends React.Component<any> {
-  state = { visible: this.props.visible }
-  isNeedToRenderContent = false
-
-  close = () => {
-    const { visible } = this.state
-    if (!visible) {
-      return
-    }
-    // it is need for animation before invisible state
-    setTimeout(() => {
-      this.isNeedToRenderContent = false
-    })
-    this.setState({ visible: false })
-    const { onVisibleChange } = this.props
-    if (onVisibleChange) {
-      onVisibleChange(false)
-    }
-  }
-
-  open = () => {
-    const { visible } = this.state
-    if (visible) {
-      return
-    }
-    this.isNeedToRenderContent = true
-    this.setState({ visible: true })
-    const { onVisibleChange } = this.props
-    if (onVisibleChange) {
-      onVisibleChange(true)
-    }
-  }
-
-  handleVisibleChange = (visible) => {
-    if (visible) {
-      this.open()
-    } else {
-      this.close()
-    }
-  }
-
   componentDidUpdate(prevProps) {
     const { bodyWidth } = this.props
     if (bodyWidth !== prevProps.bodyWidth) {
       // TODO: Tooltip не способен определять новое положение
-      this.close()
+      const { close } = this.props
+      close()
     }
   }
 
   render() {
-    const { className, overlayClassName, renderContent, children, ...rest } = this.props
-    const { visible } = this.state
-    const popup = { open: this.open, close: this.close }
-    const renderChildren = children as Function
+    const { className, overlayClassName, renderContent, ...rest } = this.props
     return (
       <div className={className}>
         <Tooltip
           {...{
             overlayClassName: classNames(overlayClassName, className),
-            title: this.isNeedToRenderContent ? renderContent(popup) : <React.Fragment />,
+            title: renderContent(),
             ...rest,
-            visible,
-            onVisibleChange: this.handleVisibleChange,
           }}
-        >
-          {renderChildren({ visible })}
-        </Tooltip>
+        />
       </div>
     )
   }

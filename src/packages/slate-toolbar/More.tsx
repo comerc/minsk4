@@ -53,25 +53,22 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class More extends React.Component<any> {
-  state = { isConfirmDelete: false }
+  state = { isVisiblePopup: false, isConfirmDelete: false }
   isButtonMouseDown = false
-  popup = null as any
 
   close = () => {
-    if (this.popup) {
-      this.popup.close()
-    }
+    this.setState({ isVisiblePopup: false, isConfirmDelete: false })
   }
 
   open = () => {
-    if (this.popup) {
-      this.popup.open()
-    }
+    this.setState({ isVisiblePopup: true })
   }
 
-  handleVisibleChange = (visible) => {
-    if (!visible) {
-      this.setState({ isConfirmDelete: false })
+  handlePopupVisibleChange = (visible) => {
+    if (visible) {
+      this.open()
+    } else {
+      this.close()
     }
   }
 
@@ -158,8 +155,7 @@ class More extends React.Component<any> {
     }, closeInterval)
   }
 
-  renderContent = (popup) => {
-    this.popup = popup
+  renderContent = () => {
     const {
       editor: {
         value: { focusBlock, document },
@@ -220,27 +216,9 @@ class More extends React.Component<any> {
     )
   }
 
-  renderButton = ({ visible }) => {
-    return (
-      <div
-        {...{
-          className: classNames('button', { 'button--open': visible }),
-          onMouseDown: this.handleButtonMouseDown,
-          onMouseUp: this.handleButtonMouseUp,
-          role: 'button',
-        }}
-      >
-        <MoreIcon />
-      </div>
-    )
-  }
-
-  componentWillUnmount() {
-    this.popup = null
-  }
-
   render() {
     const { className, bodyWidth } = this.props
+    const { isVisiblePopup } = this.state
     return (
       <div className={className}>
         <Popup
@@ -249,12 +227,23 @@ class More extends React.Component<any> {
             placement: 'topRight',
             trigger: 'click',
             align: { offset: [8, -2] },
-            onVisibleChange: this.handleVisibleChange,
+            visible: isVisiblePopup,
+            onVisibleChange: this.handlePopupVisibleChange,
             renderContent: this.renderContent,
             bodyWidth,
+            close: this.close,
           }}
         >
-          {this.renderButton}
+          <div
+            {...{
+              className: classNames('button', { 'button--open': isVisiblePopup }),
+              onMouseDown: this.handleButtonMouseDown,
+              onMouseUp: this.handleButtonMouseUp,
+              role: 'button',
+            }}
+          >
+            <MoreIcon />
+          </div>
         </Popup>
       </div>
     )
