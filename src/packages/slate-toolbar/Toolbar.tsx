@@ -48,7 +48,7 @@ const withStyle = (Self) => styled(Self)`
       display: block;
     }
   }
-  .content {
+  .toolbar .content {
     max-width: ${({ theme }) => theme.contentWidth};
     margin: 0 auto;
     position: relative;
@@ -159,14 +159,11 @@ class Toolbar extends React.Component<any, any> {
   state = {
     isOpenedToolbox: false,
     activeToolId: -1,
-    visibleTooltipId: -1,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
-    offset: [0, 0] as any,
   }
 
   containerRef = React.createRef() as any
-  wrapperRef = React.createRef() as any
 
   move = () => {
     const {
@@ -201,14 +198,9 @@ class Toolbar extends React.Component<any, any> {
     }, closeInterval)
   }
 
-  handleTooltipVisibleChange = (id) => (visible) => {
-    this.setState({ visibleTooltipId: visible ? id : -1 })
-  }
-
   // TODO: may be getDerivedStateFromProps?
   tools = this.props.getTools(this.props.editor).map(({ onClick, ...rest }, id) => ({
     onClick: this.handleToolClick(onClick),
-    onTooltipVisibleChange: this.handleTooltipVisibleChange(id),
     ...rest,
   }))
 
@@ -253,7 +245,7 @@ class Toolbar extends React.Component<any, any> {
        */
       id = (id + 1) % this.tools.length
     }
-    this.setState({ activeToolId: id, visibleTooltipId: id })
+    this.setState({ activeToolId: id })
   }
 
   open = () => {
@@ -266,7 +258,6 @@ class Toolbar extends React.Component<any, any> {
     this.setState({
       isOpenedToolbox: false,
       activeToolId: -1,
-      visibleTooltipId: -1,
     })
   }
 
@@ -341,19 +332,6 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
-  handleMouseOver = (event) => {
-    const { left, width } = event.target.getBoundingClientRect()
-    const wrapperNode = this.wrapperRef.current
-    const { left: wrapperBoundLeft } = wrapperNode.getBoundingClientRect()
-    const { width: ulBoundWidth } = event.target.parentElement.parentElement.getBoundingClientRect()
-    console.log('handleMouseOver', ulBoundWidth)
-    this.setState({ offset: [left - wrapperBoundLeft - ulBoundWidth / 2 + width / 2, 3] })
-  }
-
-  handleMouseOut = (event) => {
-    console.log('handleMouseOut', event)
-  }
-
   shouldComponentUpdate(nextProps) {
     if (nextProps.value.focusBlock === null) {
       return false
@@ -387,14 +365,7 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const {
-      isOpenedToolbox,
-      activeToolId,
-      visibleTooltipId,
-      toolbarTop,
-      focusBlockBoundOffset,
-      offset,
-    } = this.state
+    const { isOpenedToolbox, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
     const isTitle = focusBlock.type === 'title'
     const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
     return (
@@ -413,12 +384,7 @@ class Toolbar extends React.Component<any, any> {
             trigger: 'focus',
           }}
         >
-          <div
-            {...{
-              className: 'wrapper',
-              ref: this.wrapperRef,
-            }}
-          >
+          <div className="wrapper">
             {children}
             <div
               {...{
@@ -463,39 +429,23 @@ class Toolbar extends React.Component<any, any> {
                     },
                   }}
                 >
-                  <Tooltip
-                    {...{
-                      // key: id,
-                      overlayClassName: classNames(className, {
-                        'ant-tooltip-hidden': !isOpenedToolbox,
-                      }),
-                      // title: alt,
-                      title: '111',
-                      align: { offset },
-                      // visible: id === visibleTooltipId,
-                      // onVisibleChange: onTooltipVisibleChange,
-                    }}
-                  >
-                    <ul>
-                      {this.tools.map(({ src, alt, onClick, onTooltipVisibleChange }, id) => (
-                        <li key={id}>
-                          <Button
-                            {...{
-                              className: classNames('button', {
-                                'button--active': id === activeToolId,
-                              }),
-                              size: 'small',
-                              onClick,
-                              onMouseOver: this.handleMouseOver,
-                              onMouseOut: this.handleMouseOut,
-                            }}
-                          >
-                            {src}
-                          </Button>
-                        </li>
-                      ))}
-                    </ul>
-                  </Tooltip>
+                  <ul>
+                    {this.tools.map(({ src, alt, onClick }, id) => (
+                      <li key={id}>
+                        <Button
+                          {...{
+                            className: classNames('button', {
+                              'button--active': id === activeToolId,
+                            }),
+                            size: 'small',
+                            onClick,
+                          }}
+                        >
+                          {src} {alt}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
               <div
