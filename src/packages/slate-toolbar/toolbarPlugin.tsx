@@ -1,7 +1,6 @@
 import React from 'react'
 // import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
-import idx from 'idx'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
@@ -13,7 +12,7 @@ const toolbarPlugin = (options: any = {}) => {
   }
   const renderNode = (props, editor, next) => {
     props.attributes.className = classNames(props.attributes.className, {
-      'block--focused': props.key === idx(editor.value.focusBlock, (_) => _.key),
+      'block--focused': props.isFocused,
       'block--title': props.node.type === 'title',
     })
     return next()
