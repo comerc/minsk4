@@ -7,6 +7,7 @@ import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
 import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
+import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   display: inline-flex;
@@ -220,7 +221,6 @@ class More extends React.Component<any> {
   }
 
   renderButton = ({ visible }) => {
-    const { children } = this.props
     return (
       <div
         {...{
@@ -230,7 +230,7 @@ class More extends React.Component<any> {
           role: 'button',
         }}
       >
-        {children}
+        <MoreIcon />
       </div>
     )
   }

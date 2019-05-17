@@ -7,7 +7,6 @@ import { Tooltip } from 'antd'
 import Button from './Button'
 import More from './More'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
-import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
@@ -459,9 +458,7 @@ class Toolbar extends React.Component<any, any> {
                   }),
                 }}
               >
-                <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }}>
-                  <MoreIcon />
-                </More>
+                <More {...{ theme, editor, bodyWidth, closeInterval, onMove: this.move }} />
               </div>
             </div>
           </div>
