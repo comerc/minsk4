@@ -70,6 +70,10 @@ class Popup extends React.Component<any> {
   isNeedToRenderContent = false
 
   close = () => {
+    const { visible } = this.state
+    if (!visible) {
+      return
+    }
     // it is need for animation before invisible state
     setTimeout(() => {
       this.isNeedToRenderContent = false
@@ -82,6 +86,10 @@ class Popup extends React.Component<any> {
   }
 
   open = () => {
+    const { visible } = this.state
+    if (visible) {
+      return
+    }
     this.isNeedToRenderContent = true
     this.setState({ visible: true })
     const { onVisibleChange } = this.props
