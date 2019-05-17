@@ -86,7 +86,6 @@ class Popup extends React.Component<any> {
 
   render() {
     const { className, overlayClassName, renderContent, ...rest } = this.props
-    // console.log(overlayClassName, this.isNeedToRenderContent)
     return (
       <div className={className}>
         <Tooltip
