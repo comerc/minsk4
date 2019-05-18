@@ -19,7 +19,7 @@ const toolbarPlugin = (options: any = {}) => {
     return next()
   }
   const renderEditor = (props, editor, next) => {
-    console.log('renderEditor', props)
+    // console.log('renderEditor', props)
     const { value } = props
     const children = next()
     return (
