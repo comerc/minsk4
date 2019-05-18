@@ -53,15 +53,15 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class More extends React.Component<any> {
-  state = { isVisiblePopup: false, isConfirmDelete: false }
-  isButtonMouseDown = false
-
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!prevState.isVisiblePopup && prevState.isConfirmDelete) {
       return { isConfirmDelete: false }
     }
     return null
   }
+
+  state = { isVisiblePopup: false, isConfirmDelete: false }
+  isButtonMouseDown = false
 
   open = () => {
     this.setState({ isVisiblePopup: true })
@@ -233,7 +233,7 @@ class More extends React.Component<any> {
             overlayClassName: className,
             placement: 'bottomRight',
             trigger: 'click',
-            align: { offset: [8, -2] },
+            align: { offset: [8, 0] },
             visible: isVisiblePopup,
             onVisibleChange: this.handlePopupVisibleChange,
             renderContent: this.renderContent,

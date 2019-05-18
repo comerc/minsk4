@@ -10,8 +10,6 @@ const withStyle = (Self) => styled(Self)``
 
 @withStyle
 class Layout extends React.Component<any> {
-  state = { pathname: null, isNotFound: false }
-
   static getDerivedStateFromProps(nextProps, prevState) {
     const {
       location: { pathname },
@@ -22,6 +20,8 @@ class Layout extends React.Component<any> {
     }
     return null
   }
+
+  state = { pathname: null, isNotFound: false }
 
   render() {
     const {
