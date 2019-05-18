@@ -60,6 +60,7 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Plus extends React.Component<any> {
+  alignPopup = { offset: [this.props.theme.toolbarButtonWidth, -5] }
   // isButtonMouseDown = false
 
   // handleButtonMouseDown = (event) => {
@@ -118,7 +119,7 @@ class Plus extends React.Component<any> {
             overlayClassName: className,
             placement: 'bottomLeft',
             trigger: 'click',
-            align: { offset: [theme.toolbarButtonWidth, -5] },
+            align: this.alignPopup,
             visible: isVisiblePopup,
             onVisibleChange: onVisiblePopupChange,
             renderContent: this.renderContent,

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import { Block } from 'slate'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
@@ -61,6 +60,7 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
+  alignPopup = { offset: [8, 0] }
   isButtonMouseDown = false
 
   open = () => {
@@ -233,7 +233,7 @@ class More extends React.Component<any> {
             overlayClassName: className,
             placement: 'bottomRight',
             trigger: 'click',
-            align: { offset: [8, 0] },
+            align: this.alignPopup,
             visible: isVisiblePopup,
             onVisibleChange: this.handlePopupVisibleChange,
             renderContent: this.renderContent,
