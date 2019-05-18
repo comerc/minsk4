@@ -80,7 +80,6 @@ const other = () => {
 }
 
 const addCheckListItemBlock = (editor) => (event) => {
-  event.preventDefault()
   editor.setBlocks({ type: 'check-list-item', data: { checked: false } })
 }
 
