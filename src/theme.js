@@ -13,9 +13,8 @@ const fade = (rgb, alpha) => {
 let mainVars = {
   // mobile: '(max-width: 650px)',
   // notMobile: '(min-width: 651px)',
-  contentWidth: '650px', // Block content width
   toolbarPaddingHorizontal: '40px',
-  toolbarButtonWidth: '30px', // Toolbar button width
+  toolbarButtonWidth: '32px', // Toolbar button width
   toolbarButtonHeight: (theme) => theme.btnHeightSm, // Toolbar button height
 }
 
@@ -30,9 +29,9 @@ let antdVars = {
   textColorSecondary: (theme) => fade(theme.black, 0.45),
   popoverBg: '#fff',
   popoverColor: (theme) => theme.textColor,
-  btnDefaultBg: '#fff',
   btnHeightSm: '24px',
   primaryColor5: (theme) => colorPalette(theme.primaryColor, 5),
+  fontSizeSm: '12px',
 }
 
 const theme = new Proxy(
