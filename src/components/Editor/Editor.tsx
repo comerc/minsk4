@@ -9,6 +9,7 @@ import initialValueAsJson from './value.json'
 import { ReactComponent as TasksIcon } from 'src/icons/ce-code.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
 import { ReactComponent as ListIcon } from 'src/icons/ce-list.svg'
+import { ReactComponent as DummyIcon } from 'src/icons/ce-header.svg'
 
 const withStyle = (Self) => styled(Self)``
 
@@ -91,6 +92,40 @@ class Editor extends React.Component<any> {
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
     toolbar({
       theme: this.props.theme,
+      getActions: (editor) => ({
+        paragraph: [
+          {
+            src: <DummyIcon />,
+            alt: 'Action #0',
+            onClick: () => {
+              console.log('Action #0')
+            },
+          },
+        ],
+        'check-list-item': [
+          {
+            src: <DummyIcon />,
+            alt: 'Action #1',
+            onClick: () => {
+              console.log('Action #1')
+            },
+          },
+          {
+            src: <DummyIcon />,
+            alt: 'Action #2',
+            onClick: () => {
+              console.log('Action #2')
+            },
+          },
+          {
+            src: <DummyIcon />,
+            alt: 'Action #3',
+            onClick: () => {
+              console.log('Action #3')
+            },
+          },
+        ],
+      }),
       getTools: (editor) => [
         {
           src: <TasksIcon />,

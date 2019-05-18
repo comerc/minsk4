@@ -5,7 +5,7 @@ import idx from 'idx'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
-  let { theme = {}, getTools = () => [], closeInterval = 200 } = options
+  let { theme = {}, getActions = () => ({}), getTools = () => [], closeInterval = 200 } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -27,6 +27,7 @@ const toolbarPlugin = (options: any = {}) => {
         {...{
           editor,
           theme,
+          getActions,
           getTools,
           closeInterval,
           value,

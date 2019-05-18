@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
-import { Tooltip } from 'antd'
+import Actions from './Actions'
 import Plus from './Plus'
 import More from './More'
 
@@ -97,6 +97,8 @@ class Toolbar extends React.Component<any, any> {
   }
 
   state = {
+    isActions: false,
+    activeActionId: -1,
     isPlus: false,
     activeToolId: -1,
     toolbarTop: 0,
@@ -104,6 +106,7 @@ class Toolbar extends React.Component<any, any> {
   }
 
   tools = this.props.getTools(this.props.editor)
+  actions = this.props.getActions(this.props.editor)
   containerRef = React.createRef() as any
 
   move = () => {
@@ -172,6 +175,22 @@ class Toolbar extends React.Component<any, any> {
       id = (id + 1) % this.tools.length
     }
     this.setState({ activeToolId: id })
+  }
+
+  openActions = () => {
+    this.setState({ isActions: true })
+  }
+
+  closeActions = () => {
+    this.setState({ isActions: false })
+  }
+
+  handleActionsChange = (visible) => {
+    if (visible) {
+      this.openActions()
+    } else {
+      this.closeActions()
+    }
   }
 
   openPlus = () => {
@@ -285,10 +304,18 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const { isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
+    const {
+      isActions,
+      activeActionId,
+      isPlus,
+      activeToolId,
+      toolbarTop,
+      focusBlockBoundOffset,
+    } = this.state
     const isFocused = selection.isFocused && focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
+    const actions = (isFocused && this.actions[focusBlock.type]) || []
     return (
       <div
         {...{
@@ -298,64 +325,68 @@ class Toolbar extends React.Component<any, any> {
           onClickCapture: this.handleClickCapture,
         }}
       >
-        <Tooltip
-          {...{
-            overlayClassName: classNames(className, {
-              'ant-tooltip-hidden': !isFocused || isTitle || isEmptyParagraph,
-            }),
-            title: 'alt',
-            align: { offset: [0, toolbarTop + 2] },
-            trigger: 'focus',
-          }}
-        >
-          <div className="wrapper">
-            {children}
+        <div className="wrapper">
+          <Actions
+            {...{
+              theme,
+              offsetY: toolbarTop + 2,
+              isForcedHiddenPopup: !isFocused || isTitle || isEmptyParagraph,
+              isVisiblePopup: isActions,
+              onVisiblePopupChange: this.handleActionsChange,
+              // open: this.openPlus,
+              close: this.closePlus,
+              closeInterval,
+              actions,
+              activeActionId,
+            }}
+          >
+            <div>{children}</div>
+          </Actions>
+          <div
+            {...{
+              className: classNames('toolbar', {
+                'toolbar--hidden': !isFocused || isReadOnly,
+              }),
+              style: {
+                transform: `translate3D(0, ${toolbarTop}px, 0)`,
+              },
+              onMouseDown: this.handleToolbarMouseDown,
+            }}
+          >
             <div
               {...{
-                className: classNames('toolbar', {
-                  'toolbar--hidden': !isFocused || isReadOnly,
+                className: classNames('plus-wrapper', {
+                  'plus-wrapper--hidden': !isEmptyParagraph,
                 }),
                 style: {
-                  transform: `translate3D(0, ${toolbarTop}px, 0)`,
+                  transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
                 },
-                onMouseDown: this.handleToolbarMouseDown,
               }}
             >
-              <div
+              <Plus
                 {...{
-                  className: classNames('plus-wrapper', {
-                    'plus-wrapper--hidden': !isEmptyParagraph,
-                  }),
-                  style: {
-                    transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
-                  },
+                  theme,
+                  isVisiblePopup: isPlus,
+                  onVisiblePopupChange: this.handlePlusChange,
+                  // open: this.openPlus,
+                  close: this.closePlus,
+                  closeInterval,
+                  tools: this.tools,
+                  activeToolId,
                 }}
-              >
-                <Plus
-                  {...{
-                    theme,
-                    isVisiblePopup: isPlus,
-                    onVisiblePopupChange: this.handlePlusChange,
-                    open: this.openPlus,
-                    close: this.closePlus,
-                    closeInterval,
-                    tools: this.tools,
-                    activeToolId,
-                  }}
-                />
-              </div>
-              <div
-                {...{
-                  className: classNames('more-wrapper', {
-                    'more-wrapper--hidden': isTitle,
-                  }),
-                }}
-              >
-                <More {...{ theme, editor, closeInterval, onMove: this.move }} />
-              </div>
+              />
+            </div>
+            <div
+              {...{
+                className: classNames('more-wrapper', {
+                  'more-wrapper--hidden': isTitle,
+                }),
+              }}
+            >
+              <More {...{ theme, editor, closeInterval, onMove: this.move }} />
             </div>
           </div>
-        </Tooltip>
+        </div>
       </div>
     )
   }
