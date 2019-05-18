@@ -104,7 +104,6 @@ class Toolbar extends React.Component<any, any> {
   }
 
   state = {
-    // isActions: true,
     activeActionId: -1,
     isPlus: false,
     activeToolId: -1,
@@ -183,22 +182,6 @@ class Toolbar extends React.Component<any, any> {
     }
     this.setState({ activeToolId: id })
   }
-
-  // openActions = () => {
-  //   this.setState({ isActions: true })
-  // }
-
-  // closeActions = () => {
-  //   this.setState({ isActions: false })
-  // }
-
-  // handleActionsChange = (visible) => {
-  //   if (visible) {
-  //     this.openActions()
-  //   } else {
-  //     this.closeActions()
-  //   }
-  // }
 
   openPlus = () => {
     this.setState({ isPlus: true })
@@ -311,14 +294,7 @@ class Toolbar extends React.Component<any, any> {
       closeInterval,
       children,
     } = this.props
-    const {
-      // isActions,
-      activeActionId,
-      isPlus,
-      activeToolId,
-      toolbarTop,
-      focusBlockBoundOffset,
-    } = this.state
+    const { activeActionId, isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
     const isFocused = selection.isFocused && focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
@@ -360,7 +336,6 @@ class Toolbar extends React.Component<any, any> {
                   theme,
                   isVisiblePopup: isPlus,
                   onVisiblePopupChange: this.handlePlusChange,
-                  // open: this.openPlus,
                   close: this.closePlus,
                   closeInterval,
                   tools: this.tools,
@@ -378,9 +353,6 @@ class Toolbar extends React.Component<any, any> {
               <Actions
                 {...{
                   theme,
-                  // isVisiblePopup: isActions,
-                  // open: this.openActions,
-                  // close: this.closeActions,
                   closeInterval,
                   actions,
                   activeActionId,
