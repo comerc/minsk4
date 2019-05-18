@@ -56,12 +56,19 @@ class More extends React.Component<any> {
   state = { isVisiblePopup: false, isConfirmDelete: false }
   isButtonMouseDown = false
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.isVisiblePopup && prevState.isConfirmDelete) {
+      return { isConfirmDelete: false }
+    }
+    return null
+  }
+
   open = () => {
     this.setState({ isVisiblePopup: true })
   }
 
   close = () => {
-    this.setState({ isVisiblePopup: false, isConfirmDelete: false })
+    this.setState({ isVisiblePopup: false })
   }
 
   handlePopupVisibleChange = (visible) => {
