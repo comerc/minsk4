@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import { Tooltip } from 'antd'
 import Popup from './Popup'
 import Button from './Button'
 
@@ -36,28 +35,22 @@ class Actions extends React.Component<any> {
     const { className, actions, activeActionId } = this.props
     return (
       <ul className="content">
-        {actions.map(({ src, alt, onClick }, id) => (
+        {actions.map(({ src, title, onClick }, id) => (
           <li key={id}>
-            <Tooltip
+            <Button
               {...{
-                overlayClassName: className,
-                title: alt,
+                className: classNames('action', {
+                  'action--active': id === activeActionId,
+                }),
+                tabIndex: -1,
+                'data-id': id,
+                onClick: this.handleActionClick,
+                size: 'small',
+                title,
               }}
             >
-              <Button
-                {...{
-                  className: classNames('action', {
-                    'action--active': id === activeActionId,
-                  }),
-                  tabIndex: -1,
-                  'data-id': id,
-                  onClick: this.handleActionClick,
-                  size: 'small',
-                }}
-              >
-                {src}
-              </Button>
-            </Tooltip>
+              {src}
+            </Button>
           </li>
         ))}
       </ul>
