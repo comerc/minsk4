@@ -19,7 +19,6 @@ const withStyle = (Self) => styled(Self)`
     height: ${sqrtArrowWidth}px !important;
     border-width: ${sqrtArrowWidth / 2}px !important;
     transform: rotate(45deg);
-    right: ${arrowIndentX}px !important;
     border-color: transparent !important;
   }
   .ant-tooltip-inner {
@@ -31,7 +30,6 @@ const withStyle = (Self) => styled(Self)`
     &::before {
       content: '';
       position: absolute;
-      right: ${arrowIndentX}px;
       width: ${sqrtArrowWidth}px;
       height: ${sqrtArrowWidth}px;
       border-width: ${sqrtArrowWidth / 2}px;
@@ -42,10 +40,12 @@ const withStyle = (Self) => styled(Self)`
   }
   &.ant-tooltip-placement-topRight {
     .ant-tooltip-arrow {
+      right: ${arrowIndentX}px !important;
       bottom: ${arrowIndentY}px !important;
       box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
     }
     .ant-tooltip-inner::before {
+      right: ${arrowIndentX}px;
       bottom: -${arrowIndentY}px;
       border-right-color: ${({ theme }) => theme.popoverBg};
       border-bottom-color: ${({ theme }) => theme.popoverBg};
@@ -53,13 +53,28 @@ const withStyle = (Self) => styled(Self)`
   }
   &.ant-tooltip-placement-bottomRight {
     .ant-tooltip-arrow {
+      right: ${arrowIndentX}px !important;
       top: ${arrowIndentY}px !important;
       box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
     }
     .ant-tooltip-inner::before {
+      right: ${arrowIndentX}px;
       top: -${arrowIndentY}px;
       border-top-color: ${({ theme }) => theme.popoverBg};
       border-left-color: ${({ theme }) => theme.popoverBg};
+    }
+  }
+  &.ant-tooltip-placement-top {
+    .ant-tooltip-arrow {
+      bottom: ${arrowIndentY}px !important;
+      box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
+    }
+    .ant-tooltip-inner::before {
+      bottom: -${arrowIndentY}px;
+      left: 50%;
+      margin-left: -5px;
+      border-right-color: ${({ theme }) => theme.popoverBg};
+      border-bottom-color: ${({ theme }) => theme.popoverBg};
     }
   }
 `

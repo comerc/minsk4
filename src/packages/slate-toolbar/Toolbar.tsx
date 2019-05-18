@@ -74,7 +74,7 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     left: 0;
     right: 0;
-    top: 3px;
+    top: 7px;
     display: inline-flex;
     &--hidden {
       display: none;
@@ -91,9 +91,6 @@ const withStyle = (Self) => styled(Self)`
       opacity: 0;
     }
   }
-  /* &.ant-tooltip {
-    pointer-events: none;
-  } */
 `
 
 @withSizes(({ width }) => ({ bodyWidth: width }))
