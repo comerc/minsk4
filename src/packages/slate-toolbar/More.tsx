@@ -231,7 +231,7 @@ class More extends React.Component<any> {
         <Popup
           {...{
             overlayClassName: className,
-            placement: 'topRight',
+            placement: 'bottomRight',
             trigger: 'click',
             align: { offset: [8, -2] },
             visible: isVisiblePopup,
