@@ -7,6 +7,15 @@ import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   display: inline-flex;
+  .ant-tooltip-arrow {
+    display: none;
+  }
+  .ant-tooltip-inner {
+    width: 304px;
+    &::before {
+      content: none;
+    }
+  }
   ul.content {
     margin: 0;
     padding: 0;
@@ -14,47 +23,102 @@ const withStyle = (Self) => styled(Self)`
     li {
       display: inline-flex;
     }
-    li:not(:last-child) {
-      margin-right: 6px;
+  }
+  .button {
+    &--x {
+      svg {
+        animation: spin 0.4s;
+        animation-fill-mode: forwards;
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+  }
+  .tool {
+    width: ${({ theme }) => '72px'};
+    height: 64px;
+    font-size: ${({ theme }) => theme.fontSizeSm};
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+    &--active {
+      color: ${({ theme }) => theme.primaryColor};
+      border-color: ${({ theme }) => theme.primaryColor};
     }
   }
 `
 
 @withStyle
 class Plus extends React.Component<any> {
-  isButtonMouseDown = false
+  // isButtonMouseDown = false
 
-  handleButtonMouseDown = (event) => {
-    this.isButtonMouseDown = true
-  }
+  // handleButtonMouseDown = (event) => {
+  //   this.isButtonMouseDown = true
+  // }
 
-  handleButtonMouseUp = (event) => {
-    if (this.isButtonMouseDown) {
-      this.isButtonMouseDown = false
-    } else {
-      const { open } = this.props
-      open()
-    }
+  // handleButtonMouseUp = (event) => {
+  //   if (this.isButtonMouseDown) {
+  //     this.isButtonMouseDown = false
+  //   } else {
+  //     const { open } = this.props
+  //     open()
+  //   }
+  // }
+
+  handleToolClick = (event) => {
+    const { tools, close, closeInterval } = this.props
+    const id = event.target.dataset.id
+    setTimeout(() => {
+      close()
+      tools[id].onClick(event)
+    }, closeInterval)
   }
 
   renderContent = () => {
+    const { tools, activeToolId } = this.props
     return (
       <ul className="content">
-        <li>content</li>
+        {tools.map(({ src, alt, onClick }, id) => (
+          <li key={id}>
+            <Button
+              {...{
+                className: classNames('tool', {
+                  'tool--active': id === activeToolId,
+                }),
+                tabIndex: -1,
+                'data-id': id,
+                onClick: this.handleToolClick,
+              }}
+            >
+              {src}
+              <span>{alt}</span>
+            </Button>
+          </li>
+        ))}
       </ul>
     )
   }
 
   render() {
-    const { className, isVisiblePopup, onVisiblePopupChange } = this.props
+    const { className, theme, isVisiblePopup, onVisiblePopupChange } = this.props
     return (
       <div className={className}>
         <Popup
           {...{
             overlayClassName: className,
-            placement: 'topRight',
+            placement: 'bottomLeft',
             trigger: 'click',
-            align: { offset: [0, 0] },
+            align: { offset: [theme.toolbarButtonWidth, -5] },
             visible: isVisiblePopup,
             onVisibleChange: onVisiblePopupChange,
             renderContent: this.renderContent,
@@ -63,12 +127,12 @@ class Plus extends React.Component<any> {
           <Button
             {...{
               className: classNames('button', {
-                'button--open': isVisiblePopup,
+                'button--x': isVisiblePopup,
               }),
               size: 'small',
               shape: 'circle',
-              onMouseDown: this.handleButtonMouseDown,
-              onMouseUp: this.handleButtonMouseUp,
+              // onMouseDown: this.handleButtonMouseDown,
+              // onMouseUp: this.handleButtonMouseUp,
             }}
           >
             <PlusIcon />

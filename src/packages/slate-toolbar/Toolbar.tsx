@@ -4,10 +4,8 @@ import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
 import { Tooltip } from 'antd'
-// import Button from './Button'
 import Plus from './Plus'
 import More from './More'
-// import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
@@ -48,32 +46,29 @@ const withStyle = (Self) => styled(Self)`
       display: none;
     }
   }
-  .toolbar .content {
+  .content {
     max-width: ${({ theme }) => theme.contentWidth};
     margin: 0 auto;
     position: relative;
   }
   .plus-wrapper {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     left: -${({ theme }) => theme.toolbarButtonWidth};
     animation: fadeIn 0.4s;
     display: inline-flex;
     &--hidden {
       display: none;
     }
-  }
-  .plus {
-    &--x {
-      svg {
-        animation: spin 0.4s;
-        animation-fill-mode: forwards;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
-  }
-  .plus-wrapper,
-  .toolbox {
-    top: 50%;
-    transform: translateY(-50%);
   }
   .more-wrapper {
     position: absolute;
@@ -86,76 +81,21 @@ const withStyle = (Self) => styled(Self)`
       opacity: 0;
     }
   }
-  .toolbox {
-    position: absolute;
-    display: none;
-    opacity: 0;
-    /* will-change: opacity; */
-    background-color: ${({ theme }) => theme.btnDefaultBg};
-    &--opened {
-      display: inline-flex;
-      opacity: 1;
-      animation: fadeIn 0.4s;
-      /* когда меньше 0.4s, то пропадает MoreIcon, если кликнуть по PlusIcon  */
-    }
-  }
-  .toolbox ul {
-    margin: 0;
-    padding: 0;
-    display: inline-flex;
-    li {
-      display: inline-flex;
-    }
-    li:not(:last-child) {
-      margin-right: 6px;
-    }
-  }
-  .toolbox .button--active {
-    color: ${({ theme }) => theme.primaryColor};
-    border-color: ${({ theme }) => theme.primaryColor};
-    animation: bounceIn 0.75s;
-    animation-fill-mode: forwards;
-  }
-  &.ant-tooltip {
+  /* &.ant-tooltip {
     pointer-events: none;
-  }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(45deg);
-    }
-  }
-  @keyframes bounceIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.3);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-    70% {
-      transform: scale(0.9);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+  } */
 `
 
 @withSizes(({ width }) => ({ bodyWidth: width }))
 @withStyle
 class Toolbar extends React.Component<any, any> {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.isPlus && prevState.activeToolId !== -1) {
+      return { activeToolId: -1 }
+    }
+    return null
+  }
+
   state = {
     isPlus: false,
     activeToolId: -1,
@@ -163,6 +103,7 @@ class Toolbar extends React.Component<any, any> {
     focusBlockBoundOffset: 0,
   }
 
+  tools = this.props.getTools(this.props.editor)
   containerRef = React.createRef() as any
 
   move = () => {
@@ -189,24 +130,9 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
-  handleToolClick = (onClick) => (event) => {
-    const { closeInterval } = this.props
-    setTimeout(() => {
-      this.closePlus()
-      this.focus() // ?
-      onClick(event)
-    }, closeInterval)
-  }
-
-  // TODO: may be getDerivedStateFromProps?
-  tools = this.props.getTools(this.props.editor).map(({ onClick, ...rest }, id) => ({
-    onClick: this.handleToolClick(onClick),
-    ...rest,
-  }))
-
   /**
    * Leaf
-   * flip through the toolbox items
+   * flip through the items
    */
   leaf = (isReverseDirection = false) => {
     const { activeToolId } = this.state
@@ -249,22 +175,11 @@ class Toolbar extends React.Component<any, any> {
   }
 
   openPlus = () => {
-    this.setState({
-      isPlus: true,
-    })
+    this.setState({ isPlus: true })
   }
 
   closePlus = () => {
-    this.setState({
-      isPlus: false,
-      activeToolId: -1,
-    })
-  }
-
-  handleToolbarMouseDown = (event) => {
-    /* for stop of double click by PlusIcon or MoreIcon */
-    // TODO: проверить pointer-events: none для svg
-    event.preventDefault()
+    this.setState({ isPlus: false })
   }
 
   handlePlusChange = (visible) => {
@@ -273,6 +188,12 @@ class Toolbar extends React.Component<any, any> {
     } else {
       this.closePlus()
     }
+  }
+
+  handleToolbarMouseDown = (event) => {
+    /* for stop of double click by PlusIcon or MoreIcon */
+    // TODO: проверить pointer-events: none для svg
+    event.preventDefault()
   }
 
   handleKeyDownCapture = (event) => {
@@ -400,68 +321,28 @@ class Toolbar extends React.Component<any, any> {
                 onMouseDown: this.handleToolbarMouseDown,
               }}
             >
-              <div className="content">
-                <div
+              <div
+                {...{
+                  className: classNames('plus-wrapper', {
+                    'plus-wrapper--hidden': !isEmptyParagraph,
+                  }),
+                  style: {
+                    transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                  },
+                }}
+              >
+                <Plus
                   {...{
-                    className: classNames('plus-wrapper', {
-                      'plus-wrapper--hidden': !isEmptyParagraph,
-                    }),
-                    style: {
-                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
-                    },
+                    theme,
+                    isVisiblePopup: isPlus,
+                    onVisiblePopupChange: this.handlePlusChange,
+                    open: this.openPlus,
+                    close: this.closePlus,
+                    closeInterval,
+                    tools: this.tools,
+                    activeToolId,
                   }}
-                >
-                  <Plus
-                    {...{
-                      theme,
-                      isVisiblePopup: isPlus,
-                      onVisiblePopupChange: this.handlePlusChange,
-                      open: this.openPlus,
-                      close: this.closePlus,
-                      closeInterval,
-                      tools: this.tools,
-                    }}
-                  />
-                  {/* <Button
-                    {...{
-                      className: classNames('plus', {
-                        'plus--x': isPlus,
-                      }),
-                      size: 'small',
-                      shape: 'circle',
-                      onClick: this.handlePlusClick,
-                    }}
-                  >
-                    <PlusIcon />
-                  </Button> */}
-                </div>
-                {/* <div
-                  {...{
-                    className: classNames('toolbox', { 'toolbox--opened': isPlus }),
-                    style: {
-                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
-                    },
-                  }}
-                >
-                  <ul>
-                    {this.tools.map(({ src, alt, onClick }, id) => (
-                      <li key={id}>
-                        <Button
-                          {...{
-                            className: classNames('button', {
-                              'button--active': id === activeToolId,
-                            }),
-                            tabIndex: -1,
-                            size: 'small',
-                            onClick,
-                          }}
-                        >
-                          {src} {alt}
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                </div> */}
+                />
               </div>
               <div
                 {...{
