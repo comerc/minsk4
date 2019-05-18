@@ -69,8 +69,7 @@ class Popup extends React.Component<any> {
   isNeedToRenderContent = false
 
   shouldComponentUpdate(nextProps) {
-    const { visible } = this.props
-    if (visible !== nextProps.visible && nextProps.visible) {
+    if (nextProps.visible) {
       this.isNeedToRenderContent = true
     }
     return true

@@ -7,6 +7,7 @@ import Button from './Button'
 
 const withStyle = (Self) => styled(Self)`
   display: inline-flex;
+  margin: 0 auto;
   ul.content {
     margin: 0;
     padding: 0;
@@ -23,11 +24,11 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Actions extends React.Component<any> {
   handleActionClick = (event) => {
-    const { actions, close, closeInterval } = this.props
+    const { actions, closeInterval } = this.props
     const id = event.target.dataset.id
+    const action = actions[id]
     setTimeout(() => {
-      close()
-      actions[id].onClick(event)
+      action.onClick(event)
     }, closeInterval)
   }
 
@@ -64,30 +65,16 @@ class Actions extends React.Component<any> {
   }
 
   render() {
-    const {
-      className,
-      offsetY,
-      isForcedHiddenPopup,
-      isVisiblePopup,
-      onVisiblePopupChange,
-      children,
-    } = this.props
+    const { className } = this.props
     return (
       <div className={className}>
         <Popup
           {...{
-            overlayClassName: classNames(className, {
-              'ant-tooltip-hidden': isForcedHiddenPopup,
-            }),
-            trigger: 'focus',
-            align: { offset: [0, offsetY] }, // TODO: memoize!
-            visible: isVisiblePopup,
-            onVisibleChange: onVisiblePopupChange,
+            overlayClassName: className,
+            visible: true,
             renderContent: this.renderContent,
           }}
-        >
-          <div>{children}</div>
-        </Popup>
+        />
       </div>
     )
   }

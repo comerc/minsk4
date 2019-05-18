@@ -70,6 +70,16 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
+  .actions-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 3px;
+    display: inline-flex;
+    &--hidden {
+      display: none;
+    }
+  }
   .more-wrapper {
     position: absolute;
     right: 2px;
@@ -97,7 +107,7 @@ class Toolbar extends React.Component<any, any> {
   }
 
   state = {
-    isActions: false,
+    // isActions: true,
     activeActionId: -1,
     isPlus: false,
     activeToolId: -1,
@@ -177,21 +187,21 @@ class Toolbar extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  openActions = () => {
-    this.setState({ isActions: true })
-  }
+  // openActions = () => {
+  //   this.setState({ isActions: true })
+  // }
 
-  closeActions = () => {
-    this.setState({ isActions: false })
-  }
+  // closeActions = () => {
+  //   this.setState({ isActions: false })
+  // }
 
-  handleActionsChange = (visible) => {
-    if (visible) {
-      this.openActions()
-    } else {
-      this.closeActions()
-    }
-  }
+  // handleActionsChange = (visible) => {
+  //   if (visible) {
+  //     this.openActions()
+  //   } else {
+  //     this.closeActions()
+  //   }
+  // }
 
   openPlus = () => {
     this.setState({ isPlus: true })
@@ -305,7 +315,7 @@ class Toolbar extends React.Component<any, any> {
       children,
     } = this.props
     const {
-      isActions,
+      // isActions,
       activeActionId,
       isPlus,
       activeToolId,
@@ -326,22 +336,7 @@ class Toolbar extends React.Component<any, any> {
         }}
       >
         <div className="wrapper">
-          <Actions
-            {...{
-              theme,
-              offsetY: toolbarTop + 2,
-              isForcedHiddenPopup: !isFocused || isTitle || isEmptyParagraph,
-              isVisiblePopup: isActions,
-              onVisiblePopupChange: this.handleActionsChange,
-              // open: this.openPlus,
-              close: this.closePlus,
-              closeInterval,
-              actions,
-              activeActionId,
-            }}
-          >
-            <div>{children}</div>
-          </Actions>
+          {children}
           <div
             {...{
               className: classNames('toolbar', {
@@ -373,6 +368,25 @@ class Toolbar extends React.Component<any, any> {
                   closeInterval,
                   tools: this.tools,
                   activeToolId,
+                }}
+              />
+            </div>
+            <div
+              {...{
+                className: classNames('actions-wrapper', {
+                  'actions-wrapper--hidden': !isFocused || isTitle || isEmptyParagraph,
+                }),
+              }}
+            >
+              <Actions
+                {...{
+                  theme,
+                  // isVisiblePopup: isActions,
+                  // open: this.openActions,
+                  // close: this.closeActions,
+                  closeInterval,
+                  actions,
+                  activeActionId,
                 }}
               />
             </div>
