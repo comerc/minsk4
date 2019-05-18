@@ -96,7 +96,7 @@ class Editor extends React.Component<any> {
         paragraph: [
           {
             src: <DummyIcon />,
-            alt: 'Action #0',
+            title: 'Action #0',
             onClick: () => {
               console.log('Action #0')
             },
@@ -105,21 +105,21 @@ class Editor extends React.Component<any> {
         'check-list-item': [
           {
             src: <DummyIcon />,
-            alt: 'Action #1',
+            title: 'Action #1',
             onClick: () => {
               console.log('Action #1')
             },
           },
           {
             src: <DummyIcon />,
-            alt: 'Action #2',
+            title: 'Action #2',
             onClick: () => {
               console.log('Action #2')
             },
           },
           {
             src: <DummyIcon />,
-            alt: 'Action #3',
+            title: 'Action #3',
             onClick: () => {
               console.log('Action #3')
             },
@@ -129,17 +129,17 @@ class Editor extends React.Component<any> {
       getTools: (editor) => [
         {
           src: <TasksIcon />,
-          alt: 'Check List',
+          title: 'Check List',
           onClick: addCheckListItemBlock(editor),
         },
         {
           src: <ImageIcon />,
-          alt: 'Image',
+          title: 'Image',
           onClick: () => {},
         },
         {
           src: <ListIcon />,
-          alt: 'List',
+          title: 'List',
           onClick: () => {},
         },
       ],

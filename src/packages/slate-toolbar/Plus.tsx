@@ -89,7 +89,7 @@ class Plus extends React.Component<any> {
     const { tools, activeToolId } = this.props
     return (
       <ul className="content">
-        {tools.map(({ src, alt, onClick }, id) => (
+        {tools.map(({ src, title, onClick }, id) => (
           <li key={id}>
             <Button
               {...{
@@ -102,7 +102,7 @@ class Plus extends React.Component<any> {
               }}
             >
               {src}
-              <span>{alt}</span>
+              <span>{title}</span>
             </Button>
           </li>
         ))}
