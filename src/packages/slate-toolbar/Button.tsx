@@ -7,9 +7,13 @@ export default styled(Button)`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    svg {
+    flex-direction: column;
+    > svg {
       fill: currentColor;
       pointer-events: none;
+    }
+    > span {
+      white-space: nowrap;
     }
   }
   &.ant-btn.ant-btn-circle {
