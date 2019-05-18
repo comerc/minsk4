@@ -11,7 +11,7 @@ const withStyle = (Self) => styled(Self)`
     display: none;
   }
   .ant-tooltip-inner {
-    width: 304px;
+    max-width: 304px;
     &::before {
       content: none;
     }
