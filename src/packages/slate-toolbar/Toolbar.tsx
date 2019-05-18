@@ -291,7 +291,7 @@ class Toolbar extends React.Component<any, any> {
       editor,
       editor: { readOnly: isReadOnly },
       value: { selection, focusBlock, focusText },
-      closeInterval,
+      clickInterval,
       children,
     } = this.props
     const { activeActionId, isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
@@ -337,7 +337,7 @@ class Toolbar extends React.Component<any, any> {
                   isVisiblePopup: isPlus,
                   onVisiblePopupChange: this.handlePlusChange,
                   close: this.closePlus,
-                  closeInterval,
+                  clickInterval,
                   tools: this.tools,
                   activeToolId,
                 }}
@@ -353,7 +353,7 @@ class Toolbar extends React.Component<any, any> {
               <Actions
                 {...{
                   theme,
-                  closeInterval,
+                  clickInterval,
                   actions,
                   activeActionId,
                 }}
@@ -366,7 +366,7 @@ class Toolbar extends React.Component<any, any> {
                 }),
               }}
             >
-              <More {...{ theme, editor, closeInterval, onMove: this.move }} />
+              <More {...{ theme, editor, clickInterval, onMove: this.move }} />
             </div>
           </div>
         </div>

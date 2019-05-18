@@ -77,12 +77,12 @@ class Plus extends React.Component<any> {
   // }
 
   handleToolClick = (event) => {
-    const { tools, close, closeInterval } = this.props
+    const { tools, close, clickInterval } = this.props
     const id = event.target.dataset.id
     setTimeout(() => {
       close()
       tools[id].onClick(event)
-    }, closeInterval)
+    }, clickInterval)
   }
 
   renderContent = () => {

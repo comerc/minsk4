@@ -98,7 +98,7 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMove,
-      closeInterval,
+      clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
@@ -109,7 +109,7 @@ class More extends React.Component<any> {
         onMove()
         this.open()
       })
-    }, closeInterval)
+    }, clickInterval)
   }
 
   handleDeleteClick = (event) => {
@@ -123,7 +123,7 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      closeInterval,
+      clickInterval,
     } = this.props
     setTimeout(() => {
       this.close()
@@ -138,7 +138,7 @@ class More extends React.Component<any> {
         }
       }
       editor.removeNodeByKey(focusBlock.key)
-    }, closeInterval)
+    }, clickInterval)
   }
 
   handleArrowDownClick = (event) => {
@@ -148,7 +148,7 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMove,
-      closeInterval,
+      clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
@@ -159,7 +159,7 @@ class More extends React.Component<any> {
         onMove()
         this.open()
       })
-    }, closeInterval)
+    }, clickInterval)
   }
 
   renderContent = () => {

@@ -23,12 +23,12 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Actions extends React.Component<any> {
   handleActionClick = (event) => {
-    const { actions, closeInterval } = this.props
+    const { actions, clickInterval } = this.props
     const id = event.target.dataset.id
     const action = actions[id]
     setTimeout(() => {
       action.onClick(event)
-    }, closeInterval)
+    }, clickInterval)
   }
 
   renderContent = () => {
