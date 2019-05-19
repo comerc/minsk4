@@ -160,6 +160,7 @@ class Editor extends React.Component<any> {
           className,
           defaultValue: Value.fromJSON(initialValueAsJson),
           autoFocus: true,
+          spellCheck: false,
           schema,
           plugins: this.plugins,
         }}
