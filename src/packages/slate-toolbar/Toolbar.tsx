@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
@@ -75,16 +76,65 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 class Toolbar extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
+    let result = {} as any
     if (!prevState.isPlus && prevState.activeToolId !== -1) {
-      return { activeToolId: -1 }
+      result = { ...result, activeToolId: -1 }
     }
-    return null
+    const {
+      value: { selection, focusBlock, focusText },
+      bodyWidth,
+    } = nextProps
+    const focusBlockKey = idx(nextProps, (_) => _.value.focusBlock.key)
+    if (prevState.focusBlockKey !== focusBlockKey) {
+      result = { ...result, focusBlockKey }
+    }
+    if (prevState.bodyWidth !== bodyWidth) {
+      result = { ...result, bodyWidth }
+    }
+    const isFocused = selection.isFocused && focusBlock
+    if (isFocused) {
+      const isOther = prevState.focusBlockKey !== focusBlock.key
+      const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+      if (prevState.isPlus && (isOther || !isEmptyParagraph)) {
+        result = { ...result, isPlus: false }
+      }
+      if (isOther || prevState.bodyWidth !== bodyWidth) {
+        result = { ...result, ...Toolbar.move(nextProps) }
+      }
+    } else {
+      if (prevState.isPlus) {
+        result = { ...result, isPlus: false }
+      }
+    }
+    return result
+  }
+
+  static move = (props) => {
+    const {
+      editor,
+      value: { focusBlock },
+    } = props
+    const containerNode = ReactDOM.findDOMNode(editor) as any
+    const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
+    if (!focusBlockNode) {
+      // if call in getDerivedStateFromProps() for new node before render(),
+      // then call again in componentDidUpdate()
+      return { needMoveForNewBlock: true }
+    }
+    const focusBlockBound = focusBlockNode.getBoundingClientRect()
+    const { top: containerBoundTop } = containerNode.getBoundingClientRect()
+    const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
+    const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
+    return { toolbarTop, focusBlockBoundOffset, needMoveForNewBlock: false }
   }
 
   state = {
     activeActionId: -1,
     isPlus: false,
     activeToolId: -1,
+    bodyWidth: 0, // only for getDerivedStateFromProps
+    focusBlockKey: null, // only for getDerivedStateFromProps
+    needMoveForNewBlock: false,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
@@ -92,31 +142,17 @@ class Toolbar extends React.Component<any, any> {
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
-  move = (nextProps) => {
-    const {
-      value: { focusBlock },
-      containerRef,
-    } = nextProps
-    const containerNode = containerRef.current
-    const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
-    const focusBlockBound = focusBlockNode.getBoundingClientRect()
-    const { top: containerBoundTop } = containerNode.getBoundingClientRect()
-    const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
-    const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-    return { toolbarTop, focusBlockBoundOffset }
-  }
-
   handleMoveClick = () => {
-    this.setState(this.move(this.props))
+    this.setState(Toolbar.move(this.props))
   }
 
   focus = () => {
     const {
+      editor,
       value: { selection, document },
-      containerRef,
     } = this.props
     if (!selection.isFocused) {
-      const containerNode = containerRef.current
+      const containerNode = ReactDOM.findDOMNode(editor) as any
       const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
       documentNode.focus()
     }
@@ -237,32 +273,15 @@ class Toolbar extends React.Component<any, any> {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const {
-      value: { selection, focusBlock, focusText },
-      bodyWidth,
-    } = this.props
-    const isFocused = selection.isFocused && focusBlock
-    if (isFocused) {
-      const isOther = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
-      const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-      if (this.state.isPlus && (isOther || !isEmptyParagraph)) {
-        this.setState({ isPlus: false })
-      }
-      if (isOther || bodyWidth !== prevProps.bodyWidth) {
-        this.setState(this.move(this.props))
-      }
-    } else {
-      if (this.state.isPlus) {
-        this.setState({ isPlus: false })
-      }
+  componentDidUpdate() {
+    if (this.state.needMoveForNewBlock) {
+      this.setState(Toolbar.move(this.props))
     }
   }
 
   render() {
     const {
       className,
-      containerRef,
       theme,
       editor,
       editor: { readOnly: isReadOnly },
@@ -279,7 +298,6 @@ class Toolbar extends React.Component<any, any> {
       <div
         {...{
           className,
-          ref: containerRef,
           onKeyDownCapture: this.handleKeyDownCapture,
           onClickCapture: this.handleClickCapture,
         }}
