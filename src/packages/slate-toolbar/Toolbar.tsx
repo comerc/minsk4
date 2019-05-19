@@ -91,7 +91,6 @@ class Toolbar extends React.Component<any, any> {
 
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
-  containerRef = React.createRef() as any
 
   move = (nextProps) => {
     const {
