@@ -117,13 +117,6 @@ class Editor extends React.Component<any> {
               console.log('Action #2')
             },
           },
-          {
-            src: <DummyIcon />,
-            title: 'Action #3',
-            onClick: () => {
-              console.log('Action #3')
-            },
-          },
         ],
       }),
       getTools: (editor) => [
