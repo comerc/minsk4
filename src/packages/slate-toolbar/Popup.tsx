@@ -83,22 +83,23 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Popup extends React.Component<any> {
-  // isNeedToRenderContent = false
+  isNeedToRenderContent = this.props.visible
 
-  // shouldComponentUpdate(nextProps) {
-  //   if (nextProps.visible) {
-  //     this.isNeedToRenderContent = true
-  //   }
-  //   return true
-  // }
+  shouldComponentUpdate(nextProps) {
+    const { visible } = this.props
+    if (!visible && nextProps.visible) {
+      this.isNeedToRenderContent = true
+    }
+    return true
+  }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { visible } = this.props
-  //   if (visible !== prevProps.visible && prevProps.visible) {
-  //     // it is need for animation before invisible state
-  //     this.isNeedToRenderContent = false
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    const { visible } = this.props
+    if (prevProps.visible && !visible) {
+      // it is need for animation before invisible state
+      this.isNeedToRenderContent = false
+    }
+  }
 
   render() {
     const { className, overlayClassName, renderContent, ...rest } = this.props
@@ -111,8 +112,7 @@ class Popup extends React.Component<any> {
         <Tooltip
           {...{
             overlayClassName: classNames(overlayClassName, className),
-            // title: this.isNeedToRenderContent ? renderContent() : <React.Fragment />,
-            title: renderContent(),
+            title: this.isNeedToRenderContent ? renderContent() : <React.Fragment />,
             ...rest,
           }}
         />
