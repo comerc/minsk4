@@ -1,9 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import withSizes from 'react-sizes'
 import idx from 'idx'
+import withSizes from 'react-sizes'
+import withContainerNode from './withContainerNode'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
 import Plus from './Plus'
@@ -71,6 +71,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withSizes(({ width }) => ({ bodyWidth: width }))
+@withContainerNode
 @withStyle
 class Editor extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -112,10 +113,10 @@ class Editor extends React.Component<any, any> {
 
   static moveToolbar = (props) => {
     const {
+      containerNode,
       editor,
       value: { focusBlock },
     } = props
-    const containerNode = ReactDOM.findDOMNode(editor) as any
     const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
     if (!focusBlockNode) {
       // if call in getDerivedStateFromProps() for new node before render(),
@@ -144,21 +145,24 @@ class Editor extends React.Component<any, any> {
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
-  handleMoveBlockClick = () => {
-    this.setState(Editor.moveToolbar(this.props))
+  handleMoveBlockClick = (callback) => {
+    const { containerNode } = this.props
+    const { top: containerBoundTop } = containerNode.getBoundingClientRect()
+    this.setState({ toolbarTop: containerBoundTop - 1000 })
+    callback(() => this.setState(Editor.moveToolbar(this.props)))
   }
 
-  focus = () => {
-    const {
-      editor,
-      value: { selection, document },
-    } = this.props
-    if (!selection.isFocused) {
-      const containerNode = ReactDOM.findDOMNode(editor) as any
-      const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
-      documentNode.focus()
-    }
-  }
+  // focus = () => {
+  //   const {
+  //     editor,
+  //     value: { selection, document },
+  //   } = this.props
+  //   if (!selection.isFocused) {
+  //     const { containerNode } = this.props
+  //     const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
+  //     documentNode.focus()
+  //   }
+  // }
 
   /**
    * Leaf
