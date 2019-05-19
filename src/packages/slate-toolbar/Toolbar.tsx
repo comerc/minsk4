@@ -94,7 +94,7 @@ class Toolbar extends React.Component<any, any> {
     if (prevState.isHiddenPlusPopup) {
       result = { ...result, isHiddenPlusPopup: false }
     }
-    const isFocused = selection.isFocused && focusBlock
+    const isFocused = selection.isFocused && !!focusBlock
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
