@@ -9,7 +9,9 @@ import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
-  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
+  &.container {
+    display: 'inline-flex';
+  }
   ul.content {
     margin: 0;
     padding: 0;
@@ -39,7 +41,7 @@ const withStyle = (Self) => styled(Self)`
     justify-content: center;
     align-items: center;
     &:hover,
-    &--open {
+    &--active {
       opacity: 1;
       color: ${({ theme }) => theme.textColor};
     }
@@ -63,20 +65,8 @@ class More extends React.Component<any> {
   alignPopup = { offset: [8, 0] }
   isButtonMouseDown = false
 
-  open = () => {
-    this.setState({ isVisiblePopup: true })
-  }
-
-  close = () => {
-    this.setState({ isVisiblePopup: false })
-  }
-
   handlePopupVisibleChange = (visible) => {
-    if (visible) {
-      this.open()
-    } else {
-      this.close()
-    }
+    this.setState({ isVisiblePopup: visible })
   }
 
   handleButtonMouseDown = (event) => {
@@ -87,7 +77,7 @@ class More extends React.Component<any> {
     if (this.isButtonMouseDown) {
       this.isButtonMouseDown = false
     } else {
-      this.open()
+      this.setState({ isVisiblePopup: true })
     }
   }
 
@@ -97,17 +87,17 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      onMove,
+      onMoveClick,
       clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
     setTimeout(() => {
-      this.close()
+      this.setState({ isVisiblePopup: false })
       editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        onMove()
-        this.open()
+        onMoveClick()
+        this.setState({ isVisiblePopup: true })
       })
     }, clickInterval)
   }
@@ -126,7 +116,7 @@ class More extends React.Component<any> {
       clickInterval,
     } = this.props
     setTimeout(() => {
-      this.close()
+      this.setState({ isVisiblePopup: false })
       const hasTitle = document.nodes.get(0).type === 'title'
       const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
       if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
@@ -147,17 +137,17 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      onMove,
+      onMoveClick,
       clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
     setTimeout(() => {
-      this.close()
+      this.setState({ isVisiblePopup: false })
       editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        onMove()
-        this.open()
+        onMoveClick()
+        this.setState({ isVisiblePopup: true })
       })
     }, clickInterval)
   }
@@ -227,7 +217,11 @@ class More extends React.Component<any> {
     const { className } = this.props
     const { isVisiblePopup } = this.state
     return (
-      <div className={className}>
+      <div
+        {...{
+          className: classNames(className, 'container'),
+        }}
+      >
         <Popup
           {...{
             overlayClassName: className,
@@ -241,7 +235,7 @@ class More extends React.Component<any> {
         >
           <div
             {...{
-              className: classNames('button', { 'button--open': isVisiblePopup }),
+              className: classNames('button', { 'button--active': isVisiblePopup }),
               onMouseDown: this.handleButtonMouseDown,
               onMouseUp: this.handleButtonMouseUp,
               role: 'button',

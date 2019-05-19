@@ -10,7 +10,9 @@ const arrowIndentY = 4 // TODO: почему? 6 внутри Antd Popconfirm
 const arrowIndentX = 16
 
 const withStyle = (Self) => styled(Self)`
-  display: inline-flex;
+  &.container {
+    display: inline-flex;
+  }
   &.ant-tooltip {
     max-width: none;
   }
@@ -81,31 +83,36 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Popup extends React.Component<any> {
-  isNeedToRenderContent = false
+  // isNeedToRenderContent = false
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.visible) {
-      this.isNeedToRenderContent = true
-    }
-    return true
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.visible) {
+  //     this.isNeedToRenderContent = true
+  //   }
+  //   return true
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { visible } = this.props
-    if (visible !== prevProps.visible && prevProps.visible) {
-      // it is need for animation before invisible state
-      this.isNeedToRenderContent = false
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { visible } = this.props
+  //   if (visible !== prevProps.visible && prevProps.visible) {
+  //     // it is need for animation before invisible state
+  //     this.isNeedToRenderContent = false
+  //   }
+  // }
 
   render() {
     const { className, overlayClassName, renderContent, ...rest } = this.props
     return (
-      <div className={className}>
+      <div
+        {...{
+          className: classNames(className, 'container'),
+        }}
+      >
         <Tooltip
           {...{
             overlayClassName: classNames(overlayClassName, className),
-            title: this.isNeedToRenderContent ? renderContent() : <React.Fragment />,
+            // title: this.isNeedToRenderContent ? renderContent() : <React.Fragment />,
+            title: renderContent(),
             ...rest,
           }}
         />

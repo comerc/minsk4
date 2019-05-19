@@ -5,7 +5,9 @@ import Popup from './Popup'
 import Button from './Button'
 
 const withStyle = (Self) => styled(Self)`
-  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
+  &.container {
+    display: inline-flex;
+  }
   ${Popup} {
     margin: 0 auto;
   }
@@ -62,7 +64,11 @@ class Actions extends React.Component<any> {
   render() {
     const { className } = this.props
     return (
-      <div className={className}>
+      <div
+        {...{
+          className: classNames(className, 'container'),
+        }}
+      >
         <Popup
           {...{
             overlayClassName: className,

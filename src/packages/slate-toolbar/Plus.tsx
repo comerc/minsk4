@@ -6,7 +6,9 @@ import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
-  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
+  &.container {
+    display: 'inline-flex';
+  }
   .ant-tooltip-arrow {
     display: none;
   }
@@ -77,10 +79,10 @@ class Plus extends React.Component<any> {
   // }
 
   handleToolClick = (event) => {
-    const { tools, close, clickInterval } = this.props
+    const { tools, onVisiblePopupChange, clickInterval } = this.props
     const id = event.target.dataset.id
     setTimeout(() => {
-      close()
+      onVisiblePopupChange(false)
       tools[id].onClick(event)
     }, clickInterval)
   }
@@ -113,7 +115,12 @@ class Plus extends React.Component<any> {
   render() {
     const { className, style, theme, isVisiblePopup, onVisiblePopupChange } = this.props
     return (
-      <div className={className} style={style}>
+      <div
+        {...{
+          className: classNames(className, 'container'),
+          style,
+        }}
+      >
         <Popup
           {...{
             overlayClassName: className,
