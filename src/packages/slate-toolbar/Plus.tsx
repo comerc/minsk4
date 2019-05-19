@@ -12,7 +12,7 @@ const withStyle = (Self) => styled(Self)`
       0,
       calc(${({ focusBlockBoundOffset }) => focusBlockBoundOffset}px - 50%),
       0
-    ) !important;
+    );
   }
   .ant-tooltip-arrow {
     display: none;

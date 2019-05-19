@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 import withSizes from 'react-sizes'
 import idx from 'idx'
+import Toolbar from './Toolbar'
 import Actions from './Actions'
 import Plus from './Plus'
 import More from './More'
@@ -37,17 +38,14 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  .toolbar {
+  ${Toolbar} {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
-    display: block;
   }
   ${Plus} {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     left: -${({ theme }) => theme.toolbarButtonWidth};
     animation: fadeIn 0.4s;
     @keyframes fadeIn {
@@ -316,12 +314,9 @@ class Editor extends React.Component<any, any> {
         <div className="wrapper">
           {children}
           {isFocused && !isReadOnly && (
-            <div
+            <Toolbar
               {...{
-                className: 'toolbar',
-                style: {
-                  transform: `translate3D(0, ${toolbarTop}px, 0)`,
-                },
+                top: toolbarTop,
                 onMouseDown: this.handleToolbarMouseDown,
               }}
             >
@@ -359,7 +354,7 @@ class Editor extends React.Component<any, any> {
                   }}
                 />
               )}
-            </div>
+            </Toolbar>
           )}
         </div>
       </div>
