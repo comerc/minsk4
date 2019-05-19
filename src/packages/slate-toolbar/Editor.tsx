@@ -76,7 +76,7 @@ const withStyle = (Self) => styled(Self)`
 class Editor extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
-    if (!prevState.isPlus && prevState.activeToolId !== -1) {
+    if (!prevState.isPlusPopup && prevState.activeToolId !== -1) {
       result = { ...result, activeToolId: -1 }
     }
     const {
@@ -97,15 +97,15 @@ class Editor extends React.Component<any, any> {
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-      if (prevState.isPlus && (isOther || !isEmptyParagraph)) {
-        result = { ...result, isPlus: false, isHiddenPlusPopup: true }
+      if (prevState.isPlusPopup && (isOther || !isEmptyParagraph)) {
+        result = { ...result, isPlusPopup: false, isHiddenPlusPopup: true }
       }
       if (isOther || prevState.bodyWidth !== bodyWidth) {
         result = { ...result, ...Editor.moveToolbar(nextProps) }
       }
     } else {
-      if (prevState.isPlus) {
-        result = { ...result, isPlus: false }
+      if (prevState.isPlusPopup) {
+        result = { ...result, isPlusPopup: false }
       }
     }
     return result
@@ -133,7 +133,7 @@ class Editor extends React.Component<any, any> {
   state = {
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
-    isPlus: false,
+    isPlusPopup: false,
     activeToolId: -1,
     bodyWidth: 0, // only for getDerivedStateFromProps
     focusBlockKey: null, // only for getDerivedStateFromProps
@@ -208,8 +208,8 @@ class Editor extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  handlePlusChange = (visible) => {
-    this.setState({ isPlus: visible })
+  handlePlusPopupChange = (visible) => {
+    this.setState({ isPlusPopup: visible })
   }
 
   handleToolbarMouseDown = (event) => {
@@ -220,10 +220,10 @@ class Editor extends React.Component<any, any> {
 
   handleKeyDownCapture = (event) => {
     if (event.key === 'Escape') {
-      if (this.state.isPlus) {
+      if (this.state.isPlusPopup) {
         event.preventDefault()
         event.stopPropagation()
-        this.setState({ isPlus: false })
+        this.setState({ isPlusPopup: false })
       }
       return
     }
@@ -234,7 +234,7 @@ class Editor extends React.Component<any, any> {
       if (!selection.isFocused) {
         return
       }
-      if (this.state.isPlus) {
+      if (this.state.isPlusPopup) {
         event.preventDefault()
         event.stopPropagation()
         this.leafTools(event.shiftKey)
@@ -246,7 +246,7 @@ class Editor extends React.Component<any, any> {
         if (isEmptyParagraph) {
           event.preventDefault()
           event.stopPropagation()
-          this.setState({ isPlus: true })
+          this.setState({ isPlusPopup: true })
           this.leafTools(event.shiftKey)
         }
       }
@@ -259,7 +259,7 @@ class Editor extends React.Component<any, any> {
         event.preventDefault()
         event.stopPropagation()
         setTimeout(() => {
-          this.setState({ isPlus: false })
+          this.setState({ isPlusPopup: false })
           this.tools[activeToolId].onClick(event)
         }, clickInterval)
       }
@@ -268,13 +268,13 @@ class Editor extends React.Component<any, any> {
   }
 
   handleClickCapture = (event) => {
-    if (this.state.isPlus) {
+    if (this.state.isPlusPopup) {
       const key = event.target.dataset.key
       const {
         value: { focusBlock, document },
       } = this.props
       if ([focusBlock.key, document.key].includes(key)) {
-        this.setState({ isPlus: false })
+        this.setState({ isPlusPopup: false })
       }
     }
   }
@@ -298,7 +298,7 @@ class Editor extends React.Component<any, any> {
     const {
       activeActionId,
       isHiddenPlusPopup,
-      isPlus,
+      isPlusPopup,
       activeToolId,
       toolbarTop,
       focusBlockBoundOffset,
@@ -330,8 +330,8 @@ class Editor extends React.Component<any, any> {
                     theme,
                     topOffset: focusBlockBoundOffset,
                     isHiddenPopup: isHiddenPlusPopup,
-                    isVisiblePopup: isPlus,
-                    onVisiblePopupChange: this.handlePlusChange,
+                    isVisiblePopup: isPlusPopup,
+                    onVisiblePopupChange: this.handlePlusPopupChange,
                     clickInterval,
                     tools: this.tools,
                     activeToolId,
