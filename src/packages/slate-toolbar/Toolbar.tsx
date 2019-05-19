@@ -341,7 +341,7 @@ class Toolbar extends React.Component<any, any> {
                   }}
                 />
               )}
-              {actions.length !== 0 && (
+              {!isEmptyParagraph && actions.length !== 0 && (
                 <Actions
                   {...{
                     theme,
