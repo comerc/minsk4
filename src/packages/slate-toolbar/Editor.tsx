@@ -120,13 +120,13 @@ class Editor extends React.Component<any, any> {
     if (!focusBlockNode) {
       // if call in getDerivedStateFromProps() for new node before render(),
       // then call again in componentDidUpdate()
-      return { needMoveForNewBlock: true }
+      return { isMoveToolbarForNewBlock: true }
     }
     const focusBlockBound = focusBlockNode.getBoundingClientRect()
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-    return { toolbarTop, focusBlockBoundOffset, needMoveForNewBlock: false }
+    return { toolbarTop, focusBlockBoundOffset, isMoveToolbarForNewBlock: false }
   }
 
   state = {
@@ -136,7 +136,7 @@ class Editor extends React.Component<any, any> {
     activeToolId: -1,
     bodyWidth: 0, // only for getDerivedStateFromProps
     focusBlockKey: null, // only for getDerivedStateFromProps
-    needMoveForNewBlock: false,
+    isMoveToolbarForNewBlock: false,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
@@ -144,7 +144,7 @@ class Editor extends React.Component<any, any> {
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
-  handleMoveClick = () => {
+  handleMoveBlockClick = () => {
     this.setState(Editor.moveToolbar(this.props))
   }
 
@@ -276,7 +276,7 @@ class Editor extends React.Component<any, any> {
   }
 
   componentDidUpdate() {
-    if (this.state.needMoveForNewBlock) {
+    if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
     }
   }
@@ -324,7 +324,7 @@ class Editor extends React.Component<any, any> {
                 <Plus
                   {...{
                     theme,
-                    focusBlockBoundOffset,
+                    topOffset: focusBlockBoundOffset,
                     isHiddenPopup: isHiddenPlusPopup,
                     isVisiblePopup: isPlus,
                     onVisiblePopupChange: this.handlePlusChange,
@@ -350,7 +350,7 @@ class Editor extends React.Component<any, any> {
                     theme,
                     editor,
                     clickInterval,
-                    onMoveClick: this.handleMoveClick,
+                    onMoveBlockClick: this.handleMoveBlockClick,
                   }}
                 />
               )}

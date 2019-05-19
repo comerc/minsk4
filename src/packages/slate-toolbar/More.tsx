@@ -87,7 +87,7 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      onMoveClick,
+      onMoveBlockClick,
       clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
@@ -96,7 +96,7 @@ class More extends React.Component<any> {
       this.setState({ isVisiblePopup: false })
       editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        onMoveClick()
+        onMoveBlockClick()
         this.setState({ isVisiblePopup: true })
       })
     }, clickInterval)
@@ -137,7 +137,7 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      onMoveClick,
+      onMoveBlockClick,
       clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
@@ -146,7 +146,7 @@ class More extends React.Component<any> {
       this.setState({ isVisiblePopup: false })
       editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
       setTimeout(() => {
-        onMoveClick()
+        onMoveBlockClick()
         this.setState({ isVisiblePopup: true })
       })
     }, clickInterval)
