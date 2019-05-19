@@ -91,12 +91,15 @@ class Toolbar extends React.Component<any, any> {
     if (prevState.bodyWidth !== bodyWidth) {
       result = { ...result, bodyWidth }
     }
+    if (prevState.isHiddenPlusPopup) {
+      result = { ...result, isHiddenPlusPopup: false }
+    }
     const isFocused = selection.isFocused && focusBlock
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       if (prevState.isPlus && (isOther || !isEmptyParagraph)) {
-        result = { ...result, isPlus: false }
+        result = { ...result, isPlus: false, isHiddenPlusPopup: true }
       }
       if (isOther || prevState.bodyWidth !== bodyWidth) {
         result = { ...result, ...Toolbar.move(nextProps) }
@@ -130,6 +133,7 @@ class Toolbar extends React.Component<any, any> {
 
   state = {
     activeActionId: -1,
+    isHiddenPlusPopup: false, // for move() w/o close-animation between two empty paragraph
     isPlus: false,
     activeToolId: -1,
     bodyWidth: 0, // only for getDerivedStateFromProps
@@ -289,7 +293,14 @@ class Toolbar extends React.Component<any, any> {
       clickInterval,
       children,
     } = this.props
-    const { activeActionId, isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
+    const {
+      activeActionId,
+      isHiddenPlusPopup,
+      isPlus,
+      activeToolId,
+      toolbarTop,
+      focusBlockBoundOffset,
+    } = this.state
     const isFocused = selection.isFocused && !!focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
@@ -321,6 +332,7 @@ class Toolbar extends React.Component<any, any> {
                     style: {
                       transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
                     },
+                    isHiddenPopup: isHiddenPlusPopup,
                     isVisiblePopup: isPlus,
                     onVisiblePopupChange: this.handlePlusChange,
                     clickInterval,

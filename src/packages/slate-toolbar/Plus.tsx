@@ -113,7 +113,14 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const { className, style, theme, isVisiblePopup, onVisiblePopupChange } = this.props
+    const {
+      className,
+      style,
+      theme,
+      isHiddenPopup,
+      isVisiblePopup,
+      onVisiblePopupChange,
+    } = this.props
     return (
       <div
         {...{
@@ -123,7 +130,7 @@ class Plus extends React.Component<any> {
       >
         <Popup
           {...{
-            overlayClassName: className,
+            overlayClassName: classNames(className, { 'ant-tooltip-hidden': isHiddenPopup }),
             placement: 'bottomLeft',
             trigger: 'click',
             align: this.alignPopup,
