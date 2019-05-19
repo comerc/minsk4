@@ -22,11 +22,9 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('renderEditor', props)
     const { value } = props
     const children = next()
-    const containerRef = React.createRef() as any
     return (
       <Toolbar
         {...{
-          containerRef,
           theme,
           editor,
           getTools,
