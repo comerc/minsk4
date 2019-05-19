@@ -107,6 +107,10 @@ class Toolbar extends React.Component<any, any> {
     return { toolbarTop, focusBlockBoundOffset }
   }
 
+  handleMoveClick = () => {
+    this.setState(this.move(this.props))
+  }
+
   focus = () => {
     const {
       value: { selection, document },
@@ -163,20 +167,8 @@ class Toolbar extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  openPlus = () => {
-    this.setState({ isPlus: true })
-  }
-
-  closePlus = () => {
-    this.setState({ isPlus: false })
-  }
-
   handlePlusChange = (visible) => {
-    if (visible) {
-      this.openPlus()
-    } else {
-      this.closePlus()
-    }
+    this.setState({ isPlus: visible })
   }
 
   handleToolbarMouseDown = (event) => {
@@ -190,7 +182,7 @@ class Toolbar extends React.Component<any, any> {
       if (this.state.isPlus) {
         event.preventDefault()
         event.stopPropagation()
-        this.closePlus()
+        this.setState({ isPlus: false })
       }
       return
     }
@@ -213,7 +205,7 @@ class Toolbar extends React.Component<any, any> {
         if (isEmptyParagraph) {
           event.preventDefault()
           event.stopPropagation()
-          this.openPlus()
+          this.setState({ isPlus: true })
           this.leaf(event.shiftKey)
         }
       }
@@ -226,7 +218,7 @@ class Toolbar extends React.Component<any, any> {
         event.preventDefault()
         event.stopPropagation()
         setTimeout(() => {
-          this.closePlus()
+          this.setState({ isPlus: false })
           this.tools[activeToolId].onClick(event)
         }, clickInterval)
       }
@@ -241,7 +233,7 @@ class Toolbar extends React.Component<any, any> {
         value: { focusBlock, document },
       } = this.props
       if ([focusBlock.key, document.key].includes(key)) {
-        this.closePlus()
+        this.setState({ isPlus: false })
       }
     }
   }
@@ -257,17 +249,14 @@ class Toolbar extends React.Component<any, any> {
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       if (this.state.isPlus && (isOther || !isEmptyParagraph)) {
         this.setState({ isPlus: false })
-        // this.closePlus()
       }
       if (isOther || bodyWidth !== prevProps.bodyWidth) {
         this.setState(this.move(this.props))
       }
-      // } else {
-      //   if (this.state.isPlus) {
-      //     console.log('!isFocused')
-      //     this.setState({ isPlus: false })
-      //     // this.closePlus()
-      //   }
+    } else {
+      if (this.state.isPlus) {
+        this.setState({ isPlus: false })
+      }
     }
   }
 
@@ -283,7 +272,7 @@ class Toolbar extends React.Component<any, any> {
       children,
     } = this.props
     const { activeActionId, isPlus, activeToolId, toolbarTop, focusBlockBoundOffset } = this.state
-    const isFocused = selection.isFocused && focusBlock
+    const isFocused = selection.isFocused && !!focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
     const actions = (isFocused && this.actions[focusBlock.type]) || []
@@ -308,39 +297,41 @@ class Toolbar extends React.Component<any, any> {
                 onMouseDown: this.handleToolbarMouseDown,
               }}
             >
-              <Plus
-                {...{
-                  theme,
-                  style: {
-                    transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
-                  },
-                  isVisible: isEmptyParagraph,
-                  isVisiblePopup: isPlus,
-                  onVisiblePopupChange: this.handlePlusChange,
-                  close: this.closePlus,
-                  clickInterval,
-                  tools: this.tools,
-                  activeToolId,
-                }}
-              />
-              <Actions
-                {...{
-                  theme,
-                  isVisible: actions.length !== 0,
-                  clickInterval,
-                  actions,
-                  activeActionId,
-                }}
-              />
-              <More
-                {...{
-                  theme,
-                  isVisible: !isTitle,
-                  editor,
-                  clickInterval,
-                  onMove: this.move,
-                }}
-              />
+              {isEmptyParagraph && (
+                <Plus
+                  {...{
+                    theme,
+                    style: {
+                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                    },
+                    isVisiblePopup: isPlus,
+                    onVisiblePopupChange: this.handlePlusChange,
+                    clickInterval,
+                    tools: this.tools,
+                    activeToolId,
+                  }}
+                />
+              )}
+              {actions.length !== 0 && (
+                <Actions
+                  {...{
+                    theme,
+                    clickInterval,
+                    actions,
+                    activeActionId,
+                  }}
+                />
+              )}
+              {!isTitle && (
+                <More
+                  {...{
+                    theme,
+                    editor,
+                    clickInterval,
+                    onMoveClick: this.handleMoveClick,
+                  }}
+                />
+              )}
             </div>
           )}
         </div>
