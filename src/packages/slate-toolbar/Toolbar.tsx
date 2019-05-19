@@ -241,10 +241,14 @@ class Toolbar extends React.Component<any, any> {
     }
     if (event.key === 'Enter') {
       const { activeToolId } = this.state
-      if (activeToolId > -1) {
+      if (activeToolId !== -1) {
+        const { clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
-        this.tools[activeToolId].onClick(event)
+        setTimeout(() => {
+          this.closePlus()
+          this.tools[activeToolId].onClick(event)
+        }, clickInterval)
       }
       return
     }
