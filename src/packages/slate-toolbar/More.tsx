@@ -93,11 +93,13 @@ class More extends React.Component<any> {
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
     setTimeout(() => {
-      this.setState({ isVisiblePopup: false })
-      editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-      setTimeout(() => {
-        onMoveBlockClick()
-        this.setState({ isVisiblePopup: true })
+      onMoveBlockClick((callback) => {
+        this.setState({ isVisiblePopup: false })
+        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+        setTimeout(() => {
+          callback()
+          this.setState({ isVisiblePopup: true })
+        })
       })
     }, clickInterval)
   }
@@ -143,11 +145,13 @@ class More extends React.Component<any> {
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
     setTimeout(() => {
-      this.setState({ isVisiblePopup: false })
-      editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-      setTimeout(() => {
-        onMoveBlockClick()
-        this.setState({ isVisiblePopup: true })
+      onMoveBlockClick((callback) => {
+        this.setState({ isVisiblePopup: false })
+        editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
+        setTimeout(() => {
+          callback()
+          this.setState({ isVisiblePopup: true })
+        })
       })
     }, clickInterval)
   }
