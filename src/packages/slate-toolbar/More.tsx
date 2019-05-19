@@ -93,6 +93,7 @@ class More extends React.Component<any> {
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
     setTimeout(() => {
+      // TODO: replace callbacks to promises
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
