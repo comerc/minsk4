@@ -2,7 +2,7 @@ import React from 'react'
 // import styled, { withTheme } from 'styled-components'
 import classNames from 'classnames'
 import idx from 'idx'
-import Toolbar from './Toolbar'
+import Editor from './Editor'
 
 const toolbarPlugin = (options: any = {}) => {
   let { theme = {}, getTools = () => [], getActions = () => ({}), clickInterval = 200 } = options
@@ -23,7 +23,7 @@ const toolbarPlugin = (options: any = {}) => {
     const { value } = props
     const children = next()
     return (
-      <Toolbar
+      <Editor
         {...{
           theme,
           editor,
@@ -34,7 +34,7 @@ const toolbarPlugin = (options: any = {}) => {
         }}
       >
         {children}
-      </Toolbar>
+      </Editor>
     )
   }
   return { decorateNode, renderNode, renderEditor }

@@ -74,7 +74,7 @@ const withStyle = (Self) => styled(Self)`
 
 @withSizes(({ width }) => ({ bodyWidth: width }))
 @withStyle
-class Toolbar extends React.Component<any, any> {
+class Editor extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
     if (!prevState.isPlus && prevState.activeToolId !== -1) {
@@ -102,7 +102,7 @@ class Toolbar extends React.Component<any, any> {
         result = { ...result, isPlus: false, isHiddenPlusPopup: true }
       }
       if (isOther || prevState.bodyWidth !== bodyWidth) {
-        result = { ...result, ...Toolbar.move(nextProps) }
+        result = { ...result, ...Editor.moveToolbar(nextProps) }
       }
     } else {
       if (prevState.isPlus) {
@@ -112,7 +112,7 @@ class Toolbar extends React.Component<any, any> {
     return result
   }
 
-  static move = (props) => {
+  static moveToolbar = (props) => {
     const {
       editor,
       value: { focusBlock },
@@ -133,7 +133,7 @@ class Toolbar extends React.Component<any, any> {
 
   state = {
     activeActionId: -1,
-    isHiddenPlusPopup: false, // for move() w/o close-animation between two empty paragraph
+    isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlus: false,
     activeToolId: -1,
     bodyWidth: 0, // only for getDerivedStateFromProps
@@ -147,7 +147,7 @@ class Toolbar extends React.Component<any, any> {
   actions = this.props.getActions(this.props.editor)
 
   handleMoveClick = () => {
-    this.setState(Toolbar.move(this.props))
+    this.setState(Editor.moveToolbar(this.props))
   }
 
   focus = () => {
@@ -166,7 +166,7 @@ class Toolbar extends React.Component<any, any> {
    * Leaf
    * flip through the items
    */
-  leaf = (isReverseDirection = false) => {
+  leafTools = (isReverseDirection = false) => {
     const { activeToolId } = this.state
     let id = activeToolId
     /**
@@ -235,7 +235,7 @@ class Toolbar extends React.Component<any, any> {
       if (this.state.isPlus) {
         event.preventDefault()
         event.stopPropagation()
-        this.leaf(event.shiftKey)
+        this.leafTools(event.shiftKey)
       } else {
         const {
           value: { focusBlock, focusText },
@@ -245,7 +245,7 @@ class Toolbar extends React.Component<any, any> {
           event.preventDefault()
           event.stopPropagation()
           this.setState({ isPlus: true })
-          this.leaf(event.shiftKey)
+          this.leafTools(event.shiftKey)
         }
       }
       return
@@ -279,7 +279,7 @@ class Toolbar extends React.Component<any, any> {
 
   componentDidUpdate() {
     if (this.state.needMoveForNewBlock) {
-      this.setState(Toolbar.move(this.props))
+      this.setState(Editor.moveToolbar(this.props))
     }
   }
 
@@ -367,4 +367,4 @@ class Toolbar extends React.Component<any, any> {
   }
 }
 
-export default Toolbar
+export default Editor
