@@ -9,7 +9,7 @@ import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
 import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
-  display: inline-flex;
+  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
   ul.content {
     margin: 0;
     padding: 0;

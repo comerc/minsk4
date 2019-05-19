@@ -6,7 +6,7 @@ import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
-  display: inline-flex;
+  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
   .ant-tooltip-arrow {
     display: none;
   }
@@ -111,9 +111,9 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const { className, theme, isVisiblePopup, onVisiblePopupChange } = this.props
+    const { className, style, theme, isVisiblePopup, onVisiblePopupChange } = this.props
     return (
-      <div className={className}>
+      <div className={className} style={style}>
         <Popup
           {...{
             overlayClassName: className,

@@ -5,7 +5,7 @@ import idx from 'idx'
 import Toolbar from './Toolbar'
 
 const toolbarPlugin = (options: any = {}) => {
-  let { theme = {}, getActions = () => ({}), getTools = () => [], clickInterval = 200 } = options
+  let { theme = {}, getTools = () => [], getActions = () => ({}), clickInterval = 200 } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -22,13 +22,15 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('renderEditor', props)
     const { value } = props
     const children = next()
+    const containerRef = React.createRef() as any
     return (
       <Toolbar
         {...{
-          editor,
+          containerRef,
           theme,
-          getActions,
+          editor,
           getTools,
+          getActions,
           clickInterval,
           value,
         }}

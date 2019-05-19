@@ -5,8 +5,10 @@ import Popup from './Popup'
 import Button from './Button'
 
 const withStyle = (Self) => styled(Self)`
-  display: inline-flex;
-  margin: 0 auto;
+  display: ${({ isVisible }) => (isVisible ? 'inline-flex' : 'none')};
+  ${Popup} {
+    margin: 0 auto;
+  }
   ul.content {
     margin: 0;
     padding: 0;

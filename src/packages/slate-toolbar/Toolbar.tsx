@@ -42,25 +42,13 @@ const withStyle = (Self) => styled(Self)`
     right: 0;
     top: 0;
     display: block;
-    &--hidden {
-      display: none;
-    }
   }
-  .content {
-    max-width: ${({ theme }) => theme.contentWidth};
-    margin: 0 auto;
-    position: relative;
-  }
-  .plus-wrapper {
+  ${Plus} {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     left: -${({ theme }) => theme.toolbarButtonWidth};
     animation: fadeIn 0.4s;
-    display: inline-flex;
-    &--hidden {
-      display: none;
-    }
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -70,26 +58,16 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
-  .actions-wrapper {
+  ${Actions} {
     position: absolute;
     left: 0;
     right: 0;
     top: 7px;
-    display: inline-flex;
-    &--hidden {
-      display: none;
-    }
   }
-  .more-wrapper {
+  ${More} {
     position: absolute;
     right: 2px;
     top: 3px;
-    display: inline-flex;
-    opacity: 1;
-    &--hidden {
-      display: none;
-      opacity: 0;
-    }
   }
 `
 
@@ -115,25 +93,27 @@ class Toolbar extends React.Component<any, any> {
   actions = this.props.getActions(this.props.editor)
   containerRef = React.createRef() as any
 
-  move = () => {
+  move = (nextProps) => {
     const {
       value: { focusBlock },
-    } = this.props
-    const containerNode = this.containerRef.current
+      containerRef,
+    } = nextProps
+    const containerNode = containerRef.current
     const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
     const focusBlockBound = focusBlockNode.getBoundingClientRect()
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
-    this.setState({ toolbarTop, focusBlockBoundOffset })
+    return { toolbarTop, focusBlockBoundOffset }
   }
 
   focus = () => {
     const {
       value: { selection, document },
+      containerRef,
     } = this.props
     if (!selection.isFocused) {
-      const containerNode = this.containerRef.current
+      const containerNode = containerRef.current
       const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
       documentNode.focus()
     }
@@ -276,21 +256,25 @@ class Toolbar extends React.Component<any, any> {
       const isOther = focusBlock.key !== idx(prevProps, (_) => _.value.focusBlock.key)
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       if (this.state.isPlus && (isOther || !isEmptyParagraph)) {
-        this.closePlus()
+        this.setState({ isPlus: false })
+        // this.closePlus()
       }
       if (isOther || bodyWidth !== prevProps.bodyWidth) {
-        this.move()
+        this.setState(this.move(this.props))
       }
-    } else {
-      if (this.state.isPlus) {
-        this.closePlus()
-      }
+      // } else {
+      //   if (this.state.isPlus) {
+      //     console.log('!isFocused')
+      //     this.setState({ isPlus: false })
+      //     // this.closePlus()
+      //   }
     }
   }
 
   render() {
     const {
       className,
+      containerRef,
       theme,
       editor,
       editor: { readOnly: isReadOnly },
@@ -307,37 +291,30 @@ class Toolbar extends React.Component<any, any> {
       <div
         {...{
           className,
-          ref: this.containerRef,
+          ref: containerRef,
           onKeyDownCapture: this.handleKeyDownCapture,
           onClickCapture: this.handleClickCapture,
         }}
       >
         <div className="wrapper">
           {children}
-          <div
-            {...{
-              className: classNames('toolbar', {
-                'toolbar--hidden': !isFocused || isReadOnly,
-              }),
-              style: {
-                transform: `translate3D(0, ${toolbarTop}px, 0)`,
-              },
-              onMouseDown: this.handleToolbarMouseDown,
-            }}
-          >
+          {isFocused && !isReadOnly && (
             <div
               {...{
-                className: classNames('plus-wrapper', {
-                  'plus-wrapper--hidden': !isEmptyParagraph,
-                }),
+                className: 'toolbar',
                 style: {
-                  transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                  transform: `translate3D(0, ${toolbarTop}px, 0)`,
                 },
+                onMouseDown: this.handleToolbarMouseDown,
               }}
             >
               <Plus
                 {...{
                   theme,
+                  style: {
+                    transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
+                  },
+                  isVisible: isEmptyParagraph,
                   isVisiblePopup: isPlus,
                   onVisiblePopupChange: this.handlePlusChange,
                   close: this.closePlus,
@@ -346,33 +323,26 @@ class Toolbar extends React.Component<any, any> {
                   activeToolId,
                 }}
               />
-            </div>
-            <div
-              {...{
-                className: classNames('actions-wrapper', {
-                  'actions-wrapper--hidden': !isFocused || isTitle || isEmptyParagraph,
-                }),
-              }}
-            >
               <Actions
                 {...{
                   theme,
+                  isVisible: actions.length !== 0,
                   clickInterval,
                   actions,
                   activeActionId,
                 }}
               />
+              <More
+                {...{
+                  theme,
+                  isVisible: !isTitle,
+                  editor,
+                  clickInterval,
+                  onMove: this.move,
+                }}
+              />
             </div>
-            <div
-              {...{
-                className: classNames('more-wrapper', {
-                  'more-wrapper--hidden': isTitle,
-                }),
-              }}
-            >
-              <More {...{ theme, editor, clickInterval, onMove: this.move }} />
-            </div>
-          </div>
+          )}
         </div>
       </div>
     )
