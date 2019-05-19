@@ -329,9 +329,7 @@ class Toolbar extends React.Component<any, any> {
                 <Plus
                   {...{
                     theme,
-                    style: {
-                      transform: `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`,
-                    },
+                    focusBlockBoundOffset,
                     isHiddenPopup: isHiddenPlusPopup,
                     isVisiblePopup: isPlus,
                     onVisiblePopupChange: this.handlePlusChange,

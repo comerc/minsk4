@@ -7,7 +7,12 @@ import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   &.container {
-    display: 'inline-flex';
+    display: inline-flex;
+    transform: translate3d(
+      0,
+      calc(${({ focusBlockBoundOffset }) => focusBlockBoundOffset}px - 50%),
+      0
+    ) !important;
   }
   .ant-tooltip-arrow {
     display: none;
@@ -115,8 +120,8 @@ class Plus extends React.Component<any> {
   render() {
     const {
       className,
-      style,
       theme,
+      focusBlockBoundOffset,
       isHiddenPopup,
       isVisiblePopup,
       onVisiblePopupChange,
@@ -125,7 +130,6 @@ class Plus extends React.Component<any> {
       <div
         {...{
           className: classNames(className, 'container'),
-          style,
         }}
       >
         <Popup

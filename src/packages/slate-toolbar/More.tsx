@@ -10,7 +10,7 @@ import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   &.container {
-    display: 'inline-flex';
+    display: inline-flex;
   }
   ul.content {
     margin: 0;
