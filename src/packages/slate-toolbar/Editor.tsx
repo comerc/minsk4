@@ -142,7 +142,7 @@ class Editor extends React.Component<any, any> {
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
-
+  timeoutId = -1
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
@@ -259,7 +259,8 @@ class Editor extends React.Component<any, any> {
         const { clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
-        setTimeout(() => {
+        clearTimeout(this.timeoutId)
+        this.timeoutId = setTimeout(() => {
           this.setState({ isPlusPopup: false })
           this.tools[activeToolId].onClick(event)
         }, clickInterval)
@@ -284,6 +285,10 @@ class Editor extends React.Component<any, any> {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutId)
   }
 
   render() {

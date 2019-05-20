@@ -62,6 +62,7 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
+  timeoutId = -1
   alignPopup = { offset: [8, 0] }
   isButtonMouseDown = false
 
@@ -92,12 +93,14 @@ class More extends React.Component<any> {
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
-    setTimeout(() => {
+    clearTimeout(this.timeoutId)
+    this.timeoutId = setTimeout(() => {
       // TODO: replace callbacks to promises
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        setTimeout(() => {
+        clearTimeout(this.timeoutId)
+        this.timeoutId = setTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -118,7 +121,8 @@ class More extends React.Component<any> {
       },
       clickInterval,
     } = this.props
-    setTimeout(() => {
+    clearTimeout(this.timeoutId)
+    this.timeoutId = setTimeout(() => {
       this.setState({ isVisiblePopup: false })
       const hasTitle = document.nodes.get(0).type === 'title'
       const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
@@ -145,11 +149,13 @@ class More extends React.Component<any> {
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
-    setTimeout(() => {
+    clearTimeout(this.timeoutId)
+    this.timeoutId = setTimeout(() => {
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        setTimeout(() => {
+        clearTimeout(this.timeoutId)
+        this.timeoutId = setTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -216,6 +222,10 @@ class More extends React.Component<any> {
         </li>
       </ul>
     )
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutId)
   }
 
   render() {

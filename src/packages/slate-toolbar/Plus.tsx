@@ -62,6 +62,7 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Plus extends React.Component<any> {
+  timeoutId = -1
   alignPopup = { offset: [this.props.offsetX, -5] }
   // isButtonMouseDown = false
 
@@ -81,7 +82,8 @@ class Plus extends React.Component<any> {
   handleToolClick = (event) => {
     const { tools, onVisiblePopupChange, clickInterval } = this.props
     const id = event.target.dataset.id
-    setTimeout(() => {
+    clearTimeout(this.timeoutId)
+    this.timeoutId = setTimeout(() => {
       onVisiblePopupChange(false)
       tools[id].onClick(event)
     }, clickInterval)
@@ -110,6 +112,10 @@ class Plus extends React.Component<any> {
         ))}
       </ul>
     )
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutId)
   }
 
   render() {
