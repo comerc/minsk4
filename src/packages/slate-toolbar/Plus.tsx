@@ -81,9 +81,9 @@ class Plus extends React.Component<any> {
   // }
 
   handleToolClick = (event) => {
-    const { tools, onVisiblePopupChange, withTimeout, clickInterval } = this.props
+    const { tools, onVisiblePopupChange, timeout, clickInterval } = this.props
     const id = event.target.dataset.id
-    withTimeout(() => {
+    timeout(() => {
       onVisiblePopupChange(false)
       tools[id].onClick(event)
     }, clickInterval)

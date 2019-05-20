@@ -90,17 +90,17 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
-      withTimeout,
+      timeout,
       clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
-    withTimeout(() => {
+    timeout(() => {
       // TODO: replace callbacks to promises
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        withTimeout(() => {
+        timeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -119,10 +119,10 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      withTimeout,
+      timeout,
       clickInterval,
     } = this.props
-    withTimeout(() => {
+    timeout(() => {
       this.setState({ isVisiblePopup: false })
       const hasTitle = document.nodes.get(0).type === 'title'
       const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
@@ -145,16 +145,16 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
-      withTimeout,
+      timeout,
       clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
-    withTimeout(() => {
+    timeout(() => {
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        withTimeout(() => {
+        timeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })

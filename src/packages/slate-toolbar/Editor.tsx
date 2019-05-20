@@ -257,10 +257,10 @@ class Editor extends React.Component<any, any> {
       // TODO: move to Plus - double code with Plus.handleToolClick()
       const { activeToolId } = this.state
       if (activeToolId !== -1) {
-        const { withTimeout, clickInterval } = this.props
+        const { timeout, clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
-        withTimeout(() => {
+        timeout(() => {
           this.setState({ isPlusPopup: false })
           this.tools[activeToolId].onClick(event)
         }, clickInterval)

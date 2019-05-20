@@ -6,7 +6,7 @@ const withTimeouts = (Component) => {
     static displayName = `withTimeouts(${Component.name})`
     timeoutIdPool: any[] = []
 
-    withTimeout = (callback, ms = 0) => {
+    timeout = (callback, ms = 0) => {
       this.timeoutIdPool.push(setTimeout(callback, ms))
     }
 
@@ -15,7 +15,7 @@ const withTimeouts = (Component) => {
     }
 
     render() {
-      return <Component {...{ ...this.props, withTimeout: this.withTimeout }} />
+      return <Component {...{ ...this.props, timeout: this.timeout }} />
     }
   }
 
