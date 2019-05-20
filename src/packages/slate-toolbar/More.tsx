@@ -62,7 +62,7 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
-  timeoutId = -1
+  timeoutId = null as any
   alignPopup = { offset: [8, 0] }
   isButtonMouseDown = false
 

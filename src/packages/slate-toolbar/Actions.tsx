@@ -26,7 +26,7 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Actions extends React.Component<any> {
-  timeoutId = -1
+  timeoutId = null as any
 
   handleActionClick = (event) => {
     const { actions, clickInterval } = this.props

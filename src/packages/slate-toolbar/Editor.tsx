@@ -142,7 +142,7 @@ class Editor extends React.Component<any, any> {
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
-  timeoutId = -1
+  timeoutId = null as any
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
