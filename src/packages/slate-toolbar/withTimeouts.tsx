@@ -4,14 +4,14 @@ import ReactDOM from 'react-dom'
 const withTimeouts = (Component) => {
   class Wrapper extends React.Component {
     static displayName = `withTimeouts(${Component.name})`
-    timeoutIdPool: any[] = []
+    timeoutIds: any[] = []
 
     timeout = (callback, ms = 0) => {
-      this.timeoutIdPool.push(setTimeout(callback, ms))
+      this.timeoutIds.push(setTimeout(callback, ms))
     }
 
     componentWillUnmount() {
-      this.timeoutIdPool.forEach((timeoutId) => clearTimeout(timeoutId))
+      this.timeoutIds.forEach((timeoutId) => clearTimeout(timeoutId))
     }
 
     render() {
