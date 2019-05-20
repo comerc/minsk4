@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 const withTimeouts = (Component) => {
   class Wrapper extends React.Component<any> {
     static displayName = `withTimeouts(${Component.name})`
-    timeoutIdPool = [] as any
+    timeoutIdPool: any[] = []
 
     withTimeout = (callback, ms = 0) => {
       this.timeoutIdPool.push(setTimeout(callback, ms))
