@@ -141,9 +141,7 @@ class Plus extends React.Component<any> {
         >
           <Button
             {...{
-              className: classNames('button', {
-                'button--x': isVisiblePopup,
-              }),
+              className: classNames('button', { 'button--x': isVisiblePopup }),
               size: 'small',
               shape: 'circle',
               // onMouseDown: this.handleButtonMouseDown,
