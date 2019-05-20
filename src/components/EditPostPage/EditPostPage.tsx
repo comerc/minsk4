@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { formCreate } from 'src/utilities'
 import { Form, Input, Button } from 'antd'
 
 const withStyle = (Self) => styled(Self)`
@@ -10,8 +9,10 @@ const withStyle = (Self) => styled(Self)`
   }
 `
 
-@formCreate()
+const formCreate = Form.create as any
+
 @withStyle
+@formCreate()
 class EditPostPage extends React.Component<any> {
   handleSubmit = (event) => {
     event.preventDefault()
