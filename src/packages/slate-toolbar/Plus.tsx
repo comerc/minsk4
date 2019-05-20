@@ -8,7 +8,6 @@ import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
-    transform: translate3d(0, calc(${({ topOffset }) => topOffset}px - 50%), 0);
   }
   .ant-tooltip-arrow {
     display: none;
@@ -63,7 +62,7 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Plus extends React.Component<any> {
-  alignPopup = { offset: [this.props.theme.toolbarButtonWidth, -5] }
+  alignPopup = { offset: [this.props.offsetX, -5] }
   // isButtonMouseDown = false
 
   // handleButtonMouseDown = (event) => {
@@ -116,7 +115,6 @@ class Plus extends React.Component<any> {
   render() {
     const {
       className,
-      theme,
       focusBlockBoundOffset,
       isHiddenPopup,
       isVisiblePopup,

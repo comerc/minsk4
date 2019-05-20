@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import idx from 'idx'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
+import Wrapper from './Wrapper'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
 import Plus from './Plus'
@@ -11,10 +12,9 @@ import More from './More'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
-  .wrapper {
+  ${Wrapper} {
     position: relative;
     margin: 1px auto;
-    max-width: ${({ theme }) => theme.contentWidth};
   }
   .${({ editor }) => editor.props.className.replace(' ', '.')} {
     > * {
@@ -125,6 +125,7 @@ class Editor extends React.Component<any, any> {
     }
     const focusBlockBound = focusBlockNode.getBoundingClientRect()
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
+    console.log(focusBlockBound, containerBoundTop)
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
     return { toolbarTop, focusBlockBoundOffset, isMoveToolbarForNewBlock: false }
@@ -315,20 +316,14 @@ class Editor extends React.Component<any, any> {
           onClickCapture: this.handleClickCapture,
         }}
       >
-        <div className="wrapper">
+        <Wrapper {...{ toolbarTop, focusBlockBoundOffset }}>
           {children}
           {isFocused && !isReadOnly && (
-            <Toolbar
-              {...{
-                top: toolbarTop,
-                onMouseDown: this.handleToolbarMouseDown,
-              }}
-            >
+            <Toolbar {...{ onMouseDown: this.handleToolbarMouseDown }}>
               {isEmptyParagraph && (
                 <Plus
                   {...{
-                    theme,
-                    topOffset: focusBlockBoundOffset,
+                    offsetX: theme.toolbarButtonWidth,
                     isHiddenPopup: isHiddenPlusPopup,
                     isVisiblePopup: isPlusPopup,
                     onVisiblePopupChange: this.handlePlusPopupChange,
@@ -341,7 +336,6 @@ class Editor extends React.Component<any, any> {
               {!isEmptyParagraph && actions.length !== 0 && (
                 <Actions
                   {...{
-                    theme,
                     clickInterval,
                     actions,
                     activeActionId,
@@ -351,7 +345,6 @@ class Editor extends React.Component<any, any> {
               {!isTitle && (
                 <More
                   {...{
-                    theme,
                     editor,
                     clickInterval,
                     onMoveBlockClick: this.handleMoveBlockClick,
@@ -360,7 +353,7 @@ class Editor extends React.Component<any, any> {
               )}
             </Toolbar>
           )}
-        </div>
+        </Wrapper>
       </div>
     )
   }
