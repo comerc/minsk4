@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const withTimeouts = (Component) => {
-  class Wrapper extends React.Component<any> {
+  class Wrapper extends React.Component {
     static displayName = `withTimeouts(${Component.name})`
     timeoutIdPool: any[] = []
 
