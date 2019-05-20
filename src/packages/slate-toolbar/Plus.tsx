@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import withTimeouts from './withTimeouts'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
@@ -61,8 +62,8 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
+@withTimeouts
 class Plus extends React.Component<any> {
-  timeoutId = null as any
   alignPopup = { offset: [this.props.offsetX, -5] }
   // isButtonMouseDown = false
 
@@ -80,10 +81,9 @@ class Plus extends React.Component<any> {
   // }
 
   handleToolClick = (event) => {
-    const { tools, onVisiblePopupChange, clickInterval } = this.props
+    const { tools, onVisiblePopupChange, withTimeout, clickInterval } = this.props
     const id = event.target.dataset.id
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(() => {
+    withTimeout(() => {
       onVisiblePopupChange(false)
       tools[id].onClick(event)
     }, clickInterval)
@@ -112,10 +112,6 @@ class Plus extends React.Component<any> {
         ))}
       </ul>
     )
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutId)
   }
 
   render() {

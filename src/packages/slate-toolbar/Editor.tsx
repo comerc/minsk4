@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import idx from 'idx'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
+import withTimeouts from './withTimeouts'
 import Wrapper from './Wrapper'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
@@ -70,9 +71,10 @@ const withStyle = (Self) => styled(Self)`
   }
 `
 
+@withStyle
 @withSizes(({ width }) => ({ bodyWidth: width }))
 @withContainerNode
-@withStyle
+@withTimeouts
 class Editor extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
@@ -125,7 +127,6 @@ class Editor extends React.Component<any, any> {
     }
     const focusBlockBound = focusBlockNode.getBoundingClientRect()
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
-    console.log(focusBlockBound, containerBoundTop)
     const toolbarTop = Math.round(focusBlockBound.top - containerBoundTop)
     const focusBlockBoundOffset = Math.round(focusBlockBound.height / 2)
     return { toolbarTop, focusBlockBoundOffset, isMoveToolbarForNewBlock: false }
@@ -142,7 +143,6 @@ class Editor extends React.Component<any, any> {
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
-  timeoutId = null as any
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
@@ -254,13 +254,13 @@ class Editor extends React.Component<any, any> {
       return
     }
     if (event.key === 'Enter') {
+      // TODO: move to Plus - double code with Plus.handleToolClick()
       const { activeToolId } = this.state
       if (activeToolId !== -1) {
-        const { clickInterval } = this.props
+        const { withTimeout, clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
-        clearTimeout(this.timeoutId)
-        this.timeoutId = setTimeout(() => {
+        withTimeout(() => {
           this.setState({ isPlusPopup: false })
           this.tools[activeToolId].onClick(event)
         }, clickInterval)
@@ -285,10 +285,6 @@ class Editor extends React.Component<any, any> {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
     }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutId)
   }
 
   render() {

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import withTimeouts from './withTimeouts'
 import Popup from './Popup'
 import Button from './Button'
 
@@ -25,21 +26,15 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
+@withTimeouts
 class Actions extends React.Component<any> {
-  timeoutId = null as any
-
   handleActionClick = (event) => {
-    const { actions, clickInterval } = this.props
+    const { actions, withTimeout, clickInterval } = this.props
     const id = event.target.dataset.id
     const action = actions[id]
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(() => {
+    withTimeout(() => {
       action.onClick(event)
     }, clickInterval)
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutId)
   }
 
   renderContent = () => {

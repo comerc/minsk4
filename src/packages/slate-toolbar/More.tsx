@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import withTimeouts from './withTimeouts'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
@@ -53,6 +54,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
+@withTimeouts
 class More extends React.Component<any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!prevState.isVisiblePopup && prevState.isConfirmDelete) {
@@ -62,7 +64,6 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
-  timeoutId = null as any
   alignPopup = { offset: [8, 0] }
   isButtonMouseDown = false
 
@@ -89,18 +90,17 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
+      withTimeout,
       clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(() => {
+    withTimeout(() => {
       // TODO: replace callbacks to promises
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        clearTimeout(this.timeoutId)
-        this.timeoutId = setTimeout(() => {
+        withTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -119,10 +119,10 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
+      withTimeout,
       clickInterval,
     } = this.props
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(() => {
+    withTimeout(() => {
       this.setState({ isVisiblePopup: false })
       const hasTitle = document.nodes.get(0).type === 'title'
       const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
@@ -145,17 +145,16 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
+      withTimeout,
       clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(() => {
+    withTimeout(() => {
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        clearTimeout(this.timeoutId)
-        this.timeoutId = setTimeout(() => {
+        withTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -222,10 +221,6 @@ class More extends React.Component<any> {
         </li>
       </ul>
     )
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutId)
   }
 
   render() {
