@@ -5,6 +5,7 @@ import idx from 'idx'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
 import withTimeouts from './withTimeouts'
+import { Block } from 'slate'
 import Wrapper from './Wrapper'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
@@ -85,7 +86,7 @@ class Editor extends React.Component<any, any> {
       value: { selection, focusBlock, focusText },
       bodyWidth,
     } = nextProps
-    const focusBlockKey = idx(nextProps, (_) => _.value.focusBlock.key)
+    const focusBlockKey = idx(focusBlock, (self) => self.key)
     if (prevState.focusBlockKey !== focusBlockKey) {
       result = { ...result, focusBlockKey }
     }
@@ -284,6 +285,35 @@ class Editor extends React.Component<any, any> {
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
+    }
+    const {
+      editor,
+      value: { selection, focusBlock, document },
+    } = this.props
+    if (focusBlock !== null) {
+      const firstNode = document.nodes.get(0)
+      if (
+        (firstNode.key !== focusBlock.key || !selection.isFocused) &&
+        firstNode.type === 'title' &&
+        firstNode.text === ''
+      ) {
+        const block = Block.fromJSON({
+          key: firstNode.key,
+          object: 'block',
+          type: 'title',
+          nodes: [
+            {
+              object: 'text',
+              leaves: [
+                {
+                  text: '(Untitled)',
+                },
+              ],
+            },
+          ],
+        })
+        editor.replaceNodeByKey(firstNode.key, block)
+      }
     }
   }
 
