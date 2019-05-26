@@ -22,7 +22,11 @@ const whens = {
   },
 }
 
-const fixedCursorStyle = { float: 'left' }
+const fixedStyle = {
+  float: 'left', // for cursor
+  'user-select': 'none',
+  '-webkit-tap-highlight-color': 'transparent',
+}
 
 export default ({ type, placeholder }) => {
   if (!['title', 'paragraph'].includes(type)) {
@@ -31,6 +35,6 @@ export default ({ type, placeholder }) => {
   return PlaceholderPlugin({
     placeholder,
     when: whens[type],
-    style: fixedCursorStyle,
+    style: fixedStyle,
   })
 }
