@@ -211,7 +211,16 @@ class Editor extends React.Component<any, any> {
   }
 
   handlePlusPopupChange = (visible) => {
-    this.setState({ isPlusPopup: visible })
+    if (visible) {
+      this.setState({ isPlusPopup: true })
+    } else {
+      const { timeout } = this.props
+      // зачем тут нужен timeout?
+      // при клике мышкой по новому пустому параграфу перерисовывались:
+      // - крестик в плюсик на старом месте
+      // - курсор на новом месте без рамки фокуса
+      timeout(() => this.setState({ isPlusPopup: false }))
+    }
   }
 
   handleToolbarMouseDown = (event) => {
