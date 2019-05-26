@@ -22,10 +22,10 @@ const whens = {
   },
 }
 
-const fixedStyle = {
+const style = {
   float: 'left', // for cursor
-  'user-select': 'none',
-  '-webkit-tap-highlight-color': 'transparent',
+  userSelect: 'none',
+  WebkitTapHighlightColor: 'transparent', // remove mobile color flashing (deprecated)
 }
 
 export default ({ type, placeholder }) => {
@@ -35,6 +35,6 @@ export default ({ type, placeholder }) => {
   return PlaceholderPlugin({
     placeholder,
     when: whens[type],
-    style: fixedStyle,
+    style,
   })
 }
