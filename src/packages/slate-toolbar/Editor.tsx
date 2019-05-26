@@ -224,8 +224,6 @@ class Editor extends React.Component<any, any> {
   }
 
   handleToolbarMouseDown = (event) => {
-    /* for stop of double click by PlusIcon or MoreIcon */
-    // TODO: проверить pointer-events: none для svg
     event.preventDefault()
   }
 
@@ -279,18 +277,6 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  handleClickCapture = (event) => {
-    if (this.state.isPlusPopup) {
-      const key = event.target.dataset.key
-      const {
-        value: { focusBlock, document },
-      } = this.props
-      if ([focusBlock.key, document.key].includes(key)) {
-        this.setState({ isPlusPopup: false })
-      }
-    }
-  }
-
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
@@ -300,6 +286,8 @@ class Editor extends React.Component<any, any> {
       value: { selection, focusBlock, document },
       untitled,
     } = this.props
+    // при возвращении фокуса после onBlur,
+    // рендер отрабатывает два раза, первый - с пустым focusBlock
     if (focusBlock !== null) {
       const firstNode = document.nodes.get(0)
       if (
@@ -354,7 +342,6 @@ class Editor extends React.Component<any, any> {
         {...{
           className,
           onKeyDownCapture: this.handleKeyDownCapture,
-          onClickCapture: this.handleClickCapture,
         }}
       >
         <Wrapper {...{ toolbarTop, focusBlockBoundOffset }}>
