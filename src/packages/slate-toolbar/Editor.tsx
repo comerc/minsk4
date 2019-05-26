@@ -289,6 +289,7 @@ class Editor extends React.Component<any, any> {
     const {
       editor,
       value: { selection, focusBlock, document },
+      untitled,
     } = this.props
     if (focusBlock !== null) {
       const firstNode = document.nodes.get(0)
@@ -306,7 +307,7 @@ class Editor extends React.Component<any, any> {
               object: 'text',
               leaves: [
                 {
-                  text: '(Untitled)',
+                  text: untitled,
                 },
               ],
             },
