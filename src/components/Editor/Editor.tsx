@@ -37,11 +37,22 @@ const schema = {
 const other = () => {
   const renderNode = (props, _editor, next) => {
     const { attributes, children, node } = props
+    // FIXED: выделение текстового блока тройным кликом - { display: 'flex' } + <span>&#65279;</span>
     switch (node.type) {
       case 'title':
-        return <h2 {...attributes}>{children}</h2>
+        return (
+          <h2 {...attributes} style={{ display: 'flex' }}>
+            {children}
+            <span>&#65279;</span>
+          </h2>
+        )
       case 'paragraph':
-        return <p {...attributes}>{children}</p>
+        return (
+          <p {...attributes} style={{ display: 'flex' }}>
+            {children}
+            <span>&#65279;</span>
+          </p>
+        )
       case 'check-list-item':
         return <CheckListItem {...props} />
       // default:
