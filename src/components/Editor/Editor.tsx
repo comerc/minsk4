@@ -42,15 +42,15 @@ const other = () => {
       case 'title':
         return (
           <h2 {...attributes} style={{ display: 'flex' }}>
-            <span contentEditable={false}>&#65279;</span>
             <span style={{ flexGrow: 1 }}>{children}</span>
+            <span contentEditable={false}>&#65279;</span>
           </h2>
         )
       case 'paragraph':
         return (
           <p {...attributes} style={{ display: 'flex' }}>
-            <span contentEditable={false}>&#65279;</span>
             <span style={{ flexGrow: 1 }}>{children}</span>
+            <span contentEditable={false}>&#65279;</span>
           </p>
         )
       case 'check-list-item':
