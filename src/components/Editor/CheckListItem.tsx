@@ -51,6 +51,7 @@ class CheckListItem extends React.Component<any> {
               type: 'checkbox',
               checked,
               onChange: this.handleChange,
+              tabIndex: -1,
             }}
           />
         </span>
