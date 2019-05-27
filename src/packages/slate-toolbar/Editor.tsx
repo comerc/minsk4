@@ -333,6 +333,8 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
+    const isSelected =
+      selection.start.key !== selection.end.key || selection.start.offset !== selection.end.offset
     const isFocused = selection.isFocused && !!focusBlock
     const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
@@ -361,7 +363,7 @@ class Editor extends React.Component<any, any> {
                   }}
                 />
               )}
-              {!isEmptyParagraph && actions.length !== 0 && (
+              {!isSelected && !isEmptyParagraph && actions.length !== 0 && (
                 <Actions
                   {...{
                     clickInterval,
