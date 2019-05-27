@@ -5,6 +5,7 @@ import { Block, Value } from 'slate'
 import toolbar from 'src/packages/slate-toolbar'
 import placeholder from 'src/packages/slate-placeholder'
 import CheckListItem from './CheckListItem'
+import Paragraph from './Paragraph'
 import initialValueAsJson from './value.json'
 import { ReactComponent as TasksIcon } from 'src/icons/ce-code.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
@@ -37,22 +38,11 @@ const schema = {
 const other = () => {
   const renderNode = (props, _editor, next) => {
     const { attributes, children, node } = props
-    // FIXED: выделение текстового блока тройным кликом - { display: 'flex' } + <span>&#65279;</span>
     switch (node.type) {
       case 'title':
-        return (
-          <h2 {...attributes} style={{ display: 'flex' }}>
-            <span style={{ flexGrow: 1 }}>{children}</span>
-            <span contentEditable={false}>&#65279;</span>
-          </h2>
-        )
+        return <h2 {...attributes}>{children}</h2>
       case 'paragraph':
-        return (
-          <p {...attributes} style={{ display: 'flex' }}>
-            <span style={{ flexGrow: 1 }}>{children}</span>
-            <span contentEditable={false}>&#65279;</span>
-          </p>
-        )
+        return <Paragraph {...props} />
       case 'check-list-item':
         return <CheckListItem {...props} />
       // default:
