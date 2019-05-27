@@ -124,10 +124,10 @@ class More extends React.Component<any> {
     } = this.props
     timeout(() => {
       this.setState({ isVisiblePopup: false })
-      const hasTitle = document.nodes.get(0).type === 'title'
-      const isFirstNode = document.nodes.indexOf(focusBlock) === (hasTitle ? 1 : 0)
-      if (isFirstNode && document.nodes.size === (hasTitle ? 3 : 2)) {
-        const lastNode = document.nodes.get(hasTitle ? 2 : 1)
+      const firstNode = document.nodes.get(0)
+      const isFirstNode = firstNode.key === focusBlock.key
+      if (isFirstNode && document.nodes.size === 2) {
+        const lastNode = document.nodes.get(1)
         if (lastNode.type === 'paragraph' && lastNode.text === '') {
           // fixed placeholder
           editor.removeNodeByKey(focusBlock.key).removeNodeByKey(lastNode.key)
@@ -173,12 +173,9 @@ class More extends React.Component<any> {
     const isArrowUpDisabled = !prevNode || prevNode.type === 'title'
     const nextNode = document.getNextNode(focusBlock.key)
     const isArrowDownDisabled = !nextNode
-    const hasTitle = document.nodes.get(0).type === 'title'
-    const firstNode = document.nodes.get(hasTitle ? 1 : 0)
+    const firstNode = document.nodes.get(0)
     const isDeleteDisabled =
-      document.nodes.size === (hasTitle ? 2 : 1) &&
-      firstNode.type === 'paragraph' &&
-      firstNode.text === ''
+      document.nodes.size === 1 && firstNode.type === 'paragraph' && firstNode.text === ''
     return (
       <ul className="content">
         <li>

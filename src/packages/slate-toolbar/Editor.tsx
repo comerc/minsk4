@@ -5,7 +5,6 @@ import idx from 'idx'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
 import withTimeouts from './withTimeouts'
-import { Block } from 'slate'
 import Wrapper from './Wrapper'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
@@ -31,7 +30,7 @@ const withStyle = (Self) => styled(Self)`
         z-index: -1;
         box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor5};
       }
-      &.block--focused:not(.block--title) {
+      &.block--focused {
         background-image: linear-gradient(
           17deg,
           rgba(243, 248, 255, 0.03) 63.45%,
@@ -284,35 +283,7 @@ class Editor extends React.Component<any, any> {
     const {
       editor,
       value: { selection, focusBlock, document },
-      untitled,
     } = this.props
-    // при возвращении фокуса после onBlur,
-    // рендер отрабатывает два раза, первый - с пустым focusBlock
-    if (focusBlock !== null) {
-      const firstNode = document.nodes.get(0)
-      if (
-        (firstNode.key !== focusBlock.key || !selection.isFocused) &&
-        firstNode.type === 'title' &&
-        firstNode.text === ''
-      ) {
-        const block = Block.fromJSON({
-          key: firstNode.key,
-          object: 'block',
-          type: 'title',
-          nodes: [
-            {
-              object: 'text',
-              leaves: [
-                {
-                  text: untitled,
-                },
-              ],
-            },
-          ],
-        })
-        editor.replaceNodeByKey(firstNode.key, block)
-      }
-    }
   }
 
   render() {
@@ -336,7 +307,6 @@ class Editor extends React.Component<any, any> {
     const isSelected =
       selection.start.key !== selection.end.key || selection.start.offset !== selection.end.offset
     const isFocused = selection.isFocused && !!focusBlock
-    const isTitle = isFocused && focusBlock.type === 'title'
     const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
     const actions = (isFocused && this.actions[focusBlock.type]) || []
     return (
@@ -372,15 +342,13 @@ class Editor extends React.Component<any, any> {
                   }}
                 />
               )}
-              {!isTitle && (
-                <More
-                  {...{
-                    editor,
-                    clickInterval,
-                    onMoveBlockClick: this.handleMoveBlockClick,
-                  }}
-                />
-              )}
+              <More
+                {...{
+                  editor,
+                  clickInterval,
+                  onMoveBlockClick: this.handleMoveBlockClick,
+                }}
+              />
             </Toolbar>
           )}
         </Wrapper>

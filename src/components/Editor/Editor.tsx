@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
+import { Input } from 'antd'
 import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import toolbar from 'src/packages/slate-toolbar'
@@ -16,51 +17,43 @@ const withStyle = (Self) => styled(Self)``
 
 const schema = {
   document: {
-    nodes: [
-      { match: { type: 'title' }, min: 1, max: 1 },
-      { match: [{ type: 'paragraph' }, { type: 'check-list-item' }], min: 1 },
-    ],
+    nodes: [{ match: [{ type: 'paragraph' }, { type: 'check_list_item' }], min: 1 }],
     normalize: (editor, { code, node, child, index }) => {
-      switch (code) {
-        case 'child_type_invalid': {
-          const type = index === 0 ? 'title' : 'paragraph'
+      const handlers = {
+        child_type_invalid: () => {
+          const type = 'paragraph'
           return editor.setNodeByKey(child.key, type)
-        }
-        case 'child_min_invalid': {
-          const block = Block.create(index === 0 ? 'title' : 'paragraph')
+        },
+        child_min_invalid: () => {
+          const type = 'paragraph'
+          const block = Block.create(type)
           return editor.insertNodeByKey(node.key, index, block)
-        }
+        },
+      }
+      const handler = handlers[code]
+      if (handler) {
+        return handler()
       }
     },
   },
 }
 
 const other = () => {
-  const renderNode = (props, _editor, next) => {
-    const { attributes, children, node } = props
-    switch (node.type) {
-      case 'title':
-        return <h2 {...attributes}>{children}</h2>
-      case 'paragraph':
-        return <Paragraph {...props} />
-      case 'check-list-item':
-        return <CheckListItem {...props} />
-      // default:
+  const renderNode = (props, editor, next) => {
+    const { node } = props
+    const renders = {
+      paragraph: () => <Paragraph {...props} />,
+      check_list_item: () => <CheckListItem {...props} />,
+    }
+    const render = renders[node.type]
+    if (render) {
+      return render()
     }
     return next()
   }
   const onKeyDown = (event, editor, next) => {
     const { value } = editor
-    if (event.key === 'Enter' && value.startBlock.type === 'title') {
-      event.preventDefault()
-      editor.moveToStartOfNextBlock()
-      const firstNode = value.document.nodes.get(1)
-      if (firstNode.type !== 'paragraph' || firstNode.text !== '') {
-        editor.insertBlock('paragraph')
-      }
-      return
-    }
-    if (event.key === 'Enter' && value.startBlock.type === 'check-list-item') {
+    if (event.key === 'Enter' && value.startBlock.type === 'check_list_item') {
       event.preventDefault()
       editor.splitBlock().setBlocks({ data: { checked: false } })
       return
@@ -68,7 +61,7 @@ const other = () => {
     if (
       event.key === 'Backspace' &&
       value.selection.isCollapsed &&
-      value.startBlock.type === 'check-list-item' &&
+      value.startBlock.type === 'check_list_item' &&
       value.selection.start.offset === 0
     ) {
       event.preventDefault()
@@ -82,14 +75,13 @@ const other = () => {
 }
 
 const addCheckListItemBlock = (editor) => (event) => {
-  editor.setBlocks({ type: 'check-list-item', data: { checked: false } })
+  editor.setBlocks({ type: 'check_list_item', data: { checked: false } })
 }
 
 @withTheme
 @withStyle
 class Editor extends React.Component<any> {
   plugins = [
-    placeholder({ type: 'title', placeholder: 'Title' }),
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
     toolbar({
       theme: this.props.theme,
@@ -99,11 +91,11 @@ class Editor extends React.Component<any> {
             src: <DummyIcon />,
             title: 'Action #0',
             onClick: () => {
-              console.log('Action #0')
+              console.log('Action #0', editor.value.toJSON())
             },
           },
         ],
-        'check-list-item': [
+        check_list_item: [
           {
             src: <DummyIcon />,
             title: 'Action #1',
@@ -156,16 +148,24 @@ class Editor extends React.Component<any> {
   render() {
     const { className } = this.props
     return (
-      <SlateEditor
-        {...{
-          className,
-          defaultValue: Value.fromJSON(initialValueAsJson),
-          autoFocus: true,
-          spellCheck: false,
-          schema,
-          plugins: this.plugins,
-        }}
-      />
+      <React.Fragment>
+        <Input.TextArea
+          {...{
+            autosize: true,
+            defaultValue: 'My new title',
+          }}
+        />
+        <SlateEditor
+          {...{
+            className,
+            defaultValue: Value.fromJSON(initialValueAsJson),
+            autoFocus: true,
+            spellCheck: false,
+            schema,
+            plugins: this.plugins,
+          }}
+        />
+      </React.Fragment>
     )
   }
 }

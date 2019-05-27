@@ -1,27 +1,29 @@
 import PlaceholderPlugin from 'slate-react-placeholder'
 
-const isOnlyTitle = (document) => {
-  const firstNode = document.nodes.get(0)
-  const result =
-    document.nodes.size === 2 && firstNode.text === document.text && firstNode.type === 'title'
-  return result
+const isOnlyOne = (document) => {
+  // const firstNode = document.nodes.get(0)
+  // const result =
+  //   document.nodes.size === 2 && firstNode.text === document.text && firstNode.type === 'title'
+  // return result
+  return document.nodes.size === 1
 }
 
 const whens = {
-  title: (_editor, node) => {
-    return node.object === 'block' && node.type === 'title' && node.text === ''
-  },
+  // title: (_editor, node) => {
+  //   return node.object === 'block' && node.type === 'title' && node.text === ''
+  // },
 
   paragraph: (editor, node) => {
     return (
       node.object === 'block' &&
       node.type === 'paragraph' &&
       node.text === '' &&
-      isOnlyTitle(editor.value.document)
+      isOnlyOne(editor.value.document)
     )
   },
 }
 
+// TODO: move to styled-components (for autoprefixer)
 const style = {
   float: 'left', // for cursor
   userSelect: 'none',
