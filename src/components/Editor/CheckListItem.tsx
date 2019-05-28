@@ -11,7 +11,7 @@ const withStyle = (Self) => styled(Self)`
     display: flex;
   }
   .content-wrapper {
-    margin-left: 20px;
+    margin-left: 24px;
     opacity: 1;
     text-decoration: none;
     &.checked {
