@@ -3,9 +3,8 @@ import styled from 'styled-components'
 import classNames from 'classnames'
 
 const withStyle = (Self) => styled(Self)`
-  display: flex;
-  .content-wrapper {
-    flex-grow: 1;
+  .dummy-wrapper {
+    position: absolute;
   }
 `
 
@@ -18,19 +17,11 @@ class Paragraph extends React.Component<any> {
       children,
       readOnly,
     } = this.props
-    // FIXED: выделение текстового блока тройным кликом - { display: 'flex' } + <span>&#65279;</span>
+    // FIXED: выделение текстового блока тройным кликом - <span>&#65279;</span>
     return (
       <p {...attributes} className={classNames(externalClassName, className)}>
-        <span contentEditable={false}>&#65279;</span>
-        <span
-          {...{
-            className: classNames('content-wrapper'),
-            contentEditable: !readOnly,
-            suppressContentEditableWarning: true,
-          }}
-        >
-          {children}
-        </span>
+        <span className="dummy-wrapper">&#65279;</span>
+        {children}
       </p>
     )
   }
