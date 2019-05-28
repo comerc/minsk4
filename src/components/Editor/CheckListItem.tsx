@@ -19,9 +19,6 @@ const withStyle = (Self) => styled(Self)`
       opacity: 0.65;
       text-decoration: line-through;
     }
-    &:focus {
-      outline: none;
-    }
   }
   .ant-checkbox-inner::after {
     font-size: 0;
