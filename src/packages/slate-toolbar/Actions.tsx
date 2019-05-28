@@ -38,7 +38,7 @@ class Actions extends React.Component<any> {
   }
 
   renderContent = () => {
-    const { className, actions, activeActionId } = this.props
+    const { actions, activeActionId } = this.props
     return (
       <ul className="content">
         {actions.map(({ src, title, onClick }, id) => (
