@@ -9,10 +9,9 @@ const withStyle = (Self) => styled(Self)`
   .checkbox-wrapper {
     position: absolute;
     display: flex;
-    margin-left: 2px;
   }
   .content-wrapper {
-    margin-left: 22px;
+    margin-left: 20px;
     opacity: 1;
     text-decoration: none;
     &.checked {
