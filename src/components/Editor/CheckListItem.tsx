@@ -1,37 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import { Checkbox } from 'antd'
 
 const withStyle = (Self) => styled(Self)`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  & + & {
-    margin-top: 0;
-  }
   .checkbox-wrapper {
-    margin-right: 0.75em;
+    position: absolute;
+    display: flex;
+    margin-left: 2px;
   }
   .content-wrapper {
-    flex-grow: 1;
+    margin-left: 22px;
     opacity: 1;
     text-decoration: none;
     &.checked {
-      opacity: 0.62;
+      opacity: 0.65;
       text-decoration: line-through;
     }
     &:focus {
       outline: none;
     }
   }
+  .ant-checkbox-inner::after {
+    font-size: 0;
+  }
 `
 
 @withStyle
 class CheckListItem extends React.Component<any> {
   handleChange = (event) => {
-    const { editor, node } = this.props
+    const { readOnly, editor, node } = this.props
+    if (readOnly) {
+      return
+    }
     const checked = event.target.checked
-    editor.setNodeByKey(node.key, { data: { checked } })
+    editor
+      .focus()
+      .moveToRangeOfNode(node)
+      .moveToEnd()
+      .setNodeByKey(node.key, { data: { checked } })
   }
 
   render() {
@@ -40,30 +49,20 @@ class CheckListItem extends React.Component<any> {
       attributes: { className: externalClassName, ...attributes },
       children,
       node,
-      readOnly,
     } = this.props
     const checked = node.data.get('checked')
     return (
       <div {...attributes} className={classNames(externalClassName, className)}>
         <span className="checkbox-wrapper" contentEditable={false}>
-          <input
+          <Checkbox
             {...{
-              type: 'checkbox',
               checked,
               onChange: this.handleChange,
               tabIndex: -1,
             }}
           />
         </span>
-        <span
-          {...{
-            className: classNames('content-wrapper', { checked }),
-            contentEditable: !readOnly,
-            suppressContentEditableWarning: true,
-          }}
-        >
-          {children}
-        </span>
+        <span className={classNames('content-wrapper', { checked })}>{children}</span>
       </div>
     )
   }
