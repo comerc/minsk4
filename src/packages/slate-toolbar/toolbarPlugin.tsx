@@ -10,7 +10,7 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log({ node, others })
     return [...others]
   }
-  renderMark = (props, editor, next) => {
+  const renderMark = (props, editor, next) => {
     const { children, mark, attributes } = props
     switch (mark.type) {
       case 'bold':
@@ -56,7 +56,7 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log('onSelect')
     next()
   }
-  return { decorateNode, renderNode, renderEditor, onSelect }
+  return { decorateNode, renderMark, renderNode, renderEditor, onSelect }
 }
 
 export default toolbarPlugin
