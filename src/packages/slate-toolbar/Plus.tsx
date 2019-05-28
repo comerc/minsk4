@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import withTimeouts from './withTimeouts'
+import withTimeouts from 'src/packages/react-timeouts'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'

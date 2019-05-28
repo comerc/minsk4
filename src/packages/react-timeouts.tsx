@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 
 const withTimeouts = (Component) => {
   class Wrapper extends React.Component {
