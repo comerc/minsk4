@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
-import { Input } from 'antd'
 import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import toolbar from 'src/packages/slate-toolbar'
@@ -148,24 +147,16 @@ class Editor extends React.Component<any> {
   render() {
     const { className } = this.props
     return (
-      <React.Fragment>
-        <Input.TextArea
-          {...{
-            autosize: true,
-            defaultValue: 'My new title',
-          }}
-        />
-        <SlateEditor
-          {...{
-            className,
-            defaultValue: Value.fromJSON(initialValueAsJson),
-            autoFocus: true,
-            spellCheck: false,
-            schema,
-            plugins: this.plugins,
-          }}
-        />
-      </React.Fragment>
+      <SlateEditor
+        {...{
+          className,
+          defaultValue: Value.fromJSON(initialValueAsJson),
+          autoFocus: true,
+          spellCheck: false,
+          schema,
+          plugins: this.plugins,
+        }}
+      />
     )
   }
 }
