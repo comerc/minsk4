@@ -10,6 +10,21 @@ const toolbarPlugin = (options: any = {}) => {
     // console.log({ node, others })
     return [...others]
   }
+  renderMark = (props, editor, next) => {
+    const { children, mark, attributes } = props
+    switch (mark.type) {
+      case 'bold':
+        return <strong {...attributes}>{children}</strong>
+      case 'code':
+        return <code {...attributes}>{children}</code>
+      case 'italic':
+        return <em {...attributes}>{children}</em>
+      case 'underlined':
+        return <u {...attributes}>{children}</u>
+      default:
+        return next()
+    }
+  }
   const renderNode = (props, editor, next) => {
     if (!props.readOnly && props.isFocused) {
       props.attributes.className = classNames(props.attributes.className, {
