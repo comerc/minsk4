@@ -11,14 +11,15 @@ const toolbarPlugin = (options: any = {}) => {
     return [...others]
   }
   const renderNode = (props, editor, next) => {
-    props.attributes.className = classNames(props.attributes.className, {
-      'block--focused':
-        props.isFocused && props.key === idx(editor.value.focusBlock, (self) => self.key),
-    })
+    if (!props.readOnly && props.isFocused) {
+      props.attributes.className = classNames(props.attributes.className, {
+        'block--focused': props.key === idx(editor.value.focusBlock, (self) => self.key),
+      })
+    }
     return next()
   }
   const renderEditor = (props, editor, next) => {
-    console.log('renderEditor', props)
+    // console.log('renderEditor', props)
     const { value } = props
     const children = next()
     return (
@@ -37,7 +38,7 @@ const toolbarPlugin = (options: any = {}) => {
     )
   }
   const onSelect = (event, editor, next) => {
-    console.log('onSelect')
+    // console.log('onSelect')
     next()
   }
   return { decorateNode, renderNode, renderEditor, onSelect }
