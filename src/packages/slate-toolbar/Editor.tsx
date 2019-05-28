@@ -234,8 +234,8 @@ class Editor extends React.Component<any, any> {
       this.setState({ isPlusPopup: true })
     } else {
       const { timeout } = this.props
-      // зачем тут нужен timeout?
-      // при клике мышкой по новому пустому параграфу перерисовывались:
+      // Q: зачем тут нужен timeout?
+      // A: при клике мышкой по новому пустому параграфу перерисовывались:
       // - крестик в плюсик на старом месте
       // - курсор на новом месте без рамки фокуса
       timeout(() => this.setState({ isPlusPopup: false }))
