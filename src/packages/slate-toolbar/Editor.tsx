@@ -2,10 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import idx from 'idx'
+import { IS_SAFARI } from 'slate-dev-environment'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
 import withTimeouts from 'src/packages/react-timeouts'
 import Wrapper from './Wrapper'
+import Highlights from './Highlights'
 import Toolbar from './Toolbar'
 import Actions from './Actions'
 import Plus from './Plus'
@@ -38,6 +40,11 @@ const withStyle = (Self) => styled(Self)`
         );
       }
     }
+  }
+  ${Highlights} {
+    position: absolute;
+    left: 0;
+    top: 0;
   }
   ${Toolbar} {
     position: absolute;
@@ -85,6 +92,12 @@ class Editor extends React.Component<any, any> {
       value: { selection, focusBlock, focusText },
       bodyWidth,
     } = nextProps
+    const isSelected =
+      selection.start.key !== selection.end.key || selection.start.offset !== selection.end.offset
+    result = { ...result, isSelected }
+    if (prevState.isHighlights && !isSelected) {
+      result = { ...result, isHighlights: false }
+    }
     const focusBlockKey = idx(focusBlock, (self) => self.key)
     if (prevState.focusBlockKey !== focusBlockKey) {
       result = { ...result, focusBlockKey }
@@ -96,9 +109,11 @@ class Editor extends React.Component<any, any> {
       result = { ...result, isHiddenPlusPopup: false }
     }
     const isFocused = selection.isFocused && !!focusBlock
+    result = { ...result, isFocused }
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
+      result = { ...result, isEmptyParagraph }
       if (prevState.isPlusPopup && (isOther || !isEmptyParagraph)) {
         result = { ...result, isPlusPopup: false, isHiddenPlusPopup: true }
       }
@@ -106,6 +121,7 @@ class Editor extends React.Component<any, any> {
         result = { ...result, ...Editor.moveToolbar(nextProps) }
       }
     } else {
+      result = { ...result, isEmptyParagraph: false }
       if (prevState.isPlusPopup) {
         result = { ...result, isPlusPopup: false }
       }
@@ -133,6 +149,10 @@ class Editor extends React.Component<any, any> {
   }
 
   state = {
+    isFocused: false,
+    isEmptyParagraph: false,
+    isSelected: false,
+    isHighlights: false,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
@@ -222,7 +242,7 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  handleToolbarMouseDown = (event) => {
+  handlePopupsMouseDown = (event) => {
     event.preventDefault()
   }
 
@@ -236,10 +256,7 @@ class Editor extends React.Component<any, any> {
       return
     }
     if (event.key === 'Tab') {
-      const {
-        value: { selection },
-      } = this.props
-      if (!selection.isFocused) {
+      if (!this.state.isFocused) {
         return
       }
       if (this.state.isPlusPopup) {
@@ -247,11 +264,7 @@ class Editor extends React.Component<any, any> {
         event.stopPropagation()
         this.leafTools(event.shiftKey)
       } else {
-        const {
-          value: { focusBlock, focusText },
-        } = this.props
-        const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-        if (isEmptyParagraph) {
+        if (this.state.isEmptyParagraph) {
           event.preventDefault()
           event.stopPropagation()
           this.setState({ isPlusPopup: true })
@@ -276,14 +289,47 @@ class Editor extends React.Component<any, any> {
     }
   }
 
+  // TODO: не работает isHighlights для [ctrl+a]
+
+  // WIP
+  moveHighlights = () => {
+    const native = window.getSelection() as any
+    const range = native.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+    const style: any = {}
+    const menu = {
+      offsetHeight: 0,
+      offsetWidth: 0,
+    }
+    style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`
+    style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`
+    console.log(style)
+  }
+
+  handleMouseMoveCapture = (event) => {
+    const isLeftButton = IS_SAFARI ? event.which === 1 : event.buttons === 1
+    if (isLeftButton) {
+      return
+    }
+    const { isHighlights, isSelected } = this.state
+    if (!isHighlights && isSelected) {
+      this.setState({ isHighlights: true })
+      this.moveHighlights()
+    }
+  }
+
+  handleClickCapture = () => {
+    const { isHighlights, isSelected } = this.state
+    if (!isHighlights && isSelected) {
+      this.setState({ isHighlights: true })
+      this.moveHighlights()
+    }
+  }
+
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
     }
-    const {
-      editor,
-      value: { selection, focusBlock, document },
-    } = this.props
   }
 
   render() {
@@ -292,11 +338,15 @@ class Editor extends React.Component<any, any> {
       theme,
       editor,
       editor: { readOnly: isReadOnly },
-      value: { selection, focusBlock, focusText },
+      value: { focusBlock },
       clickInterval,
       children,
     } = this.props
     const {
+      isFocused,
+      isEmptyParagraph,
+      isSelected,
+      isHighlights,
       activeActionId,
       isHiddenPlusPopup,
       isPlusPopup,
@@ -304,52 +354,53 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const isSelected =
-      selection.start.key !== selection.end.key || selection.start.offset !== selection.end.offset
-    const isFocused = selection.isFocused && !!focusBlock
-    const isEmptyParagraph = isFocused && focusBlock.type === 'paragraph' && focusText.text === ''
-    const actions = (isFocused && this.actions[focusBlock.type]) || []
+    const actions = (focusBlock && this.actions[focusBlock.type]) || []
     return (
       <div
         {...{
           className,
           onKeyDownCapture: this.handleKeyDownCapture,
+          onMouseMoveCapture: this.handleMouseMoveCapture,
+          onClickCapture: this.handleClickCapture,
         }}
       >
         <Wrapper {...{ toolbarTop, focusBlockBoundOffset }}>
           {children}
           {isFocused && !isReadOnly && (
-            <Toolbar {...{ onMouseDown: this.handleToolbarMouseDown }}>
-              {isEmptyParagraph && (
-                <Plus
+            <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
+              {isHighlights && <Highlights />}
+              <Toolbar>
+                {isEmptyParagraph && (
+                  <Plus
+                    {...{
+                      offsetX: theme.toolbarButtonWidth,
+                      isHiddenPopup: isHiddenPlusPopup,
+                      isVisiblePopup: isPlusPopup,
+                      onVisiblePopupChange: this.handlePlusPopupChange,
+                      clickInterval,
+                      tools: this.tools,
+                      activeToolId,
+                    }}
+                  />
+                )}
+                {!isSelected && !isEmptyParagraph && actions.length !== 0 && (
+                  <Actions
+                    {...{
+                      clickInterval,
+                      actions,
+                      activeActionId,
+                    }}
+                  />
+                )}
+                <More
                   {...{
-                    offsetX: theme.toolbarButtonWidth,
-                    isHiddenPopup: isHiddenPlusPopup,
-                    isVisiblePopup: isPlusPopup,
-                    onVisiblePopupChange: this.handlePlusPopupChange,
+                    editor,
                     clickInterval,
-                    tools: this.tools,
-                    activeToolId,
+                    onMoveBlockClick: this.handleMoveBlockClick,
                   }}
                 />
-              )}
-              {!isSelected && !isEmptyParagraph && actions.length !== 0 && (
-                <Actions
-                  {...{
-                    clickInterval,
-                    actions,
-                    activeActionId,
-                  }}
-                />
-              )}
-              <More
-                {...{
-                  editor,
-                  clickInterval,
-                  onMoveBlockClick: this.handleMoveBlockClick,
-                }}
-              />
-            </Toolbar>
+              </Toolbar>
+            </div>
           )}
         </Wrapper>
       </div>
