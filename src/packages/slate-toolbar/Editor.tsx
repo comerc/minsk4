@@ -72,7 +72,9 @@ class Editor extends React.Component<any, any> {
     } = nextProps
     const isSelected =
       selection.start.key !== selection.end.key || selection.start.offset !== selection.end.offset
-    result = { ...result, isSelected }
+    if (prevState.isSelected !== isSelected) {
+      result = { ...result, isSelected }
+    }
     if (prevState.isHighlights && !isSelected) {
       result = { ...result, isHighlights: false }
     }
@@ -90,16 +92,29 @@ class Editor extends React.Component<any, any> {
     result = { ...result, isFocused }
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
+      if (prevState.isOther !== isOther) {
+        result = { ...result, isOther }
+      }
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
-      result = { ...result, isEmptyParagraph }
+      if (prevState.isEmptyParagraph !== isEmptyParagraph) {
+        result = { ...result, isEmptyParagraph }
+      }
       if (prevState.isPlusPopup && (isOther || !isEmptyParagraph)) {
-        result = { ...result, isPlusPopup: false, isHiddenPlusPopup: true }
+        result = { ...result, isPlusPopup: false }
+        if (!prevState.isHiddenPlusPopup) {
+          result = { ...result, isHiddenPlusPopup: true }
+        }
       }
       if (isOther || prevState.bodyWidth !== bodyWidth) {
         result = { ...result, ...Editor.moveToolbar(nextProps) }
       }
     } else {
-      result = { ...result, isEmptyParagraph: false }
+      if (prevState.isOther) {
+        result = { ...result, isOther: false }
+      }
+      if (prevState.isEmptyParagraph) {
+        result = { ...result, isEmptyParagraph: false }
+      }
       if (prevState.isPlusPopup) {
         result = { ...result, isPlusPopup: false }
       }
@@ -128,9 +143,12 @@ class Editor extends React.Component<any, any> {
 
   state = {
     isFocused: false,
+    isOther: false,
     isEmptyParagraph: false,
     isSelected: false,
     isHighlights: false,
+    highlightsPositionX: 0,
+    highlightsPositionY: 0,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
@@ -270,17 +288,20 @@ class Editor extends React.Component<any, any> {
 
   // WIP
   moveHighlights = () => {
+    // const { top: containerBoundTop } = containerNode.getBoundingClientRect()
     const native = window.getSelection() as any
     const range = native.getRangeAt(0)
     const rect = range.getBoundingClientRect()
     const style: any = {}
     const menu = {
-      offsetHeight: 0,
       offsetWidth: 0,
+      offsetHeight: 0,
     }
-    style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`
-    style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`
-    console.log(style)
+    console.log(window.pageXOffset, window.pageYOffset)
+    return {
+      highlightsPositionX: rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2,
+      highlightsPositionY: rect.top + window.pageYOffset - menu.offsetHeight,
+    }
   }
 
   handleMouseDownCapture = (event) => {
@@ -306,16 +327,14 @@ class Editor extends React.Component<any, any> {
     }
     const { isHighlights, isSelected } = this.state
     if (!isHighlights && isSelected) {
-      this.setState({ isHighlights: true })
-      this.moveHighlights()
+      this.setState({ isHighlights: true, ...this.moveHighlights() })
     }
   }
 
-  handleClickCapture = () => {
+  handleMouseUpCapture = () => {
     const { isHighlights, isSelected } = this.state
     if (!isHighlights && isSelected) {
-      this.setState({ isHighlights: true })
-      this.moveHighlights()
+      this.setState({ isHighlights: true, ...this.moveHighlights() })
     }
     if (this.isMouseDown) {
       this.isMouseDown = false
@@ -341,9 +360,12 @@ class Editor extends React.Component<any, any> {
     } = this.props
     const {
       isFocused,
+      isOther,
       isEmptyParagraph,
       isSelected,
       isHighlights,
+      highlightsPositionX,
+      highlightsPositionY,
       activeActionId,
       isHiddenPlusPopup,
       isPlusPopup,
@@ -351,8 +373,9 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const { isMouseDown, tools } = this
-    const isToolbar = !isSelected && !isMouseDown
+    const { tools } = this
+    const isToolbar =
+      isEmptyParagraph || (!isSelected && !isOther) || (!isSelected && !this.isMouseDown)
     const actions = (focusBlock && this.actions[focusBlock.type]) || []
     return (
       <div
@@ -363,14 +386,18 @@ class Editor extends React.Component<any, any> {
           onMouseMoveCapture: this.handleMouseMoveCapture,
           onMouseLeave: this.handleMouseLeave,
           onBlur: this.handleBlur,
-          onClickCapture: this.handleClickCapture,
+          onMouseUpCapture: this.handleMouseUpCapture,
         }}
       >
         <Wrapper {...{ isToolbar }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
-              {isHighlights && <Highlights />}
+              {isHighlights && (
+                <Highlights
+                  {...{ positionX: highlightsPositionX, positionY: highlightsPositionY }}
+                />
+              )}
               {isToolbar && (
                 <Toolbar {...{ toolbarTop }}>
                   {isEmptyParagraph && (
