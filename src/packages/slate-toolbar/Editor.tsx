@@ -160,6 +160,7 @@ class Editor extends React.Component<any, any> {
     focusBlockBoundOffset: 0,
   }
   isMouseDown = false
+  wrapperRef = React.createRef()
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
@@ -286,21 +287,20 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  // WIP
   moveHighlights = () => {
-    // const { top: containerBoundTop } = containerNode.getBoundingClientRect()
+    const wrapperNode = this.wrapperRef.current as any
+    const { left, top } = wrapperNode.getBoundingClientRect()
     const native = window.getSelection() as any
     const range = native.getRangeAt(0)
     const rect = range.getBoundingClientRect()
     const style: any = {}
     const menu = {
-      offsetWidth: 0,
-      offsetHeight: 0,
+      offsetX: 0,
+      offsetY: 0,
     }
-    console.log(window.pageXOffset, window.pageYOffset)
     return {
-      highlightsPositionX: rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2,
-      highlightsPositionY: rect.top + window.pageYOffset - menu.offsetHeight,
+      highlightsPositionX: rect.left + rect.width / 2 - left + menu.offsetX,
+      highlightsPositionY: rect.top - top + menu.offsetY,
     }
   }
 
@@ -389,7 +389,7 @@ class Editor extends React.Component<any, any> {
           onMouseUpCapture: this.handleMouseUpCapture,
         }}
       >
-        <Wrapper {...{ isToolbar }}>
+        <Wrapper {...{ isToolbar, ref: this.wrapperRef }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
