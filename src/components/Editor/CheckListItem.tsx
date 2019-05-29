@@ -7,11 +7,10 @@ const withStyle = (Self) => styled(Self)`
   display: flex;
   align-items: center;
   .checkbox-wrapper {
-    position: absolute;
     display: flex;
+    margin-right: 8px;
   }
   .content-wrapper {
-    margin-left: 24px;
     opacity: 1;
     text-decoration: none;
     &.checked {
@@ -21,6 +20,12 @@ const withStyle = (Self) => styled(Self)`
   }
   .ant-checkbox-inner::after {
     font-size: 0;
+  }
+  .ant-checkbox-input {
+    display: none;
+  }
+  .ant-checkbox-inner {
+    display: table;
   }
 `
 
@@ -49,7 +54,7 @@ class CheckListItem extends React.Component<any> {
     const checked = node.data.get('checked')
     return (
       <div {...attributes} className={classNames(externalClassName, className)}>
-        <span className="checkbox-wrapper" contentEditable={false}>
+        <span className="checkbox-wrapper">
           <Checkbox
             {...{
               checked,
