@@ -8,6 +8,7 @@ import Button from './Button'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
+    transform: translate3d(100px, 100px, 0);
   }
   ${Popup} {
     margin: 0 auto;

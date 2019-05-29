@@ -366,16 +366,17 @@ class Editor extends React.Component<any, any> {
           onClickCapture: this.handleClickCapture,
         }}
       >
-        <Wrapper {...{ toolbarTop, focusBlockBoundOffset, isToolbar }}>
+        <Wrapper {...{ isToolbar }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
               {isHighlights && <Highlights />}
               {isToolbar && (
-                <Toolbar>
+                <Toolbar {...{ toolbarTop }}>
                   {isEmptyParagraph && (
                     <Plus
                       {...{
+                        focusBlockBoundOffset,
                         offsetX: theme.toolbarButtonWidth,
                         isHiddenPopup: isHiddenPlusPopup,
                         isVisiblePopup: isPlusPopup,

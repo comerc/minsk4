@@ -9,6 +9,11 @@ import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
+    transform: translate3d(
+      0,
+      calc(${({ focusBlockBoundOffset }) => focusBlockBoundOffset}px - 50%),
+      0
+    );
   }
   .ant-tooltip-arrow {
     display: none;
