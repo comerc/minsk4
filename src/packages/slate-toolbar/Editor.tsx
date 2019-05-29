@@ -147,8 +147,8 @@ class Editor extends React.Component<any, any> {
     isEmptyParagraph: false,
     isSelected: false,
     isHighlights: false,
-    highlightsPositionX: 0,
-    highlightsPositionY: 0,
+    highlightsLeft: 0,
+    highlightsTop: 0,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
@@ -294,13 +294,9 @@ class Editor extends React.Component<any, any> {
     const range = native.getRangeAt(0)
     const rect = range.getBoundingClientRect()
     const style: any = {}
-    const menu = {
-      offsetX: 0,
-      offsetY: 0,
-    }
     return {
-      highlightsPositionX: rect.left + rect.width / 2 - left + menu.offsetX,
-      highlightsPositionY: rect.top - top + menu.offsetY,
+      highlightsLeft: rect.left + rect.width / 2 - left,
+      highlightsTop: rect.top - top,
     }
   }
 
@@ -364,8 +360,8 @@ class Editor extends React.Component<any, any> {
       isEmptyParagraph,
       isSelected,
       isHighlights,
-      highlightsPositionX,
-      highlightsPositionY,
+      highlightsLeft,
+      highlightsTop,
       activeActionId,
       isHiddenPlusPopup,
       isPlusPopup,
@@ -393,11 +389,7 @@ class Editor extends React.Component<any, any> {
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
-              {isHighlights && (
-                <Highlights
-                  {...{ positionX: highlightsPositionX, positionY: highlightsPositionY }}
-                />
-              )}
+              {isHighlights && <Highlights {...{ left: highlightsLeft, top: highlightsTop }} />}
               {isToolbar && (
                 <Toolbar {...{ toolbarTop }}>
                   {isEmptyParagraph && (

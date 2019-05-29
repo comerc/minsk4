@@ -8,7 +8,8 @@ import Button from './Button'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
-    transform: translate3d(${({ positionX }) => positionX}px, ${({ positionY }) => positionY}px, 0);
+    transform: ${({ left, top, theme: { highlightsOffsetY } }) =>
+      `translate3d(${left}px, calc(${top}px + ${highlightsOffsetY}), 0)`};
   }
   ${Popup} {
     margin: 0 auto;
