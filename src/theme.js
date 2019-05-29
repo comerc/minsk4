@@ -14,7 +14,7 @@ let mainVars = {
   // mobile: '(max-width: 650px)',
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px',
-  highlightsOffsetY: '8px',
+  highlightsOffsetY: '12px',
   toolbarPaddingHorizontal: '40px',
   toolbarButtonWidth: '32px', // Toolbar button width
   toolbarButtonHeight: (theme) => theme.btnHeightSm, // Toolbar button height
