@@ -41,7 +41,7 @@ class Actions extends React.Component<any> {
     const { actions, activeActionId } = this.props
     return (
       <ul className="content">
-        {actions.map(({ src, title, onClick }, id) => (
+        {actions.map(({ src, title }, id) => (
           <li key={id}>
             <Button
               {...{
