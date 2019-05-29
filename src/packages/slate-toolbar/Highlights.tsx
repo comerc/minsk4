@@ -5,6 +5,8 @@ import withTimeouts from 'src/packages/react-timeouts'
 import Popup from './Popup'
 import Button from './Button'
 
+// TODO: добавить смещение стрелки по краям выделенного текста
+
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
@@ -13,6 +15,14 @@ const withStyle = (Self) => styled(Self)`
   }
   ${Popup} {
     margin: 0 auto;
+  }
+  .ant-tooltip-arrow {
+    display: none;
+  }
+  .ant-tooltip-inner {
+    &::before {
+      content: none;
+    }
   }
   ul.content {
     margin: 0;
@@ -25,28 +35,52 @@ const withStyle = (Self) => styled(Self)`
       margin-right: 6px;
     }
   }
+  .highlight {
+    &--active {
+      color: red;
+    }
+  }
 `
 
 @withStyle
 @withTimeouts
 class Highlights extends React.Component<any> {
+  handleHighlightClick = (event) => {
+    const { highlights, editor, timeout, clickInterval } = this.props
+    const id = event.target.dataset.id
+    const highlight = highlights[id]
+    timeout(() => {
+      editor.toggleMark(highlight.type)
+    }, clickInterval)
+  }
+
+  isActive = (type) => {
+    const {
+      editor: { value },
+    } = this.props
+    return value.activeMarks.some((mark) => mark.type === type)
+  }
+
   renderContent = () => {
-    const { className } = this.props
+    const { highlights } = this.props
     return (
       <ul className="content">
-        <li>
-          <Button
-            {...{
-              tabIndex: -1,
-              onClick: (event) => {
-                event.preventDefault()
-              },
-              size: 'small',
-            }}
-          >
-            X
-          </Button>
-        </li>
+        {highlights.map(({ type, src, title }, id) => (
+          <li key={id}>
+            <Button
+              {...{
+                className: classNames('highlight', { 'highlight--active': this.isActive(type) }),
+                tabIndex: -1,
+                'data-id': id,
+                onClick: this.handleHighlightClick,
+                size: 'small',
+                title,
+              }}
+            >
+              {src}
+            </Button>
+          </li>
+        ))}
       </ul>
     )
   }

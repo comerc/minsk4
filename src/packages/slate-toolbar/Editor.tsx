@@ -161,6 +161,12 @@ class Editor extends React.Component<any, any> {
   }
   isMouseDown = false
   wrapperRef = React.createRef()
+  highlights = [
+    { type: 'bold', src: 'B', title: 'Bold' },
+    { type: 'italic', src: 'I', title: 'Italic' },
+    { type: 'underlined', src: 'U', title: 'Underlined' },
+    { type: 'code', src: 'C', title: 'Code' },
+  ]
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
@@ -287,6 +293,7 @@ class Editor extends React.Component<any, any> {
     }
   }
 
+  // TODO: recall wheh change bodyWidth
   moveHighlights = () => {
     const wrapperNode = this.wrapperRef.current as any
     const { left, top } = wrapperNode.getBoundingClientRect()
@@ -369,7 +376,7 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const { tools } = this
+    const { highlights, tools } = this
     const isToolbar = isEmptyParagraph || (!isSelected && !this.isMouseDown) // || (!isSelected && !isOther)
     const actions = (focusBlock && this.actions[focusBlock.type]) || []
     return (
@@ -388,7 +395,17 @@ class Editor extends React.Component<any, any> {
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
-              {isHighlights && <Highlights {...{ left: highlightsLeft, top: highlightsTop }} />}
+              {isHighlights && (
+                <Highlights
+                  {...{
+                    editor,
+                    highlights,
+                    clickInterval,
+                    left: highlightsLeft,
+                    top: highlightsTop,
+                  }}
+                />
+              )}
               {isToolbar && (
                 <Toolbar {...{ toolbarTop }}>
                   {isEmptyParagraph && (
