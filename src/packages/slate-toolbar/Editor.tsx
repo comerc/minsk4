@@ -19,28 +19,6 @@ const withStyle = (Self) => styled(Self)`
     position: relative;
     margin: 1px auto;
   }
-  .${({ editor }) => editor.props.className.replace(' ', '.')} {
-    > * {
-      position: relative;
-      &.block--focused:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 1px;
-        bottom: 1px;
-        z-index: -1;
-        box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor5};
-      }
-      &.block--focused {
-        background-image: linear-gradient(
-          17deg,
-          rgba(243, 248, 255, 0.03) 63.45%,
-          rgba(207, 214, 229, 0.27) 98%
-        );
-      }
-    }
-  }
   ${Highlights} {
     position: absolute;
     left: 0;
@@ -163,6 +141,7 @@ class Editor extends React.Component<any, any> {
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
   }
+  isMouseDown = false
   tools = this.props.getTools(this.props.editor)
   actions = this.props.getActions(this.props.editor)
 
@@ -289,8 +268,6 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  // TODO: не работает isHighlights для [ctrl+a]
-
   // WIP
   moveHighlights = () => {
     const native = window.getSelection() as any
@@ -306,9 +283,25 @@ class Editor extends React.Component<any, any> {
     console.log(style)
   }
 
+  handleMouseDownCapture = (event) => {
+    this.isMouseDown = true
+  }
+
+  handleMouseLeave = (event) => {
+    if (this.isMouseDown) {
+      this.isMouseDown = false
+    }
+  }
+
+  handleBlur = (event) => {
+    if (this.isMouseDown) {
+      this.isMouseDown = false
+    }
+  }
+
   handleMouseMoveCapture = (event) => {
-    const isLeftButton = IS_SAFARI ? event.which === 1 : event.buttons === 1
-    if (isLeftButton) {
+    const isButtons = IS_SAFARI ? !!event.which : !!event.buttons
+    if (isButtons) {
       return
     }
     const { isHighlights, isSelected } = this.state
@@ -323,6 +316,10 @@ class Editor extends React.Component<any, any> {
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true })
       this.moveHighlights()
+    }
+    if (this.isMouseDown) {
+      this.isMouseDown = false
+      this.forceUpdate()
     }
   }
 
@@ -354,52 +351,59 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
+    const { isMouseDown, tools } = this
+    const isToolbar = !isSelected && !isMouseDown
     const actions = (focusBlock && this.actions[focusBlock.type]) || []
     return (
       <div
         {...{
           className,
           onKeyDownCapture: this.handleKeyDownCapture,
+          onMouseDownCapture: this.handleMouseDownCapture,
           onMouseMoveCapture: this.handleMouseMoveCapture,
+          onMouseLeave: this.handleMouseLeave,
+          onBlur: this.handleBlur,
           onClickCapture: this.handleClickCapture,
         }}
       >
-        <Wrapper {...{ toolbarTop, focusBlockBoundOffset }}>
+        <Wrapper {...{ toolbarTop, focusBlockBoundOffset, isToolbar }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
               {isHighlights && <Highlights />}
-              <Toolbar>
-                {isEmptyParagraph && (
-                  <Plus
+              {isToolbar && (
+                <Toolbar>
+                  {isEmptyParagraph && (
+                    <Plus
+                      {...{
+                        offsetX: theme.toolbarButtonWidth,
+                        isHiddenPopup: isHiddenPlusPopup,
+                        isVisiblePopup: isPlusPopup,
+                        onVisiblePopupChange: this.handlePlusPopupChange,
+                        clickInterval,
+                        tools,
+                        activeToolId,
+                      }}
+                    />
+                  )}
+                  {!isEmptyParagraph && actions.length !== 0 && (
+                    <Actions
+                      {...{
+                        clickInterval,
+                        actions,
+                        activeActionId,
+                      }}
+                    />
+                  )}
+                  <More
                     {...{
-                      offsetX: theme.toolbarButtonWidth,
-                      isHiddenPopup: isHiddenPlusPopup,
-                      isVisiblePopup: isPlusPopup,
-                      onVisiblePopupChange: this.handlePlusPopupChange,
+                      editor,
                       clickInterval,
-                      tools: this.tools,
-                      activeToolId,
+                      onMoveBlockClick: this.handleMoveBlockClick,
                     }}
                   />
-                )}
-                {!isSelected && !isEmptyParagraph && actions.length !== 0 && (
-                  <Actions
-                    {...{
-                      clickInterval,
-                      actions,
-                      activeActionId,
-                    }}
-                  />
-                )}
-                <More
-                  {...{
-                    editor,
-                    clickInterval,
-                    onMoveBlockClick: this.handleMoveBlockClick,
-                  }}
-                />
-              </Toolbar>
+                </Toolbar>
+              )}
             </div>
           )}
         </Wrapper>
