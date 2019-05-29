@@ -9,11 +9,8 @@ import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
-    transform: translate3d(
-      0,
-      calc(${({ focusBlockBoundOffset }) => focusBlockBoundOffset}px - 50%),
-      0
-    );
+    transform: ${({ focusBlockBoundOffset }) =>
+      `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`};
   }
   .ant-tooltip-arrow {
     display: none;
@@ -49,7 +46,7 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .tool {
-    width: ${({ theme }) => '72px'};
+    width: 72px;
     height: 64px;
     font-size: ${({ theme }) => theme.fontSizeSm};
     border: none;
