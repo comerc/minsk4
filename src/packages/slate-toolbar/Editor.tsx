@@ -356,7 +356,7 @@ class Editor extends React.Component<any, any> {
     } = this.props
     const {
       isFocused,
-      isOther,
+      // isOther,
       isEmptyParagraph,
       isSelected,
       isHighlights,
@@ -370,8 +370,7 @@ class Editor extends React.Component<any, any> {
       focusBlockBoundOffset,
     } = this.state
     const { tools } = this
-    const isToolbar =
-      isEmptyParagraph || (!isSelected && !isOther) || (!isSelected && !this.isMouseDown)
+    const isToolbar = isEmptyParagraph || (!isSelected && !this.isMouseDown) // || (!isSelected && !isOther)
     const actions = (focusBlock && this.actions[focusBlock.type]) || []
     return (
       <div
