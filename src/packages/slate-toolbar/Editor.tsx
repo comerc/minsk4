@@ -446,6 +446,7 @@ class Editor extends React.Component<any, any> {
                   {isEmptyParagraph && (
                     <Plus
                       {...{
+                        editor,
                         focusBlockBoundOffset,
                         offsetX: theme.toolbarButtonWidth,
                         isHiddenPopup: isHiddenPlusPopup,
