@@ -117,6 +117,9 @@ class Editor extends React.Component<any, any> {
       if (prevState.isActions && isOther) {
         result = { ...result, isActions: false }
       }
+      if (prevState.isHighlights && isSelected && prevState.bodyWidth !== bodyWidth) {
+        result = { ...result, ...Editor.moveHighlights(nextProps) }
+      }
     } else {
       if (prevState.isEmptyParagraph) {
         result = { ...result, isEmptyParagraph: false }
@@ -157,7 +160,6 @@ class Editor extends React.Component<any, any> {
     const native = window.getSelection() as any
     const range = native.getRangeAt(0)
     const rect = range.getBoundingClientRect()
-    const style: any = {}
     return {
       highlightsLeft: rect.left + rect.width / 2 - left,
       highlightsTop: rect.top - top,
@@ -314,7 +316,7 @@ class Editor extends React.Component<any, any> {
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
     // Q: зачем тут timeout?
-    // A: isActions переключается в getDerivedStateFromProps
+    // A: isActions переключается раньше в getDerivedStateFromProps
     const { timeout } = this.props
     timeout(() => {
       const { isActions } = this.state
