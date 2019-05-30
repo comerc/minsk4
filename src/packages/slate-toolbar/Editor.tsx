@@ -352,7 +352,7 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  handleMouseUpCapture = () => {
+  handleMouseUpCapture = (event) => {
     const { isHighlights, isActions, isSelected } = this.state
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...this.moveHighlights() })
