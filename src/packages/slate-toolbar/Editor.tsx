@@ -101,9 +101,6 @@ class Editor extends React.Component<any, any> {
     result = { ...result, isFocused }
     if (isFocused) {
       const isOther = prevState.focusBlockKey !== focusBlock.key
-      if (prevState.isOther !== isOther) {
-        result = { ...result, isOther }
-      }
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       if (prevState.isEmptyParagraph !== isEmptyParagraph) {
         result = { ...result, isEmptyParagraph }
@@ -117,15 +114,18 @@ class Editor extends React.Component<any, any> {
       if (isOther || prevState.bodyWidth !== bodyWidth) {
         result = { ...result, ...Editor.moveToolbar(nextProps) }
       }
-    } else {
-      if (prevState.isOther) {
-        result = { ...result, isOther: false }
+      if (prevState.isActions && isOther) {
+        result = { ...result, isActions: false }
       }
+    } else {
       if (prevState.isEmptyParagraph) {
         result = { ...result, isEmptyParagraph: false }
       }
       if (prevState.isPlusPopup) {
         result = { ...result, isPlusPopup: false }
+      }
+      if (prevState.isActions) {
+        result = { ...result, isActions: false }
       }
     }
     return result
@@ -152,13 +152,12 @@ class Editor extends React.Component<any, any> {
 
   state = {
     isFocused: false,
-    isOther: false,
     isEmptyParagraph: false,
     isSelected: false,
     isHighlights: false,
     highlightsLeft: 0,
     highlightsTop: 0,
-    isActions: true,
+    isActions: false,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
@@ -316,6 +315,15 @@ class Editor extends React.Component<any, any> {
 
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
+    // Q: зачем тут timeout?
+    // A: isActions переключается в getDerivedStateFromProps
+    const { timeout } = this.props
+    timeout(() => {
+      const { isActions } = this.state
+      if (isActions) {
+        this.setState({ isActions: false })
+      }
+    })
   }
 
   handleMouseLeave = (event) => {
@@ -335,16 +343,22 @@ class Editor extends React.Component<any, any> {
     if (isButtons) {
       return
     }
-    const { isHighlights, isSelected } = this.state
+    const { isHighlights, isActions, isSelected } = this.state
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...this.moveHighlights() })
+    }
+    if (!isActions && !isSelected) {
+      this.setState({ isActions: true })
     }
   }
 
   handleMouseUpCapture = () => {
-    const { isHighlights, isSelected } = this.state
+    const { isHighlights, isActions, isSelected } = this.state
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...this.moveHighlights() })
+    }
+    if (!isActions && !isSelected) {
+      this.setState({ isActions: true })
     }
     if (this.isMouseDown) {
       this.isMouseDown = false
@@ -352,7 +366,7 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  // TODO: добавить isActions с таким же поведением, как isHighlights
+  // TODO: убрать мигание isActions при кликах мышкой в разных местах по одному блоку
 
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
@@ -375,7 +389,6 @@ class Editor extends React.Component<any, any> {
     } = this.props
     const {
       isFocused,
-      // isOther,
       isEmptyParagraph,
       isSelected,
       isHighlights,
@@ -389,7 +402,6 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const isToolbar = isEmptyParagraph || (!isSelected && !this.isMouseDown) // || (!isSelected && !isOther)
     const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
     return (
       <div
@@ -403,7 +415,7 @@ class Editor extends React.Component<any, any> {
           onMouseUpCapture: this.handleMouseUpCapture,
         }}
       >
-        <Wrapper {...{ isToolbar, ref: this.wrapperRef }}>
+        <Wrapper {...{ isSelected, ref: this.wrapperRef }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
@@ -418,7 +430,7 @@ class Editor extends React.Component<any, any> {
                   }}
                 />
               )}
-              {isToolbar && (
+              {!isSelected && (
                 <Toolbar {...{ toolbarTop }}>
                   {isEmptyParagraph && (
                     <Plus
