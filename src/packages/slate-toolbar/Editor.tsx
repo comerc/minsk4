@@ -150,6 +150,20 @@ class Editor extends React.Component<any, any> {
     return { toolbarTop, focusBlockBoundOffset, isMoveToolbarForNewBlock: false }
   }
 
+  static moveHighlights = (props) => {
+    const { containerNode } = props
+    const wrapperNode = containerNode.firstChild
+    const { left, top } = wrapperNode.getBoundingClientRect()
+    const native = window.getSelection() as any
+    const range = native.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+    const style: any = {}
+    return {
+      highlightsLeft: rect.left + rect.width / 2 - left,
+      highlightsTop: rect.top - top,
+    }
+  }
+
   state = {
     isFocused: false,
     isEmptyParagraph: false,
@@ -169,7 +183,6 @@ class Editor extends React.Component<any, any> {
     focusBlockBoundOffset: 0,
   }
   isMouseDown = false
-  wrapperRef = React.createRef()
 
   handleMoveBlockClick = (callback) => {
     const { containerNode } = this.props
@@ -298,21 +311,6 @@ class Editor extends React.Component<any, any> {
     }
   }
 
-  // TODO: recall wheh 3 clicks
-  // TODO: recall wheh change bodyWidth
-  moveHighlights = () => {
-    const wrapperNode = this.wrapperRef.current as any
-    const { left, top } = wrapperNode.getBoundingClientRect()
-    const native = window.getSelection() as any
-    const range = native.getRangeAt(0)
-    const rect = range.getBoundingClientRect()
-    const style: any = {}
-    return {
-      highlightsLeft: rect.left + rect.width / 2 - left,
-      highlightsTop: rect.top - top,
-    }
-  }
-
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
     // Q: зачем тут timeout?
@@ -345,7 +343,7 @@ class Editor extends React.Component<any, any> {
     }
     const { isHighlights, isActions, isSelected } = this.state
     if (!isHighlights && isSelected) {
-      this.setState({ isHighlights: true, ...this.moveHighlights() })
+      this.setState({ isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
     if (!isActions && !isSelected) {
       this.setState({ isActions: true })
@@ -355,11 +353,11 @@ class Editor extends React.Component<any, any> {
   handleMouseUpCapture = (event) => {
     const { isHighlights, isActions, isSelected } = this.state
     if (!isHighlights && isSelected) {
-      this.setState({ isHighlights: true, ...this.moveHighlights() })
+      this.setState({ isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
     if (isHighlights && event.detail === 3) {
       // TODO: анимировать изменение позиции для Highlights
-      this.setState(this.moveHighlights())
+      this.setState(Editor.moveHighlights(this.props))
     }
     if (!isActions && !isSelected) {
       this.setState({ isActions: true })
@@ -407,7 +405,6 @@ class Editor extends React.Component<any, any> {
       focusBlockBoundOffset,
     } = this.state
     const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
-    console.log({ isHighlights })
     return (
       <div
         {...{
@@ -420,7 +417,7 @@ class Editor extends React.Component<any, any> {
           onMouseUpCapture: this.handleMouseUpCapture,
         }}
       >
-        <Wrapper {...{ isSelected, ref: this.wrapperRef }}>
+        <Wrapper {...{ isSelected }}>
           {children}
           {isFocused && !isReadOnly && (
             <div {...{ onMouseDown: this.handlePopupsMouseDown }}>
