@@ -357,6 +357,10 @@ class Editor extends React.Component<any, any> {
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...this.moveHighlights() })
     }
+    if (isHighlights && event.detail === 3) {
+      // TODO: анимировать изменение позиции для Highlights
+      this.setState(this.moveHighlights())
+    }
     if (!isActions && !isSelected) {
       this.setState({ isActions: true })
     }
@@ -403,6 +407,7 @@ class Editor extends React.Component<any, any> {
       focusBlockBoundOffset,
     } = this.state
     const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
+    console.log({ isHighlights })
     return (
       <div
         {...{

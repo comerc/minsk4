@@ -9,6 +9,8 @@ const sqrtArrowWidth = Math.sqrt(arrowWidth * arrowWidth * 2)
 const arrowIndentY = 4 // TODO: почему? 6 внутри Antd Popconfirm
 const arrowIndentX = 16
 
+// TODO: проверить, что кастомизация ant-tooltip тут не повлияла на глобальные типы
+
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
