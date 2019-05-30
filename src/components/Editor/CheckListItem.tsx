@@ -31,6 +31,10 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class CheckListItem extends React.Component<any> {
+  handleCheckboxWrapperMouseDown = (event) => {
+    event.preventDefault()
+  }
+
   handleChange = (event) => {
     const { readOnly, editor, node } = this.props
     if (readOnly) {
@@ -53,8 +57,18 @@ class CheckListItem extends React.Component<any> {
     } = this.props
     const checked = node.data.get('checked')
     return (
-      <div {...attributes} className={classNames(externalClassName, className)}>
-        <span className="checkbox-wrapper">
+      <div
+        {...{
+          ...attributes,
+          className: classNames(externalClassName, className),
+        }}
+      >
+        <span
+          {...{
+            className: 'checkbox-wrapper',
+            onMouseDown: this.handleCheckboxWrapperMouseDown,
+          }}
+        >
           <Checkbox
             {...{
               checked,
