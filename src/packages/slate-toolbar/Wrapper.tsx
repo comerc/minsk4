@@ -19,7 +19,6 @@ export default styled.div`
           right: 0;
           top: 1px;
           bottom: 1px;
-          z-index: -1;
           box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor5};
         }
       }
