@@ -2,8 +2,8 @@ import styled, { css } from 'styled-components'
 
 export default styled.div`
   max-width: ${({ theme }) => theme.contentWidth};
-  ${({ isToolbar }) =>
-    isToolbar &&
+  ${({ isSelected }) =>
+    !isSelected &&
     css`
       .block--focused {
         position: relative;
