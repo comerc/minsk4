@@ -137,7 +137,6 @@ class Editor extends React.Component<any, any> {
   static moveToolbar = (props) => {
     const {
       containerNode,
-      editor,
       value: { focusBlock },
     } = props
     const focusBlockNode = containerNode.querySelector(`[data-key="${focusBlock.key}"`)
@@ -250,7 +249,7 @@ class Editor extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  // TODO: заменить timeout() без времени на setTimeout(), т.к. они не имеют смысла
+  // TODO: заменить timeout() без времени на setTimeout(), т.к. они не имеют смысла?
 
   handlePlusPopupChange = (visible) => {
     if (visible) {
@@ -317,9 +316,9 @@ class Editor extends React.Component<any, any> {
 
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
+    const { timeout } = this.props
     // Q: зачем тут timeout?
     // A: isActions переключается раньше в getDerivedStateFromProps
-    const { timeout } = this.props
     timeout(() => {
       const { isActions } = this.state
       if (isActions) {
@@ -367,9 +366,10 @@ class Editor extends React.Component<any, any> {
       this.isMouseDown = false
       this.forceUpdate()
     }
+    const { timeout } = this.props
     // Q: зачем тут timeout?
     // A: сбрасывает isSelected
-    setTimeout(() => {
+    timeout(() => {
       const { isActions, isSelected } = this.state
       if (!isActions && !isSelected) {
         this.setState({ isActions: true })
