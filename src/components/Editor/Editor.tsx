@@ -73,10 +73,6 @@ const other = () => {
   return { renderNode, onKeyDown }
 }
 
-const addCheckListItemBlock = (editor) => (event) => {
-  editor.setBlocks({ type: 'check_list_item', data: { checked: false } })
-}
-
 @withTheme
 @withStyle
 class Editor extends React.Component<any> {
@@ -84,12 +80,12 @@ class Editor extends React.Component<any> {
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
     toolbar({
       theme: this.props.theme,
-      getActions: (editor) => ({
+      actionsByType: {
         paragraph: [
           {
             src: <DummyIcon />,
             title: 'Action #0',
-            onClick: () => {
+            onClick: (event, editor) => {
               console.log('Action #0', editor.value.toJSON())
             },
           },
@@ -110,12 +106,14 @@ class Editor extends React.Component<any> {
             },
           },
         ],
-      }),
-      getTools: (editor) => [
+      },
+      tools: [
         {
           src: <TasksIcon />,
           title: 'Check List',
-          onClick: addCheckListItemBlock(editor),
+          onClick: (event, editor) => {
+            editor.setBlocks({ type: 'check_list_item', data: { checked: false } })
+          },
         },
         {
           src: <ImageIcon />,

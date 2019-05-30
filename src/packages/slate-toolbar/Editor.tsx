@@ -61,6 +61,15 @@ const withStyle = (Self) => styled(Self)`
 @withContainerNode
 @withTimeouts
 class Editor extends React.Component<any, any> {
+  static defaultProps = {
+    highlights: [
+      { type: 'bold', src: 'B', title: 'Bold' },
+      { type: 'italic', src: 'I', title: 'Italic' },
+      { type: 'underlined', src: 'U', title: 'Underlined' },
+      { type: 'code', src: 'C', title: 'Code' },
+    ],
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
     if (!prevState.isPlusPopup && prevState.activeToolId !== -1) {
@@ -149,6 +158,7 @@ class Editor extends React.Component<any, any> {
     isHighlights: false,
     highlightsLeft: 0,
     highlightsTop: 0,
+    isActions: true,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
@@ -161,14 +171,6 @@ class Editor extends React.Component<any, any> {
   }
   isMouseDown = false
   wrapperRef = React.createRef()
-  highlights = [
-    { type: 'bold', src: 'B', title: 'Bold' },
-    { type: 'italic', src: 'I', title: 'Italic' },
-    { type: 'underlined', src: 'U', title: 'Underlined' },
-    { type: 'code', src: 'C', title: 'Code' },
-  ]
-  tools = this.props.getTools(this.props.editor)
-  actions = this.props.getActions(this.props.editor)
 
   handleMoveBlockClick = (callback) => {
     const { containerNode } = this.props
@@ -194,6 +196,7 @@ class Editor extends React.Component<any, any> {
    * flip through the items
    */
   leafTools = (isReverseDirection = false) => {
+    const { tools } = this.props
     const { activeToolId } = this.state
     let id = activeToolId
     /**
@@ -223,12 +226,12 @@ class Editor extends React.Component<any, any> {
        * If we go left then choose previous (-1) Tool
        * Before counting module we need to add length before because of "The JavaScript Modulo Bug"
        */
-      id = (this.tools.length + id - 1) % this.tools.length
+      id = (tools.length + id - 1) % tools.length
     } else {
       /**
        * If we go right then choose next (+1) Tool
        */
-      id = (id + 1) % this.tools.length
+      id = (id + 1) % tools.length
     }
     this.setState({ activeToolId: id })
   }
@@ -278,21 +281,25 @@ class Editor extends React.Component<any, any> {
       return
     }
     if (event.key === 'Enter') {
+      if (!this.state.isPlusPopup) {
+        return
+      }
       // TODO: move to Plus - double code with Plus.handleToolClick()
       const { activeToolId } = this.state
       if (activeToolId !== -1) {
-        const { timeout, clickInterval } = this.props
+        const { tools, timeout, clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
         timeout(() => {
           this.setState({ isPlusPopup: false })
-          this.tools[activeToolId].onClick(event)
+          tools[activeToolId].onClick(event)
         }, clickInterval)
       }
       return
     }
   }
 
+  // TODO: recall wheh 3 clicks
   // TODO: recall wheh change bodyWidth
   moveHighlights = () => {
     const wrapperNode = this.wrapperRef.current as any
@@ -345,6 +352,8 @@ class Editor extends React.Component<any, any> {
     }
   }
 
+  // TODO: добавить isActions с таким же поведением, как isHighlights
+
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
       this.setState(Editor.moveToolbar(this.props))
@@ -360,6 +369,9 @@ class Editor extends React.Component<any, any> {
       value: { focusBlock },
       clickInterval,
       children,
+      tools,
+      highlights,
+      actionsByType,
     } = this.props
     const {
       isFocused,
@@ -369,6 +381,7 @@ class Editor extends React.Component<any, any> {
       isHighlights,
       highlightsLeft,
       highlightsTop,
+      isActions,
       activeActionId,
       isHiddenPlusPopup,
       isPlusPopup,
@@ -376,9 +389,8 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const { highlights, tools } = this
     const isToolbar = isEmptyParagraph || (!isSelected && !this.isMouseDown) // || (!isSelected && !isOther)
-    const actions = (focusBlock && this.actions[focusBlock.type]) || []
+    const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
     return (
       <div
         {...{
@@ -422,7 +434,7 @@ class Editor extends React.Component<any, any> {
                       }}
                     />
                   )}
-                  {!isEmptyParagraph && actions.length !== 0 && (
+                  {isActions && !isEmptyParagraph && actions.length !== 0 && (
                     <Actions
                       {...{
                         clickInterval,
