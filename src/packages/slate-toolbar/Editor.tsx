@@ -192,18 +192,6 @@ class Editor extends React.Component<any, any> {
     callback(() => this.setState(Editor.moveToolbar(this.props)))
   }
 
-  // focus = () => {
-  //   const {
-  //     editor,
-  //     value: { selection, document },
-  //   } = this.props
-  //   if (!selection.isFocused) {
-  //     const { containerNode } = this.props
-  //     const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
-  //     documentNode.focus()
-  //   }
-  // }
-
   /**
    * Leaf
    * flip through the items
