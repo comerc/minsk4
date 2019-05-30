@@ -16,6 +16,9 @@ const withStyle = (Self) => styled(Self)`
   ${Popup} {
     margin: 0 auto;
   }
+  &.ant-tooltip-placement-top {
+    padding-bottom: 0;
+  }
   .ant-tooltip-arrow {
     display: none;
   }
