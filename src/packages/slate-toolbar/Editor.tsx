@@ -250,6 +250,8 @@ class Editor extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
+  // TODO: заменить timeout() без времени на setTimeout(), т.к. они не имеют смысла
+
   handlePlusPopupChange = (visible) => {
     if (visible) {
       this.setState({ isPlusPopup: true })
@@ -353,7 +355,7 @@ class Editor extends React.Component<any, any> {
   }
 
   handleMouseUpCapture = (event) => {
-    const { isHighlights, isActions, isSelected } = this.state
+    const { isHighlights, isSelected } = this.state
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
@@ -361,13 +363,18 @@ class Editor extends React.Component<any, any> {
       // TODO: анимировать изменение позиции для Highlights
       this.setState(Editor.moveHighlights(this.props))
     }
-    if (!isActions && !isSelected) {
-      this.setState({ isActions: true })
-    }
     if (this.isMouseDown) {
       this.isMouseDown = false
       this.forceUpdate()
     }
+    // Q: зачем тут timeout?
+    // A: сбрасывает isSelected
+    setTimeout(() => {
+      const { isActions, isSelected } = this.state
+      if (!isActions && !isSelected) {
+        this.setState({ isActions: true })
+      }
+    })
   }
 
   // TODO: убрать мигание isActions при кликах мышкой в разных местах по одному блоку
