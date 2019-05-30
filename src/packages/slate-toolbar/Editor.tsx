@@ -185,6 +185,18 @@ class Editor extends React.Component<any, any> {
   }
   isMouseDown = false
 
+  // focus = () => {
+  //   const {
+  //     editor,
+  //     value: { selection, document },
+  //   } = this.props
+  //   if (!selection.isFocused) {
+  //     const { containerNode } = this.props
+  //     const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
+  //     documentNode.focus()
+  //   }
+  // }
+
   handleMoveBlockClick = (callback) => {
     const { containerNode } = this.props
     const { top: containerBoundTop } = containerNode.getBoundingClientRect()
