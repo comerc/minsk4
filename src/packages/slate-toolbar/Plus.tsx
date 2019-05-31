@@ -87,7 +87,7 @@ class Plus extends React.Component<any> {
     const id = event.target.dataset.id
     timeout(() => {
       onVisiblePopupChange(false)
-      tools[id].onClick(event, editor)
+      tools[id].onClick(editor)
     }, clickInterval)
   }
 
