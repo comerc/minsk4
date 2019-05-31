@@ -68,6 +68,7 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
+    "update:version": "lerna version --no-push",
     "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean && rm -rf ./node_modules ./build",
     "release": "yarn build && yarn test && yarn lint && lerna publish && yarn gh-pages",
