@@ -403,7 +403,6 @@ class Editor extends React.Component<any, any> {
       focusBlockBoundOffset,
     } = this.state
     const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
-    console.log('render')
     return (
       <div
         {...{
