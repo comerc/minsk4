@@ -5,7 +5,7 @@ import idx from 'idx'
 import { IS_SAFARI } from 'slate-dev-environment'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
-import withTimeouts from 'src/packages/react-timeouts'
+import withTimeout from 'react-timeout'
 import Wrapper from './Wrapper'
 import Highlights from './Highlights'
 import Toolbar from './Toolbar'
@@ -59,7 +59,7 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 @withSizes(({ width }) => ({ bodyWidth: width }))
 @withContainerNode
-@withTimeouts
+@withTimeout
 class Editor extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
@@ -240,18 +240,17 @@ class Editor extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  // TODO: заменить timeout() без времени на setTimeout(), т.к. они не имеют смысла?
+  // TODO: заменить props.setTimeout() без времени на window.setTimeout(), т.к. они не имеют смысла?
 
   handlePlusPopupChange = (visible) => {
     if (visible) {
       this.setState({ isPlusPopup: true })
     } else {
-      const { timeout } = this.props
       // Q: зачем тут нужен timeout?
       // A: при клике мышкой по новому пустому параграфу перерисовывались:
       // - крестик в плюсик на старом месте
       // - курсор на новом месте без рамки фокуса
-      timeout(() => this.setState({ isPlusPopup: false }))
+      this.props.setTimeout(() => this.setState({ isPlusPopup: false }))
     }
   }
 
@@ -293,10 +292,10 @@ class Editor extends React.Component<any, any> {
       // TODO: move to Plus - double code with Plus.handleToolClick()
       const { activeToolId } = this.state
       if (activeToolId !== -1) {
-        const { tools, timeout, clickInterval } = this.props
+        const { tools, clickInterval } = this.props
         event.preventDefault()
         event.stopPropagation()
-        timeout(() => {
+        this.props.setTimeout(() => {
           this.setState({ isPlusPopup: false })
           tools[activeToolId].onClick(event)
         }, clickInterval)
@@ -307,10 +306,10 @@ class Editor extends React.Component<any, any> {
 
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
-    const { timeout } = this.props
     // Q: зачем тут timeout?
-    // A: isActions переключается раньше в getDerivedStateFromProps
-    timeout(() => {
+    // A: isActions переключается раньше в getDerivedStateFromProps,
+    // при клике на другой блок - лишний render()
+    this.props.setTimeout(() => {
       const { isActions } = this.state
       if (isActions) {
         this.setState({ isActions: false })
@@ -357,10 +356,9 @@ class Editor extends React.Component<any, any> {
       this.isMouseDown = false
       this.forceUpdate()
     }
-    const { timeout } = this.props
     // Q: зачем тут timeout?
     // A: сбрасывает isSelected
-    timeout(() => {
+    this.props.setTimeout(() => {
       const { isActions, isSelected } = this.state
       if (!isActions && !isSelected) {
         this.setState({ isActions: true })
@@ -405,6 +403,7 @@ class Editor extends React.Component<any, any> {
       focusBlockBoundOffset,
     } = this.state
     const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
+    console.log('render')
     return (
       <div
         {...{

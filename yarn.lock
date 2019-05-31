@@ -3907,7 +3907,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.3:
+create-react-class@^15.5.2, create-react-class@^15.5.3:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
@@ -11439,6 +11439,15 @@ react-slick@~0.24.0:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
+
+react-timeout@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-timeout/-/react-timeout-1.2.0.tgz#7b5691cd6ab9f22773d82432f5707a00d601dafe"
+  integrity sha512-HJTmeeNsG3fHmnVkw8cCwAJNmcxf6H/A3vbiS9QKsfxMsgDtDK2oopeReMeLsH/TK1nq8BumL1yYVbcuOX8wGA==
+  dependencies:
+    create-react-class "^15.5.2"
+    hoist-non-react-statics "^2.3.1"
+    object-assign "^4.0.1"
 
 react@^16.7.0:
   version "16.8.6"

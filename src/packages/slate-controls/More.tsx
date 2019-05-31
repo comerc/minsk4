@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import withTimeouts from 'src/packages/react-timeouts'
+import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
 import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
@@ -54,7 +54,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-@withTimeouts
+@withTimeout
 class More extends React.Component<any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!prevState.isVisiblePopup && prevState.isConfirmDelete) {
@@ -90,17 +90,16 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
-      timeout,
       clickInterval,
     } = this.props
     const prevNode = document.getPreviousNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(prevNode)
-    timeout(() => {
+    this.props.setTimeout(() => {
       // TODO: replace callbacks to promises
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        timeout(() => {
+        this.props.setTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })
@@ -119,10 +118,9 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
-      timeout,
       clickInterval,
     } = this.props
-    timeout(() => {
+    this.props.setTimeout(() => {
       this.setState({ isVisiblePopup: false })
       const firstNode = document.nodes.get(0)
       const isFirstNode = firstNode.key === focusBlock.key
@@ -145,16 +143,15 @@ class More extends React.Component<any> {
         value: { focusBlock, document },
       },
       onMoveBlockClick,
-      timeout,
       clickInterval,
     } = this.props
     const nextNode = document.getNextNode(focusBlock.key)
     const newIndex = document.nodes.indexOf(nextNode)
-    timeout(() => {
+    this.props.setTimeout(() => {
       onMoveBlockClick((callback) => {
         this.setState({ isVisiblePopup: false })
         editor.moveNodeByKey(focusBlock.key, document.key, newIndex)
-        timeout(() => {
+        this.props.setTimeout(() => {
           callback()
           this.setState({ isVisiblePopup: true })
         })

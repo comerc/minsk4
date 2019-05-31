@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import withTimeouts from 'src/packages/react-timeouts'
+import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
 
@@ -41,12 +41,12 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-@withTimeouts
+@withTimeout
 class Highlights extends React.Component<any> {
   handleHighlightClick = (event) => {
-    const { highlights, editor, timeout, clickInterval } = this.props
+    const { highlights, editor, clickInterval } = this.props
     const id = event.target.dataset.id
-    timeout(() => {
+    this.props.setTimeout(() => {
       highlights[id].onClick(editor)
     }, clickInterval)
   }

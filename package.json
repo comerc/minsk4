@@ -54,6 +54,7 @@
     "react-router-config": "^4.4.0-beta.6",
     "react-router-dom": "^4.3.1",
     "react-sizes": "^2.0.0",
+    "react-timeout": "^1.2.0",
     "redux": "^4.0.1",
     "redux-act": "^1.7.4",
     "redux-devtools-extension": "^2.13.7",
