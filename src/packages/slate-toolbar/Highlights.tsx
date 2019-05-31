@@ -38,11 +38,6 @@ const withStyle = (Self) => styled(Self)`
       margin-right: 6px;
     }
   }
-  .highlight {
-    &--active {
-      color: red;
-    }
-  }
 `
 
 @withStyle
@@ -51,9 +46,8 @@ class Highlights extends React.Component<any> {
   handleHighlightClick = (event) => {
     const { highlights, editor, timeout, clickInterval } = this.props
     const id = event.target.dataset.id
-    const highlight = highlights[id]
     timeout(() => {
-      editor.toggleMark(highlight.type)
+      highlights[id].onClick(editor)
     }, clickInterval)
   }
 
@@ -72,12 +66,12 @@ class Highlights extends React.Component<any> {
           <li key={id}>
             <Button
               {...{
-                className: classNames('highlight', { 'highlight--active': this.isActive(type) }),
                 tabIndex: -1,
                 'data-id': id,
                 onClick: this.handleHighlightClick,
                 size: 'small',
                 title,
+                type: this.isActive(type) ? 'danger' : 'default',
               }}
             >
               {src}

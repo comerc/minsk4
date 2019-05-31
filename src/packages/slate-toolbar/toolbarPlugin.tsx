@@ -4,26 +4,19 @@ import idx from 'idx'
 import Editor from './Editor'
 
 const toolbarPlugin = (options: any = {}) => {
-  let { theme = {}, tools = [], actionsByType = {}, clickInterval = 200 } = options
+  let { theme = {}, highlights = [], tools = [], actionsByType = {}, clickInterval = 200 } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
     return [...others]
   }
   const renderMark = (props, editor, next) => {
-    const { children, mark, attributes } = props
-    switch (mark.type) {
-      case 'bold':
-        return <strong {...attributes}>{children}</strong>
-      case 'code':
-        return <code {...attributes}>{children}</code>
-      case 'italic':
-        return <em {...attributes}>{children}</em>
-      case 'underlined':
-        return <u {...attributes}>{children}</u>
-      default:
-        return next()
+    const { mark } = props
+    const highlight = highlights.find(({ type }) => type === mark.type)
+    if (highlight) {
+      return highlight.renderMark(props, editor)
     }
+    return next()
   }
   const renderNode = (props, editor, next) => {
     if (!props.readOnly && props.isFocused) {
@@ -42,6 +35,7 @@ const toolbarPlugin = (options: any = {}) => {
         {...{
           theme,
           editor,
+          highlights,
           tools,
           actionsByType,
           clickInterval,

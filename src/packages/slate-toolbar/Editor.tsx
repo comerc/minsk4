@@ -61,15 +61,6 @@ const withStyle = (Self) => styled(Self)`
 @withContainerNode
 @withTimeouts
 class Editor extends React.Component<any, any> {
-  static defaultProps = {
-    highlights: [
-      { type: 'bold', src: 'B', title: 'Bold' },
-      { type: 'italic', src: 'I', title: 'Italic' },
-      { type: 'underlined', src: 'U', title: 'Underlined' },
-      { type: 'code', src: 'C', title: 'Code' },
-    ],
-  }
-
   static getDerivedStateFromProps(nextProps, prevState) {
     let result = {} as any
     if (!prevState.isPlusPopup && prevState.activeToolId !== -1) {
@@ -461,6 +452,7 @@ class Editor extends React.Component<any, any> {
                   {isActions && !isEmptyParagraph && actions.length !== 0 && (
                     <Actions
                       {...{
+                        editor,
                         clickInterval,
                         actions,
                         activeActionId,

@@ -80,12 +80,58 @@ class Editor extends React.Component<any> {
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
     toolbar({
       theme: this.props.theme,
+      highlights: [
+        {
+          type: 'bold',
+          src: 'B',
+          title: 'Bold',
+          onClick: function(editor) {
+            editor.toggleMark(this.type)
+          },
+          renderMark: ({ attributes, children }) => {
+            return <strong {...attributes}>{children}</strong>
+          },
+        },
+        {
+          type: 'italic',
+          src: 'I',
+          title: 'Italic',
+          onClick: function(editor) {
+            editor.toggleMark(this.type)
+          },
+          renderMark: ({ attributes, children }) => {
+            return <em {...attributes}>{children}</em>
+          },
+        },
+        {
+          type: 'underlined',
+          src: 'U',
+          title: 'Underlined',
+          onClick: function(editor) {
+            editor.toggleMark(this.type)
+          },
+          renderMark: ({ attributes, children }) => {
+            return <u {...attributes}>{children}</u>
+          },
+        },
+        {
+          type: 'code',
+          src: 'C',
+          title: 'Code',
+          onClick: function(editor) {
+            editor.toggleMark(this.type)
+          },
+          renderMark: ({ attributes, children }) => {
+            return <code {...attributes}>{children}</code>
+          },
+        },
+      ],
       actionsByType: {
         paragraph: [
           {
             src: <DummyIcon />,
             title: 'Action #0',
-            onClick: (event, editor) => {
+            onClick: (editor) => {
               console.log('Action #0', editor.value.toJSON())
             },
           },
@@ -111,7 +157,7 @@ class Editor extends React.Component<any> {
         {
           src: <TasksIcon />,
           title: 'Check List',
-          onClick: (event, editor) => {
+          onClick: (editor) => {
             editor.setBlocks({ type: 'check_list_item', data: { checked: false } })
           },
         },
