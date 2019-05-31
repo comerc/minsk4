@@ -305,6 +305,9 @@ class Editor extends React.Component<any, any> {
 
   handleMouseDownCapture = (event) => {
     this.isMouseDown = true
+    if (event.target.dataset.isAction) {
+      return
+    }
     // Q: зачем тут timeout?
     // A: isActions переключается раньше в getDerivedStateFromProps,
     // при клике на другой блок - лишний render()

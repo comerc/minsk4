@@ -47,6 +47,7 @@ class Actions extends React.Component<any> {
                 className: classNames('action', { 'action--active': id === activeActionId }),
                 tabIndex: -1,
                 'data-id': id,
+                'data-is-action': true,
                 onClick: this.handleActionClick,
                 size: 'small',
                 title,
