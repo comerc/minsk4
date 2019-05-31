@@ -1,3 +1,3 @@
-import toolbarPlugin from './toolbarPlugin'
+import controls from './controls'
 
-export default toolbarPlugin
+export default controls

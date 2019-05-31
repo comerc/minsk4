@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import idx from 'idx'
 import Editor from './Editor'
 
-const toolbarPlugin = (options: any = {}) => {
+const controls = (options: any = {}) => {
   let { theme = {}, highlights = [], tools = [], actionsByType = {}, clickInterval = 200 } = options
   const decorateNode = (node, editor, next) => {
     const others = next() || []
@@ -53,4 +53,4 @@ const toolbarPlugin = (options: any = {}) => {
   return { decorateNode, renderMark, renderNode, renderEditor, onSelect }
 }
 
-export default toolbarPlugin
+export default controls
