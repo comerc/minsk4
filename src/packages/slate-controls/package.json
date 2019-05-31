@@ -16,7 +16,8 @@
     "react": ">=16.7.0",
     "react-dom": ">=16.7.0",
     "slate": ">=0.45.1",
-    "slate-react": ">=0.21.21"
+    "slate-react": ">=0.21.21",
+    "slate-dev-environment": ">=0.2.2"
   },
   "keywords": [
     "slate"

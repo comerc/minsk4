@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import idx from 'idx'
 import { IS_SAFARI } from 'slate-dev-environment'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'
@@ -78,7 +77,7 @@ class Editor extends React.Component<any, any> {
     if (prevState.isHighlights && !isSelected) {
       result = { ...result, isHighlights: false }
     }
-    const focusBlockKey = idx(focusBlock, (self) => self.key)
+    const focusBlockKey = focusBlock && focusBlock.key
     if (prevState.focusBlockKey !== focusBlockKey) {
       result = { ...result, focusBlockKey }
     }
@@ -402,7 +401,7 @@ class Editor extends React.Component<any, any> {
       toolbarTop,
       focusBlockBoundOffset,
     } = this.state
-    const actions: any = (focusBlock && idx(actionsByType, (self) => self[focusBlock.type])) || []
+    const actions: any = (focusBlock && actionsByType[focusBlock.type]) || []
     return (
       <div
         {...{

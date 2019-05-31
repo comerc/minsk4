@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import idx from 'idx'
 import Editor from './Editor'
 
 const controls = (options: any = {}) => {
@@ -20,8 +19,10 @@ const controls = (options: any = {}) => {
   }
   const renderNode = (props, editor, next) => {
     if (!props.readOnly && props.isFocused) {
+      const { focusBlock } = editor.value
+      const focusBlockKey = focusBlock && focusBlock.key
       props.attributes.className = classNames(props.attributes.className, {
-        'block--focused': props.key === idx(editor.value.focusBlock, (self) => self.key),
+        'block--focused': props.key === focusBlockKey,
       })
     }
     return next()
