@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
-import toolbar from 'src/packages/slate-toolbar'
+import controls from 'src/packages/slate-controls'
 import placeholder from 'src/packages/slate-placeholder'
 import CheckListItem from './CheckListItem'
 import Paragraph from './Paragraph'
@@ -78,7 +78,7 @@ const other = () => {
 class Editor extends React.Component<any> {
   plugins = [
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
-    toolbar({
+    controls({
       theme: this.props.theme,
       highlights: [
         {
