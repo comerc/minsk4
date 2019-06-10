@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
 import { matchRoutes, renderRoutes } from 'react-router-config'
 import NotFound from './NotFound'
 import Header from './Header'

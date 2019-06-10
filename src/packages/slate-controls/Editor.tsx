@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import classNames from 'classnames'
 import { IS_SAFARI } from 'slate-dev-environment'
 import withSizes from 'react-sizes'
 import withContainerNode from './withContainerNode'

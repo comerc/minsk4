@@ -123,14 +123,14 @@ class Header extends React.Component<any> {
                     overlay: (
                       <Menu>
                         <Menu.Item>
-                          <a href="#" onClick={this.handleLogoutClick(login)}>
+                          <Button type="link" onClick={this.handleLogoutClick(login)}>
                             Logout
-                          </a>
+                          </Button>
                         </Menu.Item>
                         <Menu.Item>
-                          <a href="#" onClick={this.handleDeleteClick(login)}>
+                          <Button type="link" onClick={this.handleDeleteClick(login)}>
                             Delete
-                          </a>
+                          </Button>
                         </Menu.Item>
                         <Menu.Divider />
                         <Menu.Item>3rd menu item</Menu.Item>

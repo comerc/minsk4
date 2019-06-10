@@ -126,13 +126,7 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const {
-      className,
-      focusBlockBoundOffset,
-      isHiddenPopup,
-      isVisiblePopup,
-      onVisiblePopupChange,
-    } = this.props
+    const { className, isHiddenPopup, isVisiblePopup, onVisiblePopupChange } = this.props
     return (
       <div
         {...{
