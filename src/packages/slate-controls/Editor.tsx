@@ -162,13 +162,14 @@ class Editor extends React.Component<any, any> {
     isHighlights: false,
     highlightsLeft: 0,
     highlightsTop: 0,
+    lastActionsBlockKey: null,
     isActions: false,
     activeActionId: -1,
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
     activeToolId: -1,
     bodyWidth: 0, // only for getDerivedStateFromProps
-    focusBlockKey: null, // only for getDerivedStateFromProps
+    focusBlockKey: null,
     isMoveToolbarForNewBlock: false,
     toolbarTop: 0,
     focusBlockBoundOffset: 0,
@@ -240,12 +241,13 @@ class Editor extends React.Component<any, any> {
   }
 
   // TODO: заменить props.setTimeout() без времени на window.setTimeout(), т.к. они не имеют смысла?
+  // Исследовал setTimeout(fn, 0) в ReactJS #153 - какой там вывод? (не помню)
 
   handlePlusPopupChange = (visible) => {
     if (visible) {
       this.setState({ isPlusPopup: true })
     } else {
-      // Q: зачем тут нужен timeout?
+      // Q: зачем setTimeout?
       // A: при клике мышкой по новому пустому параграфу перерисовывались:
       // - крестик в плюсик на старом месте
       // - курсор на новом месте без рамки фокуса
@@ -308,12 +310,14 @@ class Editor extends React.Component<any, any> {
     if (event.target.dataset.isAction) {
       return
     }
-    // Q: зачем тут timeout?
+    // Q: зачем setTimeout?
     // A: isActions переключается раньше в getDerivedStateFromProps,
     // при клике на другой блок - лишний render()
     this.props.setTimeout(() => {
-      const { isActions } = this.state
-      if (isActions) {
+      const { isActions, lastActionsBlockKey, focusBlockKey } = this.state
+      // Q: зачем lastActionsBlockKey
+      // A: убирает мигание Actions при кликах мышкой в разных местах по одному блоку
+      if (isActions && lastActionsBlockKey !== focusBlockKey) {
         this.setState({ isActions: false })
       }
     })
@@ -336,19 +340,21 @@ class Editor extends React.Component<any, any> {
     if (isButtons) {
       return
     }
-    const { isHighlights, isActions, isSelected } = this.state
+    const { isHighlights, isActions, isSelected, focusBlockKey } = this.state
     if (!isHighlights && isSelected) {
       this.setState({ isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
     if (!isActions && !isSelected) {
-      this.setState({ isActions: true })
+      this.setState({ isActions: true, lastActionsBlockKey: focusBlockKey })
     }
   }
 
   handleMouseUpCapture = (event) => {
     const { isHighlights, isSelected } = this.state
     if (!isHighlights && isSelected) {
-      this.setState({ isHighlights: true, ...Editor.moveHighlights(this.props) })
+      // Q: зачем отключение isActions?
+      // A: предотвращает мигание Actions при последовательных селектах мышкой
+      this.setState({ isActions: false, isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
     if (isHighlights && event.detail === 3) {
       // TODO: анимировать изменение позиции для Highlights
@@ -358,17 +364,19 @@ class Editor extends React.Component<any, any> {
       this.isMouseDown = false
       this.forceUpdate()
     }
-    // Q: зачем тут timeout?
-    // A: сбрасывает isSelected
-    this.props.setTimeout(() => {
-      const { isActions, isSelected } = this.state
-      if (!isActions && !isSelected) {
-        this.setState({ isActions: true })
-      }
-    })
+    if (event.detail === 1) {
+      // Q: зачем setTimeout?
+      // A: сбрасывает isSelected
+      // Q: зачем 400?
+      // A: ожидает double click для селекта в новом фокус-блоке
+      this.props.setTimeout(() => {
+        const { isActions, isSelected, focusBlockKey } = this.state
+        if (!isActions && !isSelected) {
+          this.setState({ isActions: true, lastActionsBlockKey: focusBlockKey })
+        }
+      }, 400)
+    }
   }
-
-  // TODO: убрать мигание isActions при кликах мышкой в разных местах по одному блоку
 
   componentDidUpdate() {
     if (this.state.isMoveToolbarForNewBlock) {
