@@ -5,8 +5,6 @@ import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
 
-// TODO: добавить смещение стрелки по краям выделенного текста
-
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
