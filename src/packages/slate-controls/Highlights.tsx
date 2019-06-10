@@ -10,11 +10,6 @@ import Button from './Button'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
-    transform: ${({ left, top, theme: { highlightsOffsetY } }) =>
-      `translate3d(${left}px, calc(${top}px + ${highlightsOffsetY}), 0)`};
-  }
-  ${Popup} {
-    margin: 0 auto;
   }
   &.ant-tooltip-placement-top {
     padding-bottom: 0;
@@ -36,6 +31,11 @@ const withStyle = (Self) => styled(Self)`
     }
     li:not(:last-child) {
       margin-right: 6px;
+    }
+  }
+  &.overlay {
+    &--has-transition {
+      transition: transform 0.2s;
     }
   }
 `
@@ -83,7 +83,7 @@ class Highlights extends React.Component<any> {
   }
 
   render() {
-    const { className } = this.props
+    const { className, left, top, hasTransition } = this.props
     return (
       <div
         {...{
@@ -92,9 +92,10 @@ class Highlights extends React.Component<any> {
       >
         <Popup
           {...{
-            overlayClassName: className,
+            overlayClassName: classNames(className, { 'overlay--has-transition': hasTransition }),
             visible: true,
             renderContent: this.renderContent,
+            align: { useCssTransform: hasTransition, offset: [left, top] },
           }}
         />
       </div>

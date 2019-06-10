@@ -32,15 +32,6 @@ const withStyle = (Self) => styled(Self)`
   ${Plus} {
     position: absolute;
     left: -${({ theme }) => theme.toolbarButtonWidth};
-    animation: fadeIn 0.4s;
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
   }
   ${Actions} {
     position: absolute;
@@ -152,6 +143,7 @@ class Editor extends React.Component<any, any> {
     return {
       highlightsLeft: rect.left + rect.width / 2 - left,
       highlightsTop: rect.top - top,
+      hightlightsHasTransition: false,
     }
   }
 
@@ -162,6 +154,7 @@ class Editor extends React.Component<any, any> {
     isHighlights: false,
     highlightsLeft: 0,
     highlightsTop: 0,
+    hightlightsHasTransition: false,
     lastActionsBlockKey: null,
     isActions: false,
     activeActionId: -1,
@@ -354,8 +347,7 @@ class Editor extends React.Component<any, any> {
       this.setState({ isActions: false, isHighlights: true, ...Editor.moveHighlights(this.props) })
     }
     if (isHighlights && event.detail === 3) {
-      // TODO: анимировать изменение позиции для Highlights
-      this.setState(Editor.moveHighlights(this.props))
+      this.setState({ ...Editor.moveHighlights(this.props), hightlightsHasTransition: true })
     }
     if (this.isMouseDown) {
       this.isMouseDown = false
@@ -401,6 +393,7 @@ class Editor extends React.Component<any, any> {
       isHighlights,
       highlightsLeft,
       highlightsTop,
+      hightlightsHasTransition,
       isActions,
       activeActionId,
       isHiddenPlusPopup,
@@ -434,6 +427,7 @@ class Editor extends React.Component<any, any> {
                     clickInterval,
                     left: highlightsLeft,
                     top: highlightsTop,
+                    hasTransition: hightlightsHasTransition,
                   }}
                 />
               )}
