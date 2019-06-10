@@ -11,6 +11,15 @@ const withStyle = (Self) => styled(Self)`
     display: inline-flex;
     transform: ${({ focusBlockBoundOffset }) =>
       `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`};
+    animation: fadeIn 0.4s;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   }
   .ant-tooltip-arrow {
     display: none;
