@@ -240,9 +240,6 @@ class Editor extends React.Component<any, any> {
     this.setState({ activeToolId: id })
   }
 
-  // TODO: заменить props.setTimeout() без времени на window.setTimeout(), т.к. они не имеют смысла?
-  // Исследовал setTimeout(fn, 0) в ReactJS #153 - какой там вывод? (не помню)
-
   handlePlusPopupChange = (visible) => {
     if (visible) {
       this.setState({ isPlusPopup: true })
