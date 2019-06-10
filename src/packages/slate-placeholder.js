@@ -23,7 +23,7 @@ const whens = {
   },
 }
 
-// TODO: move to styled-components (for autoprefixer)
+// TODO: move to styled-components (for autoprefixer) - wait reshadow
 const style = {
   float: 'left', // for cursor
   userSelect: 'none',
