@@ -295,6 +295,7 @@ class Editor extends React.Component<any, any> {
   }
 
   handleMouseDownCapture = (event) => {
+    console.log(11111222333)
     this.isMouseDown = true
     if (event.target.dataset.isAction) {
       return
