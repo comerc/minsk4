@@ -1,6 +1,6 @@
 {
   "name": "slate-controls",
-  "description": "A Slate plugin that implements controls.",
+  "description": "A Slate plugin that implements controls via Ant Design",
   "version": "0.1.1",
   "license": "MIT",
   "repository": "git://github.com/comerc/minsk4.git",
@@ -10,21 +10,28 @@
   "umd:main": "dist/slate-controls.js",
   "umdMin": "dist/slate-controls.min.js",
   "umdGlobals": {
+    "antd": "Antd",
+    "classnames": "Classnames",
+    "react": "React",
+    "react-dom": "ReactDom",
+    "react-sizes": "ReactSizes",
+    "react-timeout": "ReactTimeout",
     "slate": "Slate",
-    "slate-react": "SlateReact"
-  },
-  "dependencies": {
-    "antd": "^3.19.3",
-    "classnames": "^2.2.6",
-    "react-sizes": "^2.0.0",
-    "react-timeout": "^1.2.0",
-    "styled-components": "^4.3.1"
+    "slate-react": "SlateReact",
+    "styled-components": "StyledComponents"
   },
   "peerDependencies": {
+    "antd":  ">=3.19.3",
+    "classnames": ">=2.2.6",
+    "react": ">=16.7.0",
+    "react-dom": ">=16.7.0",
+    "react-sizes": ">=2.0.0",
+    "react-timeout": ">=1.2.0",
     "slate": ">=0.45.1",
-    "slate-react": ">=0.21.21"
+    "slate-react": ">=0.21.21",
+    "styled-components": ">=4.3.1"
   },
   "keywords": [
-    "slate"
+    "slate", "antd"
   ]
 }

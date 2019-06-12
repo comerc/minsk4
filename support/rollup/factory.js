@@ -33,10 +33,10 @@ const configure = (pkg, env, target) => {
         // we have to manually specify named exports here for them to work.
         // https://github.com/rollup/rollup-plugin-commonjs#custom-named-exports
         namedExports: {
-          esrever: ['reverse'],
-          immutable: ['List', 'Map', 'Record', 'OrderedSet', 'Set', 'Stack', 'is'],
-          'react-dom': ['findDOMNode'],
-          'react-dom/server': ['renderToStaticMarkup'],
+          // esrever: ['reverse'],
+          // immutable: ['List', 'Map', 'Record', 'OrderedSet', 'Set', 'Stack', 'is'],
+          // 'react-dom': ['findDOMNode'],
+          // 'react-dom/server': ['renderToStaticMarkup'],
         },
       }),
     // Convert JSON imports to ES6 modules.
