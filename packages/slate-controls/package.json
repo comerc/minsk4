@@ -8,6 +8,7 @@
     "url": "https://github.com/comerc/minsk4.git",
     "directory": "packages/slate-controls"
   },
+  "homepage": "https://github.com/comerc/minsk4/tree/master/packages/slate-controls#readme",
   "main:src": "index.ts",
   "main": "lib/slate-controls.js",
   "module": "lib/slate-controls.es.js",
