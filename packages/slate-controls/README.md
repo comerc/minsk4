@@ -1,6 +1,6 @@
 ## slate-controls
 
-A Slate plugin that implements controls.
+A Slate plugin that implements controls via Ant Design.
 
 ### How to use
 
