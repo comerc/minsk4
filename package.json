@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "src/packages/*"
+    "packages/slate-controls"
   ],
   "devDependencies": {
     "@types/jest": "^23.3.12",
