@@ -11,6 +11,11 @@ import { ReactComponent as TasksIcon } from 'src/icons/ce-code.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
 import { ReactComponent as ListIcon } from 'src/icons/ce-list.svg'
 import { ReactComponent as DummyIcon } from 'src/icons/ce-header.svg'
+import { ReactComponent as PlusIcon } from 'src/icons/ce-plus.svg'
+import { ReactComponent as MoreIcon } from 'src/icons/outline-more_horiz-24px.svg'
+import { ReactComponent as ArrowUpIcon } from 'src/icons/ce-arrow-up.svg'
+import { ReactComponent as DeleteIcon } from 'src/icons/ce-plus.svg'
+import { ReactComponent as ArrowDownIcon } from 'src/icons/ce-arrow-down.svg'
 
 const withStyle = (Self) => styled(Self)``
 
@@ -172,6 +177,13 @@ class Editor extends React.Component<any> {
           onClick: () => {},
         },
       ],
+      icons: {
+        PlusIcon,
+        MoreIcon,
+        ArrowUpIcon,
+        DeleteIcon,
+        ArrowDownIcon,
+      },
     }),
     // lists({
     //   blocks: {

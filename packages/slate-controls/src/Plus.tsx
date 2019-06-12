@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
-import { ReactComponent as PlusIcon } from './icons/ce-plus.svg'
+// import { ReactComponent as PlusIcon } from '../icons/ce-plus.svg'
 
 const withStyle = (Self) => styled(Self)`
   &.container {
@@ -126,7 +126,7 @@ class Plus extends React.Component<any> {
   }
 
   render() {
-    const { className, isHiddenPopup, isVisiblePopup, onVisiblePopupChange } = this.props
+    const { className, isHiddenPopup, isVisiblePopup, onVisiblePopupChange, PlusIcon } = this.props
     return (
       <div
         {...{

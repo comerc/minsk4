@@ -3,7 +3,15 @@ import classNames from 'classnames'
 import Editor from './Editor'
 
 const controls = (options: any = {}) => {
-  let { theme = {}, highlights = [], tools = [], actionsByType = {}, clickInterval = 200 } = options
+  let {
+    theme = {},
+    highlights = [],
+    tools = [],
+    actionsByType = {},
+    clickInterval = 200,
+    icons = {},
+  } = options
+  console.log(icons)
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
@@ -40,6 +48,7 @@ const controls = (options: any = {}) => {
           tools,
           actionsByType,
           clickInterval,
+          icons,
           value,
         }}
       >

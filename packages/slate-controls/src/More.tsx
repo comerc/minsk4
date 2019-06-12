@@ -4,10 +4,6 @@ import classNames from 'classnames'
 import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
-import { ReactComponent as ArrowUpIcon } from './icons/ce-arrow-up.svg'
-import { ReactComponent as DeleteIcon } from './icons/ce-plus.svg'
-import { ReactComponent as ArrowDownIcon } from './icons/ce-arrow-down.svg'
-import { ReactComponent as MoreIcon } from './icons/outline-more_horiz-24px.svg'
 
 const withStyle = (Self) => styled(Self)`
   &.container {
@@ -164,6 +160,9 @@ class More extends React.Component<any> {
       editor: {
         value: { focusBlock, document },
       },
+      ArrowUpIcon,
+      DeleteIcon,
+      ArrowDownIcon,
     } = this.props
     const { isConfirmDelete } = this.state
     const prevNode = document.getPreviousNode(focusBlock.key)
@@ -218,7 +217,7 @@ class More extends React.Component<any> {
   }
 
   render() {
-    const { className } = this.props
+    const { className, MoreIcon } = this.props
     const { isVisiblePopup } = this.state
     return (
       <div

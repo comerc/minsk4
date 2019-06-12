@@ -295,7 +295,6 @@ class Editor extends React.Component<any, any> {
   }
 
   handleMouseDownCapture = (event) => {
-    console.log(11111222333)
     this.isMouseDown = true
     if (event.target.dataset.isAction) {
       return
@@ -385,6 +384,7 @@ class Editor extends React.Component<any, any> {
       tools,
       highlights,
       actionsByType,
+      icons: { PlusIcon, MoreIcon, ArrowUpIcon, DeleteIcon, ArrowDownIcon },
     } = this.props
     const {
       isFocused,
@@ -445,6 +445,7 @@ class Editor extends React.Component<any, any> {
                         clickInterval,
                         tools,
                         activeToolId,
+                        PlusIcon,
                       }}
                     />
                   )}
@@ -463,6 +464,10 @@ class Editor extends React.Component<any, any> {
                       editor,
                       clickInterval,
                       onMoveBlockClick: this.handleMoveBlockClick,
+                      MoreIcon,
+                      ArrowUpIcon,
+                      DeleteIcon,
+                      ArrowDownIcon,
                     }}
                   />
                 </Toolbar>
