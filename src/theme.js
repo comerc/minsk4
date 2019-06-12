@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import colorPalette from './packages/color-palette'
+import colorPalette from './helpers/color-palette'
 
 // analog of less fade()
 const fade = (rgb, alpha) => {
