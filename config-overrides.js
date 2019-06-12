@@ -5,19 +5,9 @@ const inspect = (data) => {
   throw new Error(util.inspect(data, { depth: Infinity }))
 }
 
-const loadPackageJson = (packagePath) => {
-  try {
-    const fse = require('fs-extra')
-    const packageObj = fse.readJsonSync(packagePath)
-    return packageObj
-  } catch (err) {
-    throw err
-  }
-}
-
 const getWorkspacesPaths = () => {
-  const packageObj = loadPackageJson('package.json')
-  const workspaces = packageObj.workspaces
+  const package = require(path.resolve('package.json'))
+  const workspaces = package.workspaces
   const workspacesList = []
   // Normally "workspaces" in package.json is an array
   if (Array.isArray(workspaces)) {
@@ -32,8 +22,9 @@ const getWorkspacesPaths = () => {
   return workspacesList.map((workspace) => path.resolve(workspace))
 }
 
-const rewireAbsolutePath = (config, env) => {
-  config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
+const rewireMainFields = (config, env) => {
+  const mainFields = ['main:src', 'browser', 'main']
+  config.resolve = { ...config.resolve, mainFields }
 }
 
 const rewirePreRule = (getValues) => {
@@ -75,16 +66,19 @@ const rewireLess = (options = {}) => {
   }
 }
 
+const rewireAbsolutePath = (config, env) => {
+  config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
+}
+
 module.exports = (config, env) => {
-  const appSrc = path.resolve('src')
-  const include = [appSrc, ...getWorkspacesPaths()]
-  rewireAbsolutePath(config, env)
-  rewirePreRule(() => {
+  const workspacesPaths = getWorkspacesPaths()
+  rewireMainFields(config, env)
+  rewirePreRule(({ include }) => {
     return {
-      include,
+      include: [include, ...workspacesPaths],
     }
   })(config, env)
-  rewireAppRule(({ options }) => {
+  rewireAppRule(({ options, include }) => {
     const plugins = [...options.plugins]
     plugins.push([require.resolve('babel-plugin-idx')])
     plugins.push([
@@ -102,7 +96,7 @@ module.exports = (config, env) => {
         ...options,
         plugins,
       },
-      include,
+      include: [include, ...workspacesPaths],
     }
   })(config, env)
   const requireForES6 = require('esm')(module /*, options*/)
@@ -112,5 +106,6 @@ module.exports = (config, env) => {
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)
+  rewireAbsolutePath(config, env)
   return config
 }

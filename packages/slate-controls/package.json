@@ -4,6 +4,7 @@
   "version": "0.1.1",
   "license": "MIT",
   "repository": "git://github.com/comerc/minsk4.git",
+  "main:src": "index.ts",
   "main": "lib/slate-controls.js",
   "module": "lib/slate-controls.es.js",
   "umd": "dist/slate-controls.js",
