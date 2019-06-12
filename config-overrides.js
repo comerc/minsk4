@@ -15,11 +15,28 @@ const loadPackageJson = (packagePath) => {
   }
 }
 
+const getWorkspacesPaths = () => {
+  const packageObj = loadPackageJson('package.json')
+  const workspaces = packageObj.workspaces
+  const workspacesList = []
+  // Normally "workspaces" in package.json is an array
+  if (Array.isArray(workspaces)) {
+    workspacesList.push(...workspaces)
+  }
+  // Sometimes "workspaces" in package.json is an object
+  // with a ".packages" sub-array, eg: when used with "nohoist"
+  // See: https://yarnpkg.com/blog/2018/02/15/nohoist
+  if (workspaces && !Array.isArray(workspaces) && Reflect.has(workspaces, 'packages')) {
+    workspacesList.push(...workspaces.packages)
+  }
+  return workspacesList.map((workspace) => path.resolve(workspace))
+}
+
 const rewireAbsolutePath = (config, env) => {
   config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
 }
 
-const createRewirePreRule = (getValues) => {
+const rewirePreRule = (getValues) => {
   return (config, env) => {
     const testSource = /\.(js|mjs|jsx|ts|tsx)$/.source
     const rule = config.module.rules.find(
@@ -30,7 +47,7 @@ const createRewirePreRule = (getValues) => {
   }
 }
 
-const createRewireAppRule = (getValues) => {
+const rewireAppRule = (getValues) => {
   return (config, env) => {
     const oneOf = config.module.rules.find((element) => element.oneOf).oneOf
     const testSource = /\.(js|mjs|jsx|ts|tsx)$/.source
@@ -40,7 +57,7 @@ const createRewireAppRule = (getValues) => {
   }
 }
 
-const createRewireLess = (options = {}) => {
+const rewireLess = (options = {}) => {
   return (config, env) => {
     const oneOf = config.module.rules.find((element) => element.oneOf).oneOf
     const lessExtension = /\.less$/
@@ -59,31 +76,17 @@ const createRewireLess = (options = {}) => {
 }
 
 module.exports = (config, env) => {
-  const packageObj = loadPackageJson('package.json')
-  const workspaces = packageObj.workspaces
-  const workspacesList = []
-  // Normally "workspaces" in package.json is an array
-  if (Array.isArray(workspaces)) {
-    workspacesList.push(...workspaces)
-  }
-  // Sometimes "workspaces" in package.json is an object
-  // with a ".packages" sub-array, eg: when used with "nohoist"
-  // See: https://yarnpkg.com/blog/2018/02/15/nohoist
-  if (workspaces && !Array.isArray(workspaces) && Reflect.has(workspaces, 'packages')) {
-    workspacesList.push(...workspaces.packages)
-  }
-  const workspacesPaths = workspacesList.map((workspace) => path.resolve(workspace))
   const appSrc = path.resolve('src')
-  const include = [appSrc, ...workspacesPaths]
+  const include = [appSrc, ...getWorkspacesPaths()]
   const mainFields = ['browser', 'main:src', 'main']
   config.resolve = { ...config.resolve, mainFields }
   rewireAbsolutePath(config, env)
-  createRewirePreRule(() => {
+  rewirePreRule(() => {
     return {
       include,
     }
   })(config, env)
-  createRewireAppRule(({ options }) => {
+  rewireAppRule(({ options }) => {
     const plugins = [...options.plugins]
     plugins.push([require.resolve('babel-plugin-idx')])
     plugins.push([
@@ -106,7 +109,7 @@ module.exports = (config, env) => {
   })(config, env)
   const requireForES6 = require('esm')(module /*, options*/)
   const antdVars = requireForES6(path.resolve('src/theme.js')).antdVars
-  createRewireLess({
+  rewireLess({
     modifyVars: antdVars,
     javascriptEnabled: true,
     sourceMap: env === 'production',
