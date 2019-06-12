@@ -83,7 +83,6 @@
   "scripts": {
     "build:production": "cross-env NODE_ENV=production yarn build:rollup",
     "build:rollup": "rollup --config ./support/rollup/config.js",
-    "update:version": "lerna version --no-push",
     "clean": "rm -rf ./build ./node_modules ./packages/*/dist ./packages/*/lib ./packages/*/node_modules",
     "release": "yarn build:production && lerna publish",
     "serve": "serve -s build",
