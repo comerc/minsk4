@@ -78,8 +78,6 @@ const rewireLess = (options = {}) => {
 module.exports = (config, env) => {
   const appSrc = path.resolve('src')
   const include = [appSrc, ...getWorkspacesPaths()]
-  const mainFields = ['browser', 'main:src', 'main']
-  config.resolve = { ...config.resolve, mainFields }
   rewireAbsolutePath(config, env)
   rewirePreRule(() => {
     return {

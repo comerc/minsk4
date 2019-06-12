@@ -14,7 +14,7 @@ const configure = (pkg, env, target) => {
   const isProd = env === 'production'
   const isUmd = target === 'umd'
   const isModule = target === 'module'
-  const input = `packages/${pkg.name}/${pkg['main:src']}`
+  const input = `packages/${pkg.name}/index.ts`
   const deps = []
     .concat(pkg.dependencies ? Object.keys(pkg.dependencies) : [])
     .concat(pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : [])
