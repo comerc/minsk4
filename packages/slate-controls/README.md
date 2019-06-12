@@ -9,3 +9,7 @@ A Slate plugin that implements controls via Ant Design.
 ### Youtube playlist
 
 [ReactJS в режиме live-code](https://www.youtube.com/playlist?list=PLMAOL6NXxmshAD1SxMElU1cWPfqvBnxQG)
+
+### TODO
+
+- [ ] Replace styled-components to reshadow
