@@ -3,7 +3,11 @@
   "description": "A Slate plugin that implements controls via Ant Design",
   "version": "0.1.2",
   "license": "MIT",
-  "repository": "git://github.com/comerc/minsk4.git",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/comerc/minsk4.git",
+    "directory": "packages/slate-controls"
+  },  
   "main:src": "index.ts",
   "main": "lib/slate-controls.js",
   "module": "lib/slate-controls.es.js",
