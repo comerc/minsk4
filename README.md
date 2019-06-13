@@ -1,3 +1,8 @@
+Зачем записываю стримы? https://habr.com/ru/post/451926/
+Подготовка к захвату мира https://habr.com/ru/post/456020/
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
