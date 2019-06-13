@@ -1,5 +1,5 @@
-Зачем записываю стримы? https://habr.com/ru/post/451926/
-Подготовка к захвату мира https://habr.com/ru/post/456020/
+- Зачем записываю стримы? https://habr.com/ru/post/451926/
+- Подготовка к захвату мира https://habr.com/ru/post/456020/
 
 ---
 
