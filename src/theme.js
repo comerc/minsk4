@@ -10,7 +10,7 @@ const fade = (rgb, alpha) => {
   return color.setAlpha(alpha).toRgbString()
 }
 
-let mainVars = {
+const mainVars = {
   // mobile: '(max-width: 650px)',
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px',
