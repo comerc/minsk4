@@ -99,8 +99,8 @@ module.exports = (config, env) => {
       include: [include, ...workspacesPaths],
     }
   })(config, env)
-  const requireForES6 = require('esm')(module /*, options*/)
-  const antdVars = requireForES6(path.resolve('src/theme.js')).antdVars
+  const requireForES = require('esm')(module /*, options*/)
+  const antdVars = requireForES(path.resolve('src/theme.js')).antdVars
   rewireLess({
     modifyVars: antdVars,
     javascriptEnabled: true,
