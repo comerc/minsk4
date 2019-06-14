@@ -13,3 +13,4 @@ A Slate plugin that implements controls via Ant Design.
 ### TODO
 
 - [ ] Replace styled-components to reshadow
+- [ ] Drag'n'drop for blocks
