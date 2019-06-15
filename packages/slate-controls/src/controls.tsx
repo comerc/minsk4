@@ -11,7 +11,6 @@ const controls = (options: any = {}) => {
     clickInterval = 200,
     icons = {},
   } = options
-  console.log(icons)
   const decorateNode = (node, editor, next) => {
     const others = next() || []
     // console.log({ node, others })
