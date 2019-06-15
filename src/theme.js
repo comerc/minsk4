@@ -35,7 +35,7 @@ let antdVars = {
   fontSizeSm: '12px',
 }
 
-const theme = new Proxy(
+let theme = new Proxy(
   { ...mainVars, ...antdVars },
   {
     get: (target, name) => {
@@ -47,6 +47,16 @@ const theme = new Proxy(
     },
   },
 )
+
+const normalizeTheme = (theme) => {
+  const result = {}
+  Object.keys(theme).forEach((key) => {
+    result[key] = theme[key]
+  })
+  return result
+}
+
+theme = normalizeTheme(theme)
 
 const normalizeAntdVars = (antdVars, theme) => {
   const result = {}
