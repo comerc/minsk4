@@ -15,8 +15,8 @@ const mainVars = {
   // notMobile: '(min-width: 651px)',
   contentWidth: '650px',
   toolbarPaddingHorizontal: '40px',
-  toolbarButtonWidth: '32px', // Toolbar button width
-  toolbarButtonHeight: (theme) => theme.btnHeightSm, // Toolbar button height
+  toolbarButtonWidth: '32px',
+  toolbarButtonHeight: (theme) => theme.btnHeightSm,
 }
 
 let antdVars = {
@@ -47,18 +47,6 @@ const theme = new Proxy(
     },
   },
 )
-
-// const normalizeTheme = (theme) => {
-//   const result = {}
-//   const getSimpleValue = (value) =>
-//     typeof value === 'function' ? getSimpleValue(value(theme)) : value
-//   Object.entries(theme).forEach(([key, value]) => {
-//     result[key] = getSimpleValue(value)
-//   })
-//   return result
-// }
-
-// theme = normalizeTheme({ ...mainVars, ...antdVars })
 
 const normalizeAntdVars = (antdVars, theme) => {
   const result = {}
