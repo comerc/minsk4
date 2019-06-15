@@ -49,11 +49,7 @@ let theme = new Proxy(
 )
 
 const normalizeTheme = (theme) => {
-  const result = {}
-  Object.keys(theme).forEach((key) => {
-    result[key] = theme[key]
-  })
-  return result
+  return { ...theme }
 }
 
 theme = normalizeTheme(theme)
