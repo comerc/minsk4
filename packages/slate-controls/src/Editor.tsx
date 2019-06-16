@@ -13,6 +13,12 @@ import More from './More'
 
 const withStyle = (Self) => styled(Self)`
   padding: 0 ${({ theme }) => theme.toolbarPaddingHorizontal};
+  .${({ editor }) => editor.props.className.replace(' ', '.')} {
+    > * {
+      margin: 0 -11px;
+      padding: 0 11px;
+    }
+  }
   ${Wrapper} {
     position: relative;
     margin: 1px auto;
@@ -40,7 +46,7 @@ const withStyle = (Self) => styled(Self)`
   }
   ${More} {
     position: absolute;
-    right: 2px;
+    right: -9px;
     top: 3px;
   }
 `
@@ -384,6 +390,7 @@ class Editor extends React.Component<any, any> {
       tools,
       highlights,
       actionsByType,
+      plusPopupOffset,
       icons: { PlusIcon, MoreIcon, ArrowUpIcon, DeleteIcon, ArrowDownIcon },
     } = this.props
     const {
@@ -438,7 +445,7 @@ class Editor extends React.Component<any, any> {
                       {...{
                         editor,
                         focusBlockBoundOffset,
-                        offsetX: theme.toolbarButtonWidth,
+                        popupOffset: plusPopupOffset,
                         isHiddenPopup: isHiddenPlusPopup,
                         isVisiblePopup: isPlusPopup,
                         onVisiblePopupChange: this.handlePlusPopupChange,
@@ -459,17 +466,19 @@ class Editor extends React.Component<any, any> {
                       }}
                     />
                   )}
-                  <More
-                    {...{
-                      editor,
-                      clickInterval,
-                      onMoveBlockClick: this.handleMoveBlockClick,
-                      MoreIcon,
-                      ArrowUpIcon,
-                      DeleteIcon,
-                      ArrowDownIcon,
-                    }}
-                  />
+                  {!isEmptyParagraph && (
+                    <More
+                      {...{
+                        editor,
+                        clickInterval,
+                        onMoveBlockClick: this.handleMoveBlockClick,
+                        MoreIcon,
+                        ArrowUpIcon,
+                        DeleteIcon,
+                        ArrowDownIcon,
+                      }}
+                    />
+                  )}
                 </Toolbar>
               )}
             </div>

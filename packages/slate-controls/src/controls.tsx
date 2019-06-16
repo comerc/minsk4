@@ -9,6 +9,7 @@ const controls = (options: any = {}) => {
     tools = [],
     actionsByType = {},
     clickInterval = 200,
+    plusPopupOffset = [24, -11],
     icons = {},
   } = options
   const decorateNode = (node, editor, next) => {
@@ -26,10 +27,11 @@ const controls = (options: any = {}) => {
   }
   const renderNode = (props, editor, next) => {
     if (!props.readOnly && props.isFocused) {
-      const { focusBlock } = editor.value
+      const { focusBlock, focusText } = editor.value
       const focusBlockKey = focusBlock && focusBlock.key
+      const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       props.attributes.className = classNames(props.attributes.className, {
-        'block--focused': props.key === focusBlockKey,
+        'block--focused': props.key === focusBlockKey && !isEmptyParagraph,
       })
     }
     return next()
@@ -47,6 +49,7 @@ const controls = (options: any = {}) => {
           tools,
           actionsByType,
           clickInterval,
+          plusPopupOffset,
           icons,
           value,
         }}

@@ -74,7 +74,7 @@ const withStyle = (Self) => styled(Self)`
 @withStyle
 @withTimeout
 class Plus extends React.Component<any> {
-  alignPopup = { offset: [this.props.offsetX, -5] }
+  alignPopup = { offset: this.props.popupOffset }
   // isButtonMouseDown = false
 
   // handleButtonMouseDown = (event) => {
