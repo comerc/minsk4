@@ -29,6 +29,12 @@ const withStyle = (Self) => styled(Self)`
       content: none;
     }
   }
+  &.ant-tooltip-placement-bottomLeft {
+    padding-top: 0;
+  }
+  &.ant-tooltip-placement-topLeft {
+    padding-bottom: 0;
+  }
   ul.content {
     margin: 0;
     padding: 0;

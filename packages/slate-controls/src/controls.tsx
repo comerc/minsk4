@@ -9,7 +9,7 @@ const controls = (options: any = {}) => {
     tools = [],
     actionsByType = {},
     clickInterval = 200,
-    plusPopupOffset = [24, -11],
+    plusPopupOffset = [24, -3],
     icons = {},
   } = options
   const decorateNode = (node, editor, next) => {
