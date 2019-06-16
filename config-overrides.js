@@ -87,7 +87,18 @@ module.exports = (config, env) => {
         libraryName: 'antd',
         style: true,
       },
+      'import-antd',
     ])
+    // TODO: почему-то мало профита от использования (429 B)
+    // plugins.push([
+    //   require.resolve('babel-plugin-import'),
+    //   {
+    //     libraryName: 'lodash',
+    //     libraryDirectory: '',
+    //     camel2DashComponentName: false, // default: true
+    //   },
+    //   'import-lodash',
+    // ])
     if (env === 'development') {
       plugins.push([require.resolve('babel-plugin-styled-components')])
     }
