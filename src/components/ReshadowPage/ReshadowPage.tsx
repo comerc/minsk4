@@ -3,24 +3,24 @@ import styled, { css } from '@reshadow/macro'
 
 const styles = css`
   /* container {
-    border: 1px solid red;
+    background: blue;
   } */
 `
 
 class ReshadowPage extends React.Component<any> {
-  state = { a: false }
+  state = { b: false }
 
   handleClick = () => {
     console.log('handleClick')
-    this.setState({ a: !this.state.a })
+    this.setState({ b: !this.state.b })
   }
 
   render() {
-    const { a } = this.state
-    const i = a ? '2px' : '3px'
+    const { b } = this.state
+    const color = b ? 'red' : 'green'
     return styled(styles)`
       container {
-        border: ${i} solid green;
+        background: ${color};
       }
     `(
       <container as="button" onClick={this.handleClick}>
