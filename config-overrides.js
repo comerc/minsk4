@@ -80,6 +80,12 @@ module.exports = (config, env) => {
   })(config, env)
   rewireAppRule(({ options, include }) => {
     const plugins = [...options.plugins]
+    // plugins.push([
+    //   require.resolve('reshadow/babel'),
+    //   {
+    //     postcss: true,
+    //   },
+    // ])
     plugins.push([require.resolve('babel-plugin-idx')])
     plugins.push([
       require.resolve('babel-plugin-import'),
@@ -89,7 +95,7 @@ module.exports = (config, env) => {
       },
       'import-antd',
     ])
-    // TODO: почему-то мало профита от использования (429 B)
+    // TODO: почему-то мало профита от использования (429 B), попробовать babel-plugin-lodash
     // plugins.push([
     //   require.resolve('babel-plugin-import'),
     //   {
@@ -99,9 +105,9 @@ module.exports = (config, env) => {
     //   },
     //   'import-lodash',
     // ])
-    if (env === 'development') {
-      plugins.push([require.resolve('babel-plugin-styled-components')])
-    }
+    // if (env === 'development') {
+    //   plugins.push([require.resolve('babel-plugin-styled-components')])
+    // }
     return {
       options: {
         ...options,
