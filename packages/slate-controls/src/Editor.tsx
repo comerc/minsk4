@@ -42,12 +42,12 @@ const withStyle = (Self) => styled(Self)`
     position: absolute;
     left: 0;
     right: 0;
-    top: 7px;
+    top: 5px;
   }
   ${More} {
     position: absolute;
     right: -9px;
-    top: 3px;
+    top: 2px;
   }
 `
 
@@ -381,7 +381,6 @@ class Editor extends React.Component<any, any> {
   render() {
     const {
       className,
-      theme,
       editor,
       editor: { readOnly: isReadOnly },
       value: { focusBlock },

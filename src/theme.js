@@ -33,6 +33,7 @@ let antdVars = {
   btnHeightSm: '24px',
   primaryColor5: (theme) => colorPalette(theme.primaryColor, 5),
   fontSizeSm: '12px',
+  borderRadiusBase: '4px',
 }
 
 let theme = new Proxy(

@@ -5,6 +5,8 @@ import withTimeout from 'react-timeout'
 import Popup from './Popup'
 import Button from './Button'
 
+// TODO: реализовать background-color для button--active
+
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
@@ -26,13 +28,13 @@ const withStyle = (Self) => styled(Self)`
     }
   }
   .button {
-    width: 24px;
-    height: 15px;
-    padding: 0 4px;
+    width: 17px;
+    height: 17px;
+    padding: 0 1px;
     color: ${({ theme }) => theme.black};
-    background-color: ${({ theme }) => theme.white};
+    background-color: transparent;
     opacity: 0.65;
-    border-radius: 4px;
+    border-radius: 50%;
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
@@ -40,6 +42,7 @@ const withStyle = (Self) => styled(Self)`
     &:hover,
     &--active {
       opacity: 1;
+      /* background-color: gray; */
       color: ${({ theme }) => theme.textColor};
     }
     svg {
@@ -60,7 +63,8 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
-  alignPopup = { offset: [8, 0] }
+  // TODO: стрелка не по середине относительно кнопки more
+  alignPopup = { offset: [11, 1] }
   isButtonMouseDown = false
 
   handlePopupVisibleChange = (visible) => {

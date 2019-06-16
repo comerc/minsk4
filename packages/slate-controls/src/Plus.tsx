@@ -20,6 +20,12 @@ const withStyle = (Self) => styled(Self)`
       }
     }
   }
+  &.ant-tooltip-placement-topLeft {
+    padding-bottom: 0;
+  }
+  &.ant-tooltip-placement-bottomLeft {
+    padding-top: 0;
+  }
   .ant-tooltip-arrow {
     display: none;
   }
@@ -28,12 +34,6 @@ const withStyle = (Self) => styled(Self)`
     &::before {
       content: none;
     }
-  }
-  &.ant-tooltip-placement-bottomLeft {
-    padding-top: 0;
-  }
-  &.ant-tooltip-placement-topLeft {
-    padding-bottom: 0;
   }
   ul.content {
     margin: 0;
