@@ -22,6 +22,10 @@ const getWorkspacesPaths = () => {
   return workspacesList.map((workspace) => path.resolve(workspace))
 }
 
+const rewireAbsolutePath = (config, env) => {
+  config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
+}
+
 const rewireMainFields = (config, env) => {
   const mainFields = ['main:src', 'browser', 'main']
   config.resolve = { ...config.resolve, mainFields }
@@ -66,12 +70,9 @@ const rewireLess = (options = {}) => {
   }
 }
 
-const rewireAbsolutePath = (config, env) => {
-  config.resolve.modules = [...config.resolve.modules, path.resolve('.')]
-}
-
 module.exports = (config, env) => {
   const workspacesPaths = getWorkspacesPaths()
+  rewireAbsolutePath(config, env)
   rewireMainFields(config, env)
   rewirePreRule(({ include }) => {
     return {
@@ -95,16 +96,16 @@ module.exports = (config, env) => {
       },
       'import-antd',
     ])
-    // TODO: почему-то мало профита от использования (429 B), попробовать babel-plugin-lodash
-    // plugins.push([
-    //   require.resolve('babel-plugin-import'),
-    //   {
-    //     libraryName: 'lodash',
-    //     libraryDirectory: '',
-    //     camel2DashComponentName: false, // default: true
-    //   },
-    //   'import-lodash',
-    // ])
+    // TODO: почему-то мало профита от использования (429 B)?
+    plugins.push([
+      require.resolve('babel-plugin-import'),
+      {
+        libraryName: 'lodash',
+        libraryDirectory: '',
+        camel2DashComponentName: false, // default: true
+      },
+      'import-lodash',
+    ])
     if (env === 'development') {
       plugins.push([require.resolve('babel-plugin-styled-components')])
     }
@@ -123,6 +124,5 @@ module.exports = (config, env) => {
     javascriptEnabled: true,
     sourceMap: env === 'production',
   })(config, env)
-  rewireAbsolutePath(config, env)
   return config
 }
