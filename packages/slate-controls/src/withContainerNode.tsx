@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import getDisplayName from 'react-display-name'
 
 const withContainerNode = (Component) => {
   class Wrapper extends React.Component<any> {
-    static displayName = `withContainerNode(${Component.name})`
+    static displayName = `withContainerNode(${getDisplayName(Component)})`
     containerNode: any = null
 
     componentDidMount() {

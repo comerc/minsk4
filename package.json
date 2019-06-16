@@ -50,6 +50,7 @@
     "serve": "^10.1.1"
   },
   "dependencies": {
+    "@reshadow/styled": "^0.0.1-alpha.64",
     "antd": "^3.12.3",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
@@ -60,6 +61,7 @@
     "nanoid": "^2.0.1",
     "polished": "^3.1.0",
     "react": "^16.7.0",
+    "react-display-name": "^0.2.4",
     "react-dom": "^16.7.0",
     "react-immutable-proptypes": "^2.1.0",
     "react-redux": "^6.0.0",
