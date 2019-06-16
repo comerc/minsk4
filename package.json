@@ -71,6 +71,7 @@
     "redux-act": "^1.7.4",
     "redux-devtools-extension": "^2.13.7",
     "redux-thunk": "^2.3.0",
+    "reshadow": "^0.0.1-alpha.65",
     "slate": "^0.45.1",
     "slate-react": "^0.21.21",
     "slate-react-placeholder": "^0.1.17",
