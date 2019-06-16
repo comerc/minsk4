@@ -1,19 +1,32 @@
 import React from 'react'
-import styled, { css } from 'reshadow/macro'
+import styled, { css } from '@reshadow/macro'
 
 const styles = css`
-  container {
+  /* container {
     border: 1px solid red;
-  }
+  } */
 `
 
 class ReshadowPage extends React.Component<any> {
+  state = { a: false }
+
+  handleClick = () => {
+    console.log('handleClick')
+    this.setState({ a: !this.state.a })
+  }
+
   render() {
+    const { a } = this.state
+    const i = a ? '2px' : '3px'
     return styled(styles)`
       container {
-        border: 1px solid green;
+        border: ${i} solid green;
       }
-    `(<container>Dummy</container>)
+    `(
+      <container as="button" onClick={this.handleClick}>
+        Dummy
+      </container>,
+    )
   }
 }
 
