@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/comerc/minsk4.git",
+    "url": "git+https://github.com/comerc/minsk4.git",
     "directory": "packages/slate-controls"
   },
   "homepage": "https://github.com/comerc/minsk4/tree/master/packages/slate-controls#readme",
