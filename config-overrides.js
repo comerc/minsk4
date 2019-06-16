@@ -105,9 +105,9 @@ module.exports = (config, env) => {
     //   },
     //   'import-lodash',
     // ])
-    // if (env === 'development') {
-    //   plugins.push([require.resolve('babel-plugin-styled-components')])
-    // }
+    if (env === 'development') {
+      plugins.push([require.resolve('babel-plugin-styled-components')])
+    }
     return {
       options: {
         ...options,
