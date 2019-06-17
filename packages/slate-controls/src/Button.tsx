@@ -8,6 +8,7 @@ export default styled(Button)`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    pointer-events: initial;
     > svg {
       fill: currentColor;
       pointer-events: none;

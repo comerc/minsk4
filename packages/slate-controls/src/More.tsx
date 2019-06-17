@@ -8,6 +8,7 @@ import Button from './Button'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
+    pointer-events: none;
   }
   &.ant-tooltip-placement-topRight {
     padding-bottom: 0;
@@ -46,11 +47,12 @@ const withStyle = (Self) => styled(Self)`
     color: ${({ theme }) => theme.textColor};
     background-color: transparent;
     border-radius: 50%;
-    cursor: pointer;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     transition: color 0.3s ease-in-out;
+    cursor: pointer;
+    pointer-events: initial;
     &:hover:not(.button--active) {
       color: ${({ theme }) => theme.primaryColor};
     }

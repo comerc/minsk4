@@ -8,6 +8,7 @@ import Button from './Button'
 const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
+    pointer-events: none;
     transform: ${({ focusBlockBoundOffset }) =>
       `translate3d(0, calc(${focusBlockBoundOffset}px - 50%), 0)`};
     animation: fadeIn 0.4s;
