@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import { Input } from 'antd'
 import Editor from 'src/components/Editor'
 
-const withStyle = (Self) => styled(Self)``
+const withStyle = (Self) => styled(Self)`
+  ${Editor} {
+    margin-top: 8px;
+  }
+`
 
 @withStyle
 class EditorPage extends React.Component<any> {
