@@ -72,7 +72,6 @@ const withStyle = (Self) => styled(Self)`
     }
     &--active {
       color: ${({ theme }) => theme.primaryColor};
-      border-color: ${({ theme }) => theme.primaryColor};
     }
   }
 `
