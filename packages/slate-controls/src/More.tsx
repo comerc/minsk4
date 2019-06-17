@@ -72,7 +72,6 @@ class More extends React.Component<any> {
   }
 
   state = { isVisiblePopup: false, isConfirmDelete: false }
-  // TODO: стрелка не по середине относительно кнопки more
   alignPopup = { offset: [11, 0] }
   isButtonMouseDown = false
 
