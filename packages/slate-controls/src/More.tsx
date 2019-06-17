@@ -46,18 +46,13 @@ const withStyle = (Self) => styled(Self)`
     color: ${({ theme }) => theme.textColor};
     background-color: transparent;
     border-radius: 50%;
-    /* opacity: 0.65; */
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    &:hover {
-      /* opacity: 1; */
+    transition: color 0.3s ease-in-out;
+    &:hover:not(.button--active) {
       color: ${({ theme }) => theme.primaryColor};
-    }
-    &--active:hover {
-      color: ${({ theme }) => theme.textColor};
-      /* opacity: 0.65; */
     }
     svg {
       fill: currentColor;
