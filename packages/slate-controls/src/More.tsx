@@ -9,6 +9,20 @@ const withStyle = (Self) => styled(Self)`
   &.container {
     display: inline-flex;
   }
+  &.ant-tooltip-placement-topRight {
+    padding-bottom: 0;
+  }
+  &.ant-tooltip-placement-bottomRight {
+    padding-top: 0;
+  }
+  .ant-tooltip-arrow {
+    display: none;
+  }
+  .ant-tooltip-inner {
+    &::before {
+      content: none;
+    }
+  }
   ul.content {
     margin: 0;
     padding: 0;
