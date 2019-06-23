@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from '@reshadow/macro'
+import styled, { css, unit } from '@reshadow/macro'
 
 const styles = css`
   /* container {
@@ -7,20 +7,23 @@ const styles = css`
   } */
 `
 
-class ReshadowPage extends React.Component<any> {
+class ReshadowPage extends React.Component<any, any> {
   state = { b: false }
 
   handleClick = () => {
     console.log('handleClick')
-    this.setState({ b: !this.state.b })
+    this.setState(({ b }) => ({ b: !b }))
   }
 
   render() {
     const { b } = this.state
     const color = b ? 'red' : 'green'
+    const width = b ? 1 : 2
+    // FIXED: calc() as workaround for dynamic px variable
+    // https://github.com/lttb/reshadow/issues/23
     return styled(styles)`
       container {
-        background: ${color};
+        border: calc(${width} * 1px) solid ${color};
       }
     `(
       <container as="button" onClick={this.handleClick}>
