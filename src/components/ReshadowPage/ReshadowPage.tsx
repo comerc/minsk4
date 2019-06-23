@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css, unit } from '@reshadow/macro'
+import styled, { css } from '@reshadow/macro'
 
 const styles = css`
   /* container {
