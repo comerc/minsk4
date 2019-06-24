@@ -72,6 +72,7 @@ class Task extends React.Component<any> {
           <Checkbox
             {...{
               checked,
+              indeterminate: node.text === '',
               disabled: node.text === '',
               onChange: this.handleChange,
               tabIndex: -1,
