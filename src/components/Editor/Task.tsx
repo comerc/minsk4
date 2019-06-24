@@ -45,7 +45,7 @@ class Task extends React.Component<any> {
       .focus()
       .moveToRangeOfNode(node)
       .moveToEnd()
-      .setNodeByKey(node.key, { data: { checked } })
+    editor.setNodeByKey(node.key, { data: { checked } })
   }
 
   render() {
@@ -72,6 +72,7 @@ class Task extends React.Component<any> {
           <Checkbox
             {...{
               checked,
+              disabled: node.text === '',
               onChange: this.handleChange,
               tabIndex: -1,
             }}
