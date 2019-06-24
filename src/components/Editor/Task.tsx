@@ -30,7 +30,7 @@ const withStyle = (Self) => styled(Self)`
 `
 
 @withStyle
-class CheckListItem extends React.Component<any> {
+class Task extends React.Component<any> {
   handleCheckboxWrapperMouseDown = (event) => {
     event.preventDefault()
   }
@@ -83,4 +83,4 @@ class CheckListItem extends React.Component<any> {
   }
 }
 
-export default CheckListItem
+export default Task

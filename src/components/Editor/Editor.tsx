@@ -4,12 +4,12 @@ import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import controls from 'slate-controls'
 import placeholder from './placeholder'
-import CheckListItem from './CheckListItem'
+import Task from './Task'
 import Paragraph from './Paragraph'
 import initialValueAsJson from './value.json'
-import { ReactComponent as TasksIcon } from 'src/icons/ce-code.svg'
+import { ReactComponent as TasksIcon } from 'src/icons/octicon-tasklist.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
-import { ReactComponent as ListIcon } from 'src/icons/ce-list.svg'
+import { ReactComponent as ListIcon } from 'src/icons/octicon-list-unordered.svg'
 import { ReactComponent as DummyIcon } from 'src/icons/ce-header.svg'
 import { ReactComponent as PlusIcon } from 'src/icons/ce-plus.svg'
 import { ReactComponent as MoreIcon } from 'src/icons/outline-more_vert-24px.svg'
@@ -21,7 +21,7 @@ const withStyle = (Self) => styled(Self)``
 
 const schema = {
   document: {
-    nodes: [{ match: [{ type: 'paragraph' }, { type: 'check_list_item' }], min: 1 }],
+    nodes: [{ match: [{ type: 'paragraph' }, { type: 'task' }], min: 1 }],
     normalize: (editor, { code, node, child, index }) => {
       const handlers = {
         child_type_invalid: () => {
@@ -47,7 +47,7 @@ const other = () => {
     const { node } = props
     const renders = {
       paragraph: () => <Paragraph {...props} />,
-      check_list_item: () => <CheckListItem {...props} />,
+      task: () => <Task {...props} />,
     }
     const render = renders[node.type]
     if (render) {
@@ -57,7 +57,7 @@ const other = () => {
   }
   const onKeyDown = (event, editor, next) => {
     const { value } = editor
-    if (event.key === 'Enter' && value.startBlock.type === 'check_list_item') {
+    if (event.key === 'Enter' && value.startBlock.type === 'task') {
       event.preventDefault()
       editor.splitBlock().setBlocks({ data: { checked: false } })
       return
@@ -65,7 +65,7 @@ const other = () => {
     if (
       event.key === 'Backspace' &&
       value.selection.isCollapsed &&
-      value.startBlock.type === 'check_list_item' &&
+      value.startBlock.type === 'task' &&
       value.selection.start.offset === 0
     ) {
       event.preventDefault()
@@ -141,7 +141,7 @@ class Editor extends React.Component<any> {
             },
           },
         ],
-        check_list_item: [
+        task: [
           {
             src: <DummyIcon />,
             title: 'Action #1',
@@ -161,9 +161,9 @@ class Editor extends React.Component<any> {
       tools: [
         {
           src: <TasksIcon />,
-          title: 'Check List',
+          title: 'Tasks',
           onClick: (editor) => {
-            editor.setBlocks({ type: 'check_list_item', data: { checked: false } })
+            editor.setBlocks({ type: 'task', data: { checked: false } })
           },
         },
         {

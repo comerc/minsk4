@@ -31,7 +31,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": true
         },
@@ -48,7 +48,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": true
         },
@@ -65,7 +65,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": false
         },
@@ -82,7 +82,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": true
         },
@@ -99,7 +99,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": false
         },
@@ -116,7 +116,7 @@
       },
       {
         "object": "block",
-        "type": "check_list_item",
+        "type": "task",
         "data": {
           "checked": false
         },
