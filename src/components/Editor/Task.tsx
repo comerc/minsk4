@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import { Checkbox } from 'antd'
@@ -31,8 +32,29 @@ const withStyle = (Self) => styled(Self)`
 
 @withStyle
 class Task extends React.Component<any> {
+  deselect = () => {
+    const { editor, node } = this.props
+    editor.moveToRangeOfNode(node).moveToEnd()
+  }
+
+  focus = () => {
+    const {
+      editor,
+      editor: {
+        value: { selection, document },
+      },
+    } = this.props
+    if (!selection.isFocused) {
+      const containerNode: any = ReactDOM.findDOMNode(editor)
+      const documentNode = containerNode.querySelector(`[data-key="${document.key}"`)
+      documentNode.focus()
+    }
+  }
+
   handleCheckboxWrapperMouseDown = (event) => {
     event.preventDefault()
+    this.deselect()
+    this.focus()
   }
 
   handleChange = (event) => {
@@ -41,10 +63,6 @@ class Task extends React.Component<any> {
       return
     }
     const checked = event.target.checked
-    editor
-      .focus()
-      .moveToRangeOfNode(node)
-      .moveToEnd()
     editor.setNodeByKey(node.key, { data: { checked } })
   }
 
