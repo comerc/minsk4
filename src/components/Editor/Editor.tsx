@@ -16,6 +16,11 @@ import { ReactComponent as MoreIcon } from 'src/icons/outline-more_vert-24px.svg
 import { ReactComponent as ArrowUpIcon } from 'src/icons/ce-arrow-up.svg'
 import { ReactComponent as DeleteIcon } from 'src/icons/ce-plus.svg'
 import { ReactComponent as ArrowDownIcon } from 'src/icons/ce-arrow-down.svg'
+import { ReactComponent as BoldIcon } from 'src/icons/ce-bold.svg'
+import { ReactComponent as ItalicIcon } from 'src/icons/ce-italic.svg'
+// import { ReactComponent as UnderlinedIcon } from 'src/icons/fa-underline.svg'
+import { ReactComponent as CodeIcon } from 'src/icons/ce-code.svg'
+import { ReactComponent as MarkerIcon } from 'src/icons/ce-marker.svg'
 
 const withStyle = (Self) => styled(Self)``
 
@@ -88,7 +93,7 @@ class Editor extends React.Component<any> {
       highlights: [
         {
           type: 'bold',
-          src: 'B',
+          src: <BoldIcon />,
           title: 'Bold',
           onClick: function(editor) {
             editor.toggleMark(this.type)
@@ -99,7 +104,7 @@ class Editor extends React.Component<any> {
         },
         {
           type: 'italic',
-          src: 'I',
+          src: <ItalicIcon />,
           title: 'Italic',
           onClick: function(editor) {
             editor.toggleMark(this.type)
@@ -108,26 +113,37 @@ class Editor extends React.Component<any> {
             return <em {...attributes}>{children}</em>
           },
         },
-        {
-          type: 'underlined',
-          src: 'U',
-          title: 'Underlined',
-          onClick: function(editor) {
-            editor.toggleMark(this.type)
-          },
-          renderMark: ({ attributes, children }) => {
-            return <u {...attributes}>{children}</u>
-          },
-        },
+        // {
+        //   type: 'underlined',
+        //   src: <UnderlinedIcon />,
+        //   title: 'Underlined',
+        //   onClick: function(editor) {
+        //     editor.toggleMark(this.type)
+        //   },
+        //   renderMark: ({ attributes, children }) => {
+        //     return <u {...attributes}>{children}</u>
+        //   },
+        // },
         {
           type: 'code',
-          src: 'C',
+          src: <CodeIcon />,
           title: 'Code',
           onClick: function(editor) {
             editor.toggleMark(this.type)
           },
           renderMark: ({ attributes, children }) => {
             return <code {...attributes}>{children}</code>
+          },
+        },
+        {
+          type: 'marker',
+          src: <MarkerIcon />,
+          title: 'Marker',
+          onClick: function(editor) {
+            editor.toggleMark(this.type)
+          },
+          renderMark: ({ attributes, children }) => {
+            return <mark {...attributes}>{children}</mark>
           },
         },
       ],
