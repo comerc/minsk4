@@ -5,7 +5,7 @@ export default styled.div`
   ${({ isSelected }) =>
     !isSelected &&
     css`
-      .block--focused {
+      .focused-block {
         position: relative;
         /* background-image: linear-gradient(
           17deg,

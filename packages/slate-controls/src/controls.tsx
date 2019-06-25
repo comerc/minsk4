@@ -31,7 +31,7 @@ const controls = (options: any = {}) => {
       const focusBlockKey = focusBlock && focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       props.attributes.className = classNames(props.attributes.className, {
-        'block--focused': props.key === focusBlockKey && !isEmptyParagraph,
+        'focused-block': props.key === focusBlockKey && !isEmptyParagraph,
       })
     }
     return next()

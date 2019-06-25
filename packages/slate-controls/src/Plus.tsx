@@ -44,18 +44,16 @@ const withStyle = (Self) => styled(Self)`
       display: inline-flex;
     }
   }
-  .button {
-    &--x {
-      svg {
-        animation: spin 0.4s;
-        animation-fill-mode: forwards;
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(45deg);
-          }
+  .button.x {
+    svg {
+      animation: spin 0.4s;
+      animation-fill-mode: forwards;
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(45deg);
         }
       }
     }
@@ -71,7 +69,7 @@ const withStyle = (Self) => styled(Self)`
       width: 32px;
       height: 32px;
     }
-    &--active {
+    &.active {
       color: ${({ theme }) => theme.primaryColor};
     }
   }
@@ -114,7 +112,7 @@ class Plus extends React.Component<any> {
             <Button
               {...{
                 className: classNames('tool', {
-                  'tool--active': id === activeToolId,
+                  active: id === activeToolId,
                 }),
                 tabIndex: -1,
                 'data-id': id,
@@ -151,7 +149,7 @@ class Plus extends React.Component<any> {
         >
           <Button
             {...{
-              className: classNames('button', { 'button--x': isVisiblePopup }),
+              className: classNames('button', { x: isVisiblePopup }),
               size: 'small',
               shape: 'circle',
               // onMouseDown: this.handleButtonMouseDown,

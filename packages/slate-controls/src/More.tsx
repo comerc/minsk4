@@ -53,7 +53,7 @@ const withStyle = (Self) => styled(Self)`
     transition: color 0.3s ease-in-out;
     cursor: pointer;
     pointer-events: initial;
-    &:hover:not(.button--active) {
+    &:hover:not(.active) {
       color: ${({ theme }) => theme.primaryColor};
     }
     svg {
@@ -252,7 +252,7 @@ class More extends React.Component<any> {
         >
           <div
             {...{
-              className: classNames('button', { 'button--active': isVisiblePopup }),
+              className: classNames('button', { active: isVisiblePopup }),
               onMouseDown: this.handleButtonMouseDown,
               onMouseUp: this.handleButtonMouseUp,
               role: 'button',

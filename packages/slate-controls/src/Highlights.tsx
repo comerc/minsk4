@@ -31,10 +31,8 @@ const withStyle = (Self) => styled(Self)`
       margin-right: 6px;
     }
   }
-  &.overlay {
-    &--has-transition {
-      transition: transform 0.2s;
-    }
+  &.overlay.has-transition {
+    transition: transform 0.2s;
   }
 `
 
@@ -85,12 +83,14 @@ class Highlights extends React.Component<any> {
     return (
       <div
         {...{
-          className: classNames(className, 'container'),
+          className: classNames(className, 'container', 'a.b'),
         }}
       >
         <Popup
           {...{
-            overlayClassName: classNames(className, { 'overlay--has-transition': hasTransition }),
+            overlayClassName: classNames(className, 'overlay', {
+              'has-transition': hasTransition,
+            }),
             visible: true,
             renderContent: this.renderContent,
             align: { useCssTransform: hasTransition, offset: [left, top] },
