@@ -83,7 +83,7 @@ class Highlights extends React.Component<any> {
     return (
       <div
         {...{
-          className: classNames(className, 'container', 'a.b'),
+          className: classNames(className, 'container'),
         }}
       >
         <Popup
