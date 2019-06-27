@@ -27,14 +27,15 @@ class EditorPage extends React.Component<any> {
         <Select
           {...{
             className: 'language',
-            defaultValue: 'none',
+            placeholder: 'Language',
+            allowClear: true,
             showSearch: true,
+            size: 'small',
             dropdownMatchSelectWidth: false,
             optionFilterProp: 'children',
             filterOption: this.filterOption,
           }}
         >
-          <Option value="none">(none)</Option>
           <Option value="js">JavaScript</Option>
           <Option value="html">HTML</Option>
         </Select>
