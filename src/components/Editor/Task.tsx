@@ -37,6 +37,7 @@ class Task extends React.Component<any> {
     editor.moveToRangeOfNode(node).moveToEnd()
   }
 
+  // TODO вынести в утилиты, как focusEditor
   focus = () => {
     const {
       editor,
