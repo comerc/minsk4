@@ -4,9 +4,9 @@ import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import controls from 'slate-controls'
 import placeholder from './placeholder'
-import Paragraph from './Paragraph'
-import Task from './Task'
-import Code from './Code'
+import ParagraphBlock from './ParagraphBlock'
+import TaskBlock from './TaskBlock'
+import CodeBlock from './CodeBlock'
 import initialValueAsJson from './value.json'
 import { ReactComponent as TasksIcon } from 'src/icons/octicon-tasklist.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
@@ -52,9 +52,9 @@ const other = () => {
   const renderNode = (props, editor, next) => {
     const { node } = props
     const renders = {
-      paragraph: () => <Paragraph {...props} />,
-      task: () => <Task {...props} />,
-      code: () => <Code {...props} />,
+      paragraph: () => <ParagraphBlock {...props} />,
+      task: () => <TaskBlock {...props} />,
+      code: () => <CodeBlock {...props} />,
     }
     const render = renders[node.type]
     if (render) {
