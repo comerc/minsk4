@@ -4,8 +4,9 @@ import { Editor as SlateEditor } from 'slate-react'
 import { Block, Value } from 'slate'
 import controls from 'slate-controls'
 import placeholder from './placeholder'
-import Task from './Task'
 import Paragraph from './Paragraph'
+import Task from './Task'
+import Code from './Code'
 import initialValueAsJson from './value.json'
 import { ReactComponent as TasksIcon } from 'src/icons/octicon-tasklist.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
@@ -26,22 +27,22 @@ const withStyle = (Self) => styled(Self)``
 
 const schema = {
   document: {
-    nodes: [{ match: [{ type: 'paragraph' }, { type: 'task' }], min: 1 }],
+    nodes: [{ min: 1 }],
     normalize: (editor, { code, node, child, index }) => {
       const handlers = {
         child_type_invalid: () => {
           const type = 'paragraph'
-          return editor.setNodeByKey(child.key, type)
+          editor.setNodeByKey(child.key, type)
         },
         child_min_invalid: () => {
           const type = 'paragraph'
           const block = Block.create(type)
-          return editor.insertNodeByKey(node.key, index, block)
+          editor.insertNodeByKey(node.key, index, block)
         },
       }
       const handler = handlers[code]
       if (handler) {
-        return handler()
+        handler()
       }
     },
   },
@@ -53,6 +54,7 @@ const other = () => {
     const renders = {
       paragraph: () => <Paragraph {...props} />,
       task: () => <Task {...props} />,
+      code: () => <Code {...props} />,
     }
     const render = renders[node.type]
     if (render) {
@@ -65,6 +67,11 @@ const other = () => {
     if (event.key === 'Enter' && value.startBlock.type === 'task') {
       event.preventDefault()
       editor.splitBlock().setBlocks({ data: { checked: false } })
+      return
+    }
+    if (event.key === 'Enter' && value.startBlock.type === 'code') {
+      event.preventDefault()
+      editor.insertText('\n')
       return
     }
     if (
@@ -173,8 +180,24 @@ class Editor extends React.Component<any> {
             },
           },
         ],
+        code: [
+          {
+            src: <DummyIcon />,
+            title: 'Action #3',
+            onClick: () => {
+              console.log('Action #3')
+            },
+          },
+        ],
       },
       tools: [
+        {
+          src: <CodeIcon />,
+          title: 'Code',
+          onClick: (editor) => {
+            editor.setBlocks({ type: 'code', data: { syntax: null } })
+          },
+        },
         {
           src: <TasksIcon />,
           title: 'Tasks',
