@@ -1,7 +1,7 @@
 {
   "name": "slate-controls",
   "description": "A Slate plugin that implements controls via Ant Design",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -31,8 +31,8 @@
     "antd": ">=3.19.3",
     "classnames": ">=2.2.6",
     "react": ">=16.7.0",
-    "react-dom": ">=16.7.0",
     "react-display-name": ">=0.2.4",
+    "react-dom": ">=16.7.0",
     "react-sizes": ">=2.0.0",
     "react-timeout": ">=1.2.0",
     "slate": ">=0.47.0",
