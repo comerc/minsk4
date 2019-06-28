@@ -39,7 +39,9 @@ const controls = (options: any = {}) => {
   const renderEditor = (props, editor, next) => {
     // console.log('renderEditor', props)
     const { value } = props
+    // TODO: попробовать удалить value из props - можно ли заменить на editor.value?
     const children = next()
+    console.log(editor.value === value)
     return (
       <Editor
         {...{
