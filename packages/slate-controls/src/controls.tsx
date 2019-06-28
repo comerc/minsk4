@@ -25,13 +25,13 @@ const controls = (options: any = {}) => {
     }
     return next()
   }
-  const renderNode = (props, editor, next) => {
+  const renderBlock = (props, editor, next) => {
     if (!props.readOnly && props.isFocused) {
       const { focusBlock, focusText } = editor.value
       const focusBlockKey = focusBlock && focusBlock.key
       const isEmptyParagraph = focusBlock.type === 'paragraph' && focusText.text === ''
       props.attributes.className = classNames(props.attributes.className, {
-        'focused-block': props.key === focusBlockKey && !isEmptyParagraph,
+        'focused-block': props.node.key === focusBlockKey && !isEmptyParagraph,
       })
     }
     return next()
@@ -62,7 +62,7 @@ const controls = (options: any = {}) => {
     // console.log('onSelect')
     next()
   }
-  return { decorateNode, renderMark, renderNode, renderEditor, onSelect }
+  return { decorateNode, renderMark, renderBlock, renderEditor, onSelect }
 }
 
 export default controls

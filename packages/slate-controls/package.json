@@ -35,8 +35,8 @@
     "react-display-name": ">=0.2.4",
     "react-sizes": ">=2.0.0",
     "react-timeout": ">=1.2.0",
-    "slate": ">=0.45.1",
-    "slate-react": ">=0.21.21",
+    "slate": ">=0.47.0",
+    "slate-react": ">=0.22.0",
     "styled-components": ">=4.3.1"
   },
   "keywords": [
