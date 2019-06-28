@@ -6,7 +6,10 @@ import controls from 'slate-controls'
 import placeholder from './placeholder'
 import ParagraphBlock from './ParagraphBlock'
 import TaskBlock from './TaskBlock'
-import CodeBlock from './CodeBlock'
+import codeBlock from './CodeBlock'
+// import code from '@convertkit/slate-code'
+// import codeBlock from 'golery-slate-code-block'
+// import prism from 'golery-slate-prism'
 import initialValueAsJson from './value.json'
 import { ReactComponent as TasksIcon } from 'src/icons/octicon-tasklist.svg'
 import { ReactComponent as ImageIcon } from 'src/icons/ce-image.svg'
@@ -49,14 +52,16 @@ const schema = {
 }
 
 const other = () => {
-  const renderNode = (props, editor, next) => {
-    const { node } = props
+  const renderBlock = (props, editor, next) => {
+    const {
+      node: { type },
+    } = props
     const renders = {
       paragraph: () => <ParagraphBlock {...props} />,
       task: () => <TaskBlock {...props} />,
-      code: () => <CodeBlock {...props} />,
+      // code: () => <CodeBlock {...props} />,
     }
-    const render = renders[node.type]
+    const render = renders[type]
     if (render) {
       return render()
     }
@@ -67,11 +72,6 @@ const other = () => {
     if (event.key === 'Enter' && value.startBlock.type === 'task') {
       event.preventDefault()
       editor.splitBlock().setBlocks({ data: { checked: false } })
-      return
-    }
-    if (event.key === 'Enter' && value.startBlock.type === 'code') {
-      event.preventDefault()
-      editor.insertText('\n')
       return
     }
     if (
@@ -87,12 +87,18 @@ const other = () => {
     // TODO: how to check item without mouse?
     return next()
   }
-  return { renderNode, onKeyDown }
+  return { renderBlock, onKeyDown }
 }
 
 @withTheme
 @withStyle
 class Editor extends React.Component<any> {
+  state = { value: Value.fromJSON(initialValueAsJson) }
+
+  handleChange = ({ value }) => {
+    this.setState({ value })
+  }
+
   plugins = [
     placeholder({ type: 'paragraph', placeholder: 'Tell your story...' }),
     controls({
@@ -195,7 +201,7 @@ class Editor extends React.Component<any> {
           src: <CodeIcon />,
           title: 'Code',
           onClick: (editor) => {
-            editor.setBlocks({ type: 'code', data: { syntax: null } })
+            editor.setBlocks({ type: 'code', data: { language: 'js' } })
           },
         },
         {
@@ -236,20 +242,45 @@ class Editor extends React.Component<any> {
     //     list_item: 'list-item',
     //   },
     // }),
+    // code({
+    //   highlight: true,
+    //   block: 'code',
+    //   line: 'code-line',
+    //   classNames: {
+    //     block: 'code',
+    //     line: 'code-line',
+    //   },
+    // }),
+    codeBlock({
+      // onlyIn: (node) => node.type === 'code_block',
+    }),
+    // prism({
+    //   onlyIn: (node) => {
+    //     console.log('onlyIn', node.type)
+    //     return node.type === 'code'
+    //   },
+    //   getSyntax: (node) => {
+    //     console.log('getSyntax')
+    //     return 'js'
+    //   }, // node.data.get('language')
+    // }),
     other(),
   ]
 
   render() {
     const { className } = this.props
+    const { value } = this.state
     return (
       <SlateEditor
         {...{
           className,
-          defaultValue: Value.fromJSON(initialValueAsJson),
+          // defaultValue: Value.fromJSON(initialValueAsJson),
           autoFocus: true,
           spellCheck: false,
           schema,
           plugins: this.plugins,
+          value,
+          onChange: this.handleChange,
         }}
       />
     )

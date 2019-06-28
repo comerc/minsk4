@@ -9,7 +9,7 @@ const withStyle = (Self) => styled(Self)`
   ${Editor} {
     margin-top: 8px;
   }
-  .syntax {
+  .language {
     min-width: 100px;
   }
 `
@@ -26,7 +26,7 @@ class EditorPage extends React.Component<any> {
       <div className={className}>
         <Select
           {...{
-            className: 'syntax',
+            className: 'language',
             placeholder: 'Language',
             allowClear: true,
             showSearch: true,

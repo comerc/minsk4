@@ -3,6 +3,19 @@
     "nodes": [
       {
         "object": "block",
+        "type": "code",
+        "data": {
+          "language": "js"
+        },
+        "nodes": [
+          {
+            "object": "text",
+            "text": "var i = 0;"
+          }
+        ]
+      },
+      {
+        "object": "block",
         "type": "paragraph",
         "nodes": [
           {
