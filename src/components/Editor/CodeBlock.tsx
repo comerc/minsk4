@@ -89,6 +89,7 @@ const plugin = (options: any = {}) => {
     const others = next() || []
     if (node.type !== 'code') return others
     const language = node.data.get('language')
+    if (!language) return others
     const texts = Array.from(node.texts())
     const string = texts.map(([n]: any) => n.text).join('\n')
     const grammar = Prism.languages[language]
