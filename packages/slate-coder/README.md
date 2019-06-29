@@ -1,6 +1,6 @@
 ## slate-coder
 
-A Slate plugin that implements a code block.
+A Slate plugin that implements a code block with highlighting.
 
 ### How to use
 

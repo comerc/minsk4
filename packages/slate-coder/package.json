@@ -1,6 +1,6 @@
 {
   "name": "slate-coder",
-  "description": "A Slate plugin that implements a code block",
+  "description": "A Slate plugin that implements a code block with highlighting",
   "version": "0.1.1",
   "license": "MIT",
   "repository": {
