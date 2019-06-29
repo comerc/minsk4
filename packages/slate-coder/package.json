@@ -17,11 +17,13 @@
   "umdMin": "dist/slate-coder.min.js",
   "umdGlobals": {
     "classnames": "Classnames",
+    "prismjs": "Prismjs",
     "react": "React",
     "styled-components": "StyledComponents"
   },
   "peerDependencies": {
     "classnames": ">=2.2.6",
+    "prismjs": ">=1.16.0",
     "react": ">=16.7.0",
     "styled-components": ">=4.3.1"
   },
