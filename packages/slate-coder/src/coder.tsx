@@ -1,8 +1,10 @@
 import React from 'react'
+import classNames from 'classnames'
 import Prism from 'prismjs'
 import CodeBlock from './CodeBlock'
 
 const coder = (options: any = {}) => {
+  const { nodeType = 'code', hasLines = false } = options
   const getContent = (token) => {
     if (typeof token === 'string') {
       return token
@@ -14,61 +16,30 @@ const coder = (options: any = {}) => {
   }
   const renderBlock = (props, editor, next) => {
     const { node } = props
-    if (node.type === 'code') {
+    if (node.type === nodeType) {
       return <CodeBlock {...props} />
     }
     return next()
   }
   const renderDecoration = (props, editor, next) => {
     const { children, decoration, attributes } = props
-    // console.log(decoration.type)
-    switch (decoration.type) {
-      case 'string':
-        return (
-          <span {...attributes} style={{ color: 'green' }}>
-            {children}
-          </span>
-        )
-      case 'comment':
-        return (
-          <span {...attributes} style={{ opacity: '0.33' }}>
-            {children}
-          </span>
-        )
-      case 'keyword':
-        return (
-          <span {...attributes} style={{ fontWeight: 'bold' }}>
-            {children}
-          </span>
-        )
-      case 'tag':
-        return (
-          <span {...attributes} style={{ fontWeight: 'bold' }}>
-            {children}
-          </span>
-        )
-      case 'punctuation':
-        return (
-          <span {...attributes} style={{ opacity: '0.75' }}>
-            {children}
-          </span>
-        )
-      default:
-        return next()
+    if (decoration.type === 'prism-token') {
+      return (
+        <span
+          {...{
+            ...attributes,
+            className: decoration.data.get('className'),
+          }}
+        >
+          {children}
+        </span>
+      )
     }
-  }
-  const onKeyDown = (event, editor, next) => {
-    const { value } = editor
-    if (event.key === 'Enter' && value.startBlock.type === 'code') {
-      event.preventDefault()
-      editor.insertText('\n')
-      return
-    }
-    next()
+    return next()
   }
   const decorateNode = (node, editor, next) => {
     const others = next() || []
-    if (node.type !== 'code') return others
+    if (node.type !== nodeType) return others
     const language = node.data.get('language')
     if (!language) return others
     const texts = Array.from(node.texts())
@@ -86,8 +57,8 @@ const coder = (options: any = {}) => {
       startOffset = endOffset
       const [startText, startPath] = startEntry as any
       const content = getContent(token)
-      // const newlines = content.split('\n').length - 1
-      const length = content.length // - newlines
+      const newlines = hasLines ? content.split('\n').length - 1 : 0
+      const length = content.length - newlines
       const end = start + length
       let available = startText.text.length - startOffset
       let remaining = length
@@ -102,7 +73,8 @@ const coder = (options: any = {}) => {
       const [endText, endPath] = endEntry as any
       if (typeof token !== 'string') {
         const decoration = {
-          type: token.type,
+          type: 'prism-token',
+          data: { className: classNames('prism-token token', token.type, token.alias) },
           anchor: {
             key: startText.key,
             path: startPath,
@@ -123,7 +95,6 @@ const coder = (options: any = {}) => {
   return {
     renderBlock,
     renderDecoration,
-    onKeyDown,
     decorateNode,
   }
 }
