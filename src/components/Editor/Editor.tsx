@@ -6,7 +6,7 @@ import controls from 'slate-controls'
 import placeholder from './placeholder'
 import ParagraphBlock from './ParagraphBlock'
 import TaskBlock from './TaskBlock'
-import codeBlock from './CodeBlock'
+import coder from 'slate-coder'
 // import code from '@convertkit/slate-code'
 // import codeBlock from 'golery-slate-code-block'
 // import prism from 'golery-slate-prism'
@@ -186,7 +186,7 @@ class Editor extends React.Component<any> {
             },
           },
         ],
-        code: [
+        coder: [
           {
             src: <DummyIcon />,
             title: 'Action #3',
@@ -251,7 +251,7 @@ class Editor extends React.Component<any> {
     //     line: 'code-line',
     //   },
     // }),
-    codeBlock({
+    coder({
       // onlyIn: (node) => node.type === 'code_block',
     }),
     // prism({

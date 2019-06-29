@@ -10,7 +10,7 @@
         "nodes": [
           {
             "object": "text",
-            "text": "var i = 0;"
+            "text": "let i = 0; // comment\nconst s = 's';"
           }
         ]
       },

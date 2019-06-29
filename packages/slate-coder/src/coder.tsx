@@ -1,33 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import classNames from 'classnames'
 import Prism from 'prismjs'
+import CodeBlock from './CodeBlock'
 
-const withStyle = (Self) => styled(Self)``
-
-@withStyle
-class CodeBlock extends React.Component<any> {
-  render() {
-    const {
-      className,
-      attributes: { className: externalClassName, ...attributes },
-      children,
-    } = this.props
-    return (
-      <div
-        {...{
-          className: classNames(externalClassName, className),
-        }}
-      >
-        <pre>
-          <code {...attributes}>{children}</code>
-        </pre>
-      </div>
-    )
-  }
-}
-
-const plugin = (options: any = {}) => {
+const coder = (options: any = {}) => {
   const getContent = (token) => {
     if (typeof token === 'string') {
       return token
@@ -39,7 +14,6 @@ const plugin = (options: any = {}) => {
   }
   const renderBlock = (props, editor, next) => {
     const { node } = props
-    // console.log('renderNode', node)
     if (node.type === 'code') {
       return <CodeBlock {...props} />
     }
@@ -47,7 +21,14 @@ const plugin = (options: any = {}) => {
   }
   const renderDecoration = (props, editor, next) => {
     const { children, decoration, attributes } = props
+    // console.log(decoration.type)
     switch (decoration.type) {
+      case 'string':
+        return (
+          <span {...attributes} style={{ color: 'green' }}>
+            {children}
+          </span>
+        )
       case 'comment':
         return (
           <span {...attributes} style={{ opacity: '0.33' }}>
@@ -105,8 +86,8 @@ const plugin = (options: any = {}) => {
       startOffset = endOffset
       const [startText, startPath] = startEntry as any
       const content = getContent(token)
-      const newlines = content.split('\n').length - 1
-      const length = content.length - newlines
+      // const newlines = content.split('\n').length - 1
+      const length = content.length // - newlines
       const end = start + length
       let available = startText.text.length - startOffset
       let remaining = length
@@ -120,7 +101,7 @@ const plugin = (options: any = {}) => {
       }
       const [endText, endPath] = endEntry as any
       if (typeof token !== 'string') {
-        const dec = {
+        const decoration = {
           type: token.type,
           anchor: {
             key: startText.key,
@@ -133,8 +114,7 @@ const plugin = (options: any = {}) => {
             offset: endOffset,
           },
         }
-        // console.log(dec)
-        decorations.push(dec)
+        decorations.push(decoration)
       }
       start = end
     }
@@ -148,4 +128,4 @@ const plugin = (options: any = {}) => {
   }
 }
 
-export default plugin
+export default coder

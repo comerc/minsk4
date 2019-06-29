@@ -1,0 +1,31 @@
+{
+  "name": "slate-coder",
+  "description": "A Slate plugin that implements a coder block",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comerc/minsk4.git",
+    "directory": "packages/slate-coder"
+  },
+  "homepage": "https://github.com/comerc/minsk4/tree/master/packages/slate-coder#readme",
+  "main:src": "index.ts",
+  "main": "lib/slate-coder.js",
+  "module": "lib/slate-coder.es.js",
+  "umd": "dist/slate-coder.js",
+  "umd:main": "dist/slate-coder.js",
+  "umdMin": "dist/slate-coder.min.js",
+  "umdGlobals": {
+    "classnames": "Classnames",
+    "react": "React",
+    "styled-components": "StyledComponents"
+  },
+  "peerDependencies": {
+    "classnames": ">=2.2.6",
+    "react": ">=16.7.0",
+    "styled-components": ">=4.3.1"
+  },
+  "keywords": [
+    "slate"
+  ]
+}
