@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Editor from './Editor'
 
 const controls = (options: any = {}) => {
-  let {
+  const {
     theme = {},
     highlights = [],
     tools = [],
