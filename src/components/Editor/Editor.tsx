@@ -69,6 +69,11 @@ const other = () => {
   }
   const onKeyDown = (event, editor, next) => {
     const { value } = editor
+    if (event.key === 'Enter' && value.startBlock.type === 'code') {
+      event.preventDefault()
+      editor.insertText('\n')
+      return
+    }
     if (event.key === 'Enter' && value.startBlock.type === 'task') {
       event.preventDefault()
       editor.splitBlock().setBlocks({ data: { checked: false } })
