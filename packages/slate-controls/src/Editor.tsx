@@ -162,7 +162,7 @@ class Editor extends React.Component<any, any> {
     hightlightsHasTransition: false,
     lastActionsBlockKey: null,
     isActions: false,
-    activeActionId: -1,
+    activeActionId: -1, // TODO: может быть несколько активных - заменить на массив activeActionIds
     isHiddenPlusPopup: false, // for moveToolbar() w/o close-animation between two empty paragraph
     isPlusPopup: false,
     activeToolId: -1,
