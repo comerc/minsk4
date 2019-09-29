@@ -44,7 +44,7 @@ class Actions extends React.Component<any> {
           <li key={id}>
             <Button
               {...{
-                className: classNames('action', { 'action--active': id === activeActionId }),
+                className: classNames('action', { active: id === activeActionId }),
                 tabIndex: -1,
                 'data-id': id,
                 'data-is-action': true,
