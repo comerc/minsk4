@@ -191,7 +191,7 @@ class Editor extends React.Component<any> {
             },
           },
         ],
-        coder: [
+        code: [
           {
             src: <DummyIcon />,
             title: 'Action #3',
