@@ -5,7 +5,7 @@ import PostLayout from 'src/components/PostLayout'
 import PostPage from 'src/components/PostPage'
 import EditPostPage from 'src/components/EditPostPage'
 import EditorPage from 'src/components/EditorPage'
-import ReshadowPage from 'src/components/ReshadowPage'
+// import ReshadowPage from 'src/components/ReshadowPage'
 
 const routes = [
   {
@@ -26,11 +26,11 @@ const routes = [
         exact: true,
         component: EditorPage,
       },
-      {
-        path: '/reshadow',
-        exact: true,
-        component: ReshadowPage,
-      },
+      // {
+      //   path: '/reshadow',
+      //   exact: true,
+      //   component: ReshadowPage,
+      // },
       {
         path: '/post/:id',
         component: PostLayout,
