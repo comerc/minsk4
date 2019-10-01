@@ -13178,7 +13178,7 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-reshadow@^0.0.1-alpha.65:
+reshadow@^0.0.1-alpha.70:
   version "0.0.1-alpha.70"
   resolved "https://registry.yarnpkg.com/reshadow/-/reshadow-0.0.1-alpha.70.tgz#6212f027aaefff2e9ddbb154200ebe5bac7d02d1"
   integrity sha512-L3kp3hPuCufd9K4OrTk/yUqEd/h/P7hNp7lS8uhZP/c4AovmyoryiqIZOQSsI/8/IgNS9W0JaXPNWiv4sIc26Q==
